@@ -7,4 +7,6 @@ Main ideas:
 
 Currently I'm:
 
-- Implementing a basic 'character sheet CLI'. Something that provides all of the base functionality of a character sheet but without the extensive streamlining that I have planned for the engine. The end product will be an application with basic rolling functionality and character data storage (non-persistant); something that I'd be able to use in a real D&D session.
+- <del>Implementing a basic 'character sheet CLI'. Something that provides all of the base functionality of a character sheet but without the extensive streamlining that I have planned for the engine. The end product will be an application with basic rolling functionality and character data storage (non-persistant); something that I'd be able to use in a real D&D session.</del>
+
+- Expanding upon the basic character sheet to include streamlined actions via logic insertion (see the Feature and Action class)
