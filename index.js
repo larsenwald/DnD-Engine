@@ -17,5 +17,24 @@ class Character{
         this.background;
         this.feats = [];
         this.proficiencies = [];
+        this.proficiencyBonus;
+        //choose starting equipment
+        this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
+        //choose a species
+        this.species;
+        this.speciesTraits = [];
+        this.size;
+        this.speed;
+        this.languages = [];
+
+        //Step 3: Determine Ability Scores
+        this.abilityScores = {
+            str,
+            dex,
+            con,
+            int,
+            wis,
+            cha,
+        }
     }
 }
