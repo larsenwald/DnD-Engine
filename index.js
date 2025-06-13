@@ -5,6 +5,16 @@ class Roll{
         return output;
     }
 }
+class IdGenerator{
+    constructor(initialCount){
+        this.currentId = initialCount ? initialCount-1 : -1;
+    }
+    newId(){
+        this.currentId++;
+        return this.currentId;
+    }
+    
+}
 
 class Character{
     constructor(){//modeling the constructor after the order of the steps to create a new character in the 2024 PHB
@@ -68,7 +78,7 @@ class Character{
         this.alignment;
 
         //Step 5: Fill in details
-        this.features = [];
+        this.featureArray = [];
         /*
         what a features object might look like (yes, we'll create a class for Features)
         {
@@ -133,6 +143,31 @@ class Character{
     }
     
     get proficiencyBonus(){ return Math.ceil(this.level / 4) + 1 }
+
+    get features(){
+        let output = ``;
+        for (let feature of this.featureArray) output += `id: ${feature.id} '${feature.name}'\n`;
+        return output;
+    }
+
+    addFeature(name, actionType, description, sourceType, source, logic){
+        const feature = new Feature(name, actionType, description, sourceType, source, logic);
+        feature.id = idFeature.newId();
+        this.featureArray.push(feature);
+        this.playbook[actionType].push()//need to push an action object with name, id, source: 'feature', logic
+    }
+}
+
+const idFeature = new IdGenerator();
+class Feature{
+    constructor(name, actionType, description, sourceType, source, logic){
+        this.name = name;
+        this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
+        this.description = description;
+        this.sourceType = sourceType; //either 'class', 'background', 'species', 'item', etc
+        this.source = source; //the name of the source
+        this.logic = logic; //a function that holds the logic of the feature, if any. The logic will be pushed to the respective playbook array, but that'll be done via a method. I doubt this constructor will be called directly.
+    }
 }
 
 const c = new Character();
