@@ -19,8 +19,9 @@ class IdGenerator{
 class Character{
     constructor(){//modeling the constructor after the order of the steps to create a new character in the 2024 PHB
         //Step 1: Choose a class
-        this.charClass;
-        this.level;
+        this.charClass = '';
+        this.subclass = '';
+        this.level = 1;
         //*armor training was moved to the 'proficiencies' object
 
         //Step 2: Determine origin
@@ -59,7 +60,7 @@ class Character{
         //choose starting equipment
         this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
         //choose a species
-        this.species;
+        this.species = '';
         this.speciesTraits = [];
         this.size;
         this.speed;
@@ -104,6 +105,18 @@ class Character{
         free: [],
         passive: []
        }
+       this.playbook.action.push(
+        new Action(
+            'Melee Attack',
+            descriptions.meleeAttack,
+            null,
+            null,
+            'action',
+            function(){
+
+            }
+        )
+       )
 
        this.equipmentSlots = {
         head: null,
@@ -114,14 +127,15 @@ class Character{
         neck: null,
         ring1: null,
         ring2: null,
-        mainHand: null,
-        offHand: null,
+        mainHandMelee: null,
+        offHandMelee: null,
         mainHandRange: null,
         offHandRange: null,
         misc: [],
        }
 
        this.resources = {}
+       this.critCeil = 20;
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -153,13 +167,13 @@ class Character{
         return output;
     }
 
-    addFeature(name, actionType, description, sourceType, source, actionLogic, helloLogic, goodbyeLogic){//helloLogic is logic that will be execute only ONCE when the feature is added. actionLogic is logic that will be executed when the action is used. goodbyeLogic is logic that will be executed when the feature is removed, likely to reverse whatever helloLogic did.
+    addFeature(name, description, actionName, actionDescription, actionType, sourceType, source, actionLogic, helloLogic, goodbyeLogic){//helloLogic is logic that will be execute only ONCE when the feature is added. actionLogic is logic that will be executed when the action is used. goodbyeLogic is logic that will be executed when the feature is removed, likely to reverse whatever helloLogic did.
         const feature = new Feature(name, actionType, description, sourceType, source, actionLogic);
-        helloLogic.call(this);
+        helloLogic();
         feature.id = idFeature.newId();
         feature.goodbyeLogic = goodbyeLogic;
         this.featuresArray.push(feature);
-        const actionObj = new Action(name, 'feature', feature.id, actionType, actionLogic);
+        const actionObj = new Action(actionName ? actionName: name, actionDescription ? actionDescription : description, 'feature', feature.id, actionType, actionLogic);
         actionObj.id = idAction.newId();
         this.playbook[actionType].push(actionObj)//need to push an action object with name, source: 'feature', sourceId, logic
     }
@@ -168,11 +182,25 @@ class Character{
         const featureIndex = this.featuresArray.findIndex(ele => ele.id === id);
         const feature = this.featuresArray[featureIndex];
 
-        feature.goodbyeLogic.call(this);
+        feature.goodbyeLogic();
         const actionIndex = this.playbook[feature.actionType].findIndex(ele => ele.sourceId === feature.id);
         
         this.playbook[feature.actionType].splice(actionIndex, 1);
         this.featuresArray.splice(featureIndex, 1);
+    }
+
+    setBackground(name, bonus1, bonus2, bonus3, ...skillProfiencies){
+        if (bonus1 === bonus2 && bonus1 === bonus3) 
+            throw new Error('You can either have 3 different ability bonuses, or 2 of the same and one different. You cannot have all 3 the same.');
+        this.background.name = name;
+        this.background.bonus1 = bonus1;
+        this.background.bonus2 = bonus2;
+        this.background.bonus3 = bonus3;
+        this.abilityScores[bonus1]++;
+        this.abilityScores[bonus2]++;
+        this.abilityScores[bonus3]++;
+        for (let prof of skillProfiencies) 
+            this.proficiencies.skills[prof].proficiency = 'proficient';
     }
 }
 
@@ -190,11 +218,26 @@ class Feature{
 
 const idAction = new IdGenerator();
 class Action{
-    constructor(name, source, sourceId, actionType, logic){
+    constructor(name, description, source, sourceId, actionType, logic){
         this.name = name;
+        this.description = description;
         this.source = source;
         this.sourceId = sourceId;
         this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
         this.logic = logic;
     }
+}
+
+const descriptions = {
+unarmedStrike: `Instead of using a weapon to make a melee attack, you can use a punch, kick, head-butt, or similar forceful blow. In game terms, this is an Unarmed Strike—a melee attack that involves you using your body to damage, grapple, or shove a target within 5 feet of you.
+
+Whenever you use your Unarmed Strike, choose one of the following options for its effect.
+
+Damage. You make an attack roll against the target. Your bonus to the roll equals your Strength modifier plus your Proficiency Bonus. On a hit, the target takes Bludgeoning damage equal to 1 plus your Strength modifier.
+
+Grapple. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or it has the Grappled condition. The DC for the saving throw and any escape attempts equals 8 plus your Strength modifier and Proficiency Bonus. This grapple is possible only if the target is no more than one size larger than you and if you have a hand free to grab it.
+
+Shove. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or you either push it 5 feet away or cause it to have the Prone condition. The DC for the saving throw equals 8 plus your Strength modifier and Proficiency Bonus. This shove is possible only if the target is no more than one size larger than you.`,
+
+meleeAttack: 'An attack with the weapon in your main hand. If main hand is empty, an unarmed strike instead.'
 }
