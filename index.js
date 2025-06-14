@@ -78,7 +78,7 @@ class Character{
         this.alignment;
 
         //Step 5: Fill in details
-        this.featureArray = [];
+        this.featuresArray = [];
         /*
         what a features object might look like (yes, we'll create a class for Features)
         {
@@ -96,12 +96,12 @@ class Character{
         temporary: 0
        }
 
-       this.playbook = {
-        actions: [],
+       this.playbook = {//holds all the actions, bonus actions, etc
+        action: [],
         bonus: [],
-        reactions: [],
+        reaction: [],
         free: [],
-        passives: []
+        passive: []
        }
 
        this.equipmentSlots = {
@@ -119,6 +119,8 @@ class Character{
         offHandRange: null,
         misc: [],
        }
+
+       this.resources = {}
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -146,27 +148,53 @@ class Character{
 
     get features(){
         let output = ``;
-        for (let feature of this.featureArray) output += `id: ${feature.id} '${feature.name}'\n`;
+        for (let feature of this.featuresArray) output += `id: ${feature.id} '${feature.name}'\n`;
         return output;
     }
 
-    addFeature(name, actionType, description, sourceType, source, logic){
-        const feature = new Feature(name, actionType, description, sourceType, source, logic);
+    addFeature(name, actionType, description, sourceType, source, actionLogic, helloLogic, goodbyeLogic){//helloLogic is logic that will be execute only ONCE when the feature is added. actionLogic is logic that will be executed when the action is used. goodbyeLogic is logic that will be executed when the feature is removed, likely to reverse whatever helloLogic did.
+        const feature = new Feature(name, actionType, description, sourceType, source, actionLogic);
+        helloLogic.call(this);
         feature.id = idFeature.newId();
-        this.featureArray.push(feature);
-        this.playbook[actionType].push()//need to push an action object with name, id, source: 'feature', logic
+        feature.goodbyeLogic = goodbyeLogic;
+        this.featuresArray.push(feature);
+        const actionObj = new Action(name, 'feature', feature.id, actionType, actionLogic);
+        actionObj.id = idAction.newId();
+        this.playbook[actionType].push(actionObj)//need to push an action object with name, source: 'feature', sourceId, logic
+    }
+
+    removeFeature(id){//for now, we'll only be able to delete features via their unique id
+        const featureIndex = this.featuresArray.findIndex(ele => ele.id === id);
+        const feature = this.featuresArray[featureIndex];
+
+        feature.goodbyeLogic.call(this);
+        const actionIndex = this.playbook[feature.actionType].findIndex(ele => ele.sourceId === feature.id);
+        
+        this.playbook[feature.actionType].splice(actionIndex, 1);
+        this.featuresArray.splice(featureIndex, 1);
     }
 }
 
 const idFeature = new IdGenerator();
 class Feature{
-    constructor(name, actionType, description, sourceType, source, logic){
+    constructor(name, actionType, description, sourceType, source, actionLogic){
         this.name = name;
         this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
         this.description = description;
         this.sourceType = sourceType; //either 'class', 'background', 'species', 'item', etc
         this.source = source; //the name of the source
-        this.logic = logic; //a function that holds the logic of the feature, if any. The logic will be pushed to the respective playbook array, but that'll be done via a method. I doubt this constructor will be called directly.
+        this.actionLogic = actionLogic; //a function that holds the logic of the feature, if any. The logic will be pushed to the respective playbook array, but that'll be done via a method. I doubt this constructor will be called directly.
+    }
+}
+
+const idAction = new IdGenerator();
+class Action{
+    constructor(name, source, sourceId, actionType, logic){
+        this.name = name;
+        this.source = source;
+        this.sourceId = sourceId;
+        this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
+        this.logic = logic;
     }
 }
 
