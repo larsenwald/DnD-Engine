@@ -16,5 +16,4 @@ the 'doing right now' stack:
 strike or the weapon in the mainhand.
 -Figure out how weapons are going to work and implement something
 at the very least functional
--Make a function that will equip an item
 */

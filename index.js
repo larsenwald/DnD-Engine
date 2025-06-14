@@ -1,7 +1,13 @@
 class Roll{
     static d(roll, sides){//function(how many dice to roll, how many sides of each die). returns array of rolls
         const output = [];
-        for (let i = 0; i < roll; i++) output.push( Math.floor(Math.random() * sides) + 1 );
+        for (let i = 0; i < roll; i++){
+            const roll = Math.floor(Math.random() * sides) + 1 ;
+            let critOrFail = null;
+            if (roll >= character.critCeil) critOrFail = 'crit';
+            if (roll === 1) critOrFail = 'fail';
+            output.push({roll: roll, critOrFail: critOrFail});
+        }
         return output;
     }
 }
@@ -113,7 +119,11 @@ class Character{
             null,
             'action',
             function(){
-
+                //if mainHandMelee has something equipped, hit with that
+                if (this.equipmentSlots.mainHandMelee){
+                    const attackRoll = [Roll.d(1,20)[0]];
+                }
+                
             }
         )
        )
