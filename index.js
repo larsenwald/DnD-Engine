@@ -205,15 +205,21 @@ class Character{
 
     addItem(json, equipmentSlot){
         const item = JSON.parse(json);
-        if (equipmentSlot) item.equipmentSlot = equipmentSlot;
-        this.inventory.push(JSON.parse(json));
+        if (equipmentSlot)
+            item.equipmentSlot = equipmentSlot;
+        this.inventory.push(item);
     }
 
     equip(name){
         const gearPiece = this.inventory.find(ele => ele.name === name);
         if (!gearPiece)
             throw new Error(`Couldn't find an item with a name of '${name}' in inventory.`);
-        this.equipmentSlots.
+        if (!gearPiece.equipmentSlot)
+            throw new Error(`'${gearPiece}' is not an equippable item.`);
+        if (this.equipmentSlots[gearPiece.equipmentSlot])//if the equipment slot is full, push it to the inventory array--
+            this.inventory.push(this.equipmentSlots[gearPiece.equipmentSlot]);
+        this.equipmentSlots[gearPiece.equipmentSlot] = gearPiece;//--and THEN replace it with the new equipment
+        this.inventory.splice(this.inventory.findIndex(ele => ele.name === name), 1);//delete the copy of the now equipped item
     }
 }
 
