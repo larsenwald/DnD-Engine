@@ -17,3 +17,5 @@ strike or the weapon in the mainhand.
 -Figure out how weapons are going to work and implement something
 at the very least functional
 */
+
+c.proficiencies.weapons.push('Martial')

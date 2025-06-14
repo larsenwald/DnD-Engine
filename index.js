@@ -62,6 +62,7 @@ class Character{
                 survival: {proficiency: 'none', ability: 'wis'},
             },
             armor: [],
+            weapons: []
         }
         //choose starting equipment
         this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
@@ -121,7 +122,9 @@ class Character{
             function(){
                 //if mainHandMelee has something equipped, hit with that
                 if (this.equipmentSlots.mainHandMelee){
-                    const attackRoll = [Roll.d(1,20)[0]];
+                    const rollObject = Roll.d(1,20)[0]
+                    const isProficient = 0;
+                    const attackRoll = rollObject.roll;
                 }
                 
             }
