@@ -198,5 +198,3 @@ class Action{
         this.logic = logic;
     }
 }
-
-const c = new Character();
