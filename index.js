@@ -21,7 +21,7 @@ class Character{
         //Step 1: Choose a class
         this.charClass;
         this.level;
-        this.armorTraining = []; //we might just wanna put this in the proficiencies object. only putting it here because it's mentioned early in the PHB
+        //*armor training was moved to the 'proficiencies' object
 
         //Step 2: Determine origin
         this.background = {
@@ -53,7 +53,8 @@ class Character{
                 sleightOfHand: {proficiency: 'none', ability: 'dex'},
                 stealth: {proficiency: 'none', ability: 'dex'},
                 survival: {proficiency: 'none', ability: 'wis'},
-            }
+            },
+            armor: [],
         }
         //choose starting equipment
         this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
@@ -183,7 +184,7 @@ class Feature{
         this.description = description;
         this.sourceType = sourceType; //either 'class', 'background', 'species', 'item', etc
         this.source = source; //the name of the source
-        this.actionLogic = actionLogic; //a function that holds the logic of the feature, if any. The logic will be pushed to the respective playbook array, but that'll be done via a method. I doubt this constructor will be called directly.
+        this.actionLogic = actionLogic; //a function that holds the logic of the feature. The logic will be pushed to the respective playbook array, but that'll be done via a method. I doubt this constructor will be called directly.
     }
 }
 
