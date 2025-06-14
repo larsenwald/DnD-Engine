@@ -203,8 +203,17 @@ class Character{
             this.proficiencies.skills[prof].proficiency = 'proficient';
     }
 
-    addItem(json){
+    addItem(json, equipmentSlot){
+        const item = JSON.parse(json);
+        if (equipmentSlot) item.equipmentSlot = equipmentSlot;
         this.inventory.push(JSON.parse(json));
+    }
+
+    equip(name){
+        const gearPiece = this.inventory.find(ele => ele.name === name);
+        if (!gearPiece)
+            throw new Error(`Couldn't find an item with a name of '${name}' in inventory.`);
+        this.equipmentSlots.
     }
 }
 
