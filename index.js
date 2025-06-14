@@ -202,6 +202,10 @@ class Character{
         for (let prof of skillProfiencies) 
             this.proficiencies.skills[prof].proficiency = 'proficient';
     }
+
+    addItem(json){
+        this.inventory.push(JSON.parse(json));
+    }
 }
 
 const idFeature = new IdGenerator();

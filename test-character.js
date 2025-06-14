@@ -1,5 +1,5 @@
 const c = new Character();
-let character = c; //this will be for the code to be able to reference the global character object when we can't access it easily via 'this'
+let character = c; //the 'character' keyword will be used throughout the codebase as a global reference to the current character
 
 //Step 1: Choose a class
 c.charClass = 'Fighter';
@@ -16,4 +16,5 @@ the 'doing right now' stack:
 strike or the weapon in the mainhand.
 -Figure out how weapons are going to work and implement something
 at the very least functional
+-Make a function that will equip an item
 */
