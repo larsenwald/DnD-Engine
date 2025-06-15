@@ -110,7 +110,6 @@ class Character{
         bonus: [],
         reaction: [],
         free: [],
-        passive: []
        }
        this.playbook.action.push(
         new Action(
@@ -180,15 +179,12 @@ class Character{
         return output;
     }
 
-    addFeature(name, description, actionName, actionDescription, actionType, sourceType, source, actionLogic, helloLogic, goodbyeLogic){//helloLogic is logic that will be execute only ONCE when the feature is added. actionLogic is logic that will be executed when the action is used. goodbyeLogic is logic that will be executed when the feature is removed, likely to reverse whatever helloLogic did.
+    addFeature(name, description, sourceType, source, helloLogic, goodbyeLogic){//helloLogic is logic that will be execute only ONCE when the feature is added. actionLogic is logic that will be executed when the action is used. goodbyeLogic is logic that will be executed when the feature is removed, likely to reverse whatever helloLogic did.
         const feature = new Feature(name, actionType, description, sourceType, source, actionLogic);
-        helloLogic();
         feature.id = idFeature.newId();
+        helloLogic();
         feature.goodbyeLogic = goodbyeLogic;
         this.featuresArray.push(feature);
-        const actionObj = new Action(actionName ? actionName: name, actionDescription ? actionDescription : description, 'feature', feature.id, actionType, actionLogic);
-        actionObj.id = idAction.newId();
-        this.playbook[actionType].push(actionObj)//need to push an action object with name, source: 'feature', sourceId, logic
     }
 
     removeFeature(id){//for now, we'll only be able to delete features via their unique id
@@ -196,9 +192,7 @@ class Character{
         const feature = this.featuresArray[featureIndex];
 
         feature.goodbyeLogic();
-        const actionIndex = this.playbook[feature.actionType].findIndex(ele => ele.sourceId === feature.id);
-        
-        this.playbook[feature.actionType].splice(actionIndex, 1);
+
         this.featuresArray.splice(featureIndex, 1);
     }
 
