@@ -1,0 +1,8 @@
+- The weapon class
+Weapons are a special kind of item in that they have a structure to them:
+```
+Weapon Mastery: Every weapon in 5e-2024 has a weapon mastery property, each that does something unique when the weapon is used
+
+Weapon property: Weapons have other innate properties such as 'Light' or 'Two-Handed'.
+```
+Thus, it might be a good idea to give the weapon class a bunch of prototypical properties that are functions which can be stuck onto any given weapon. These functions will contain logic.

@@ -1,5 +1,21 @@
+const descriptions = {
+range: `A Range weapon has a range in parentheses after the Ammunition or Thrown property. The range lists two numbers. The first is the weapon's normal range in feet, and the second is the weapon's long range. When attacking a target beyond normal range, you have Disadvantage on the attack roll. You can't attack a target beyond the long range.`,
+versatile: `A Versatile weapon can be used with one or two hands. A damage value in parentheses appears with the property. The weapon deals that damage when used with two hands to make a melee attack.`,
+unarmedStrike: `Instead of using a weapon to make a melee attack, you can use a punch, kick, head-butt, or similar forceful blow. In game terms, this is an Unarmed Strike—a melee attack that involves you using your body to damage, grapple, or shove a target within 5 feet of you.
+
+Whenever you use your Unarmed Strike, choose one of the following options for its effect.
+
+Damage. You make an attack roll against the target. Your bonus to the roll equals your Strength modifier plus your Proficiency Bonus. On a hit, the target takes Bludgeoning damage equal to 1 plus your Strength modifier.
+
+Grapple. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or it has the Grappled condition. The DC for the saving throw and any escape attempts equals 8 plus your Strength modifier and Proficiency Bonus. This grapple is possible only if the target is no more than one size larger than you and if you have a hand free to grab it.
+
+Shove. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or you either push it 5 feet away or cause it to have the Prone condition. The DC for the saving throw equals 8 plus your Strength modifier and Proficiency Bonus. This shove is possible only if the target is no more than one size larger than you.`,
+
+meleeAttack: 'An attack with the weapon in your main hand. If main hand is empty, an unarmed strike instead.'
+}
+
 class Roll{
-    static d(roll, sides){//function(how many dice to roll, how many sides of each die). returns array of rolls
+    static d(roll, sides, adv){//function(how many dice to roll, how many sides of each die). returns array of rolls
         const output = [];
         for (let i = 0; i < roll; i++){
             const roll = Math.floor(Math.random() * sides) + 1 ;
@@ -8,6 +24,9 @@ class Roll{
             if (roll === 1) critOrFail = 'fail';
             output.push({roll: roll, critOrFail: critOrFail});
         }
+        //if adv is 'adv', sort the array so that the highest roll is first. if adv is 'dis', sort the array so that the lowest roll is first.
+        if (adv === 'adv') output.sort((a,b) => b.roll - a.roll);
+        if (adv === 'dis') output.sort((a,b) => a.roll - b.roll);
         return output;
     }
 }
@@ -119,11 +138,10 @@ class Character{
             null,
             'action',
             function(){
-                //if mainHandMelee has something equipped, hit with that
-                if (this.equipmentSlots.mainHandMelee){
+                //if mainHand has something equipped, hit with that
+                if (this.equipmentSlots.mainHand){
                     const rollObject = Roll.d(1,20)[0]
-                    const isProficient = 0//this.equipmentSlots.mainHandMelee.weaponCategory, this.proficiencies.weapons
-                    const attackRoll = rollObject.roll;
+                    const attackRoll = rollObject.roll //+ ;
                 }
                 
             }
@@ -139,15 +157,16 @@ class Character{
         neck: null,
         ring1: null,
         ring2: null,
-        mainHandMelee: null,
-        offHandMelee: null,
-        mainHandRange: null,
-        offHandRange: null,
+        mainHand: null,
+        offHand: null,
         misc: [],
        }
 
        this.resources = {}
        this.critCeil = 20;
+       this.state = {
+        finesse: false,
+       }
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -223,9 +242,9 @@ class Character{
             throw new Error(`Couldn't find an item with a name of '${name}' in inventory.`);
         if (!gearPiece.equipmentSlot)
             throw new Error(`'${gearPiece}' is not an equippable item.`);
-        if (this.equipmentSlots[gearPiece.equipmentSlot])//if the equipment slot is full, push it to the inventory array--
+        if (this.equipmentSlots[gearPiece.equipmentSlot])//if the equipment slot is full, push the item to be replaced to the inventory array--
             this.inventory.push(this.equipmentSlots[gearPiece.equipmentSlot]);
-        this.equipmentSlots[gearPiece.equipmentSlot] = gearPiece;//--and THEN replace it with the new equipment
+        this.equipmentSlots[gearPiece.equipmentSlot] = gearPiece;//--and THEN replace it with the new item
         this.inventory.splice(this.inventory.findIndex(ele => ele.name === name), 1);//delete the copy of the now equipped item
     }
 
@@ -286,16 +305,45 @@ class Action{
     }
 }
 
-const descriptions = {
-unarmedStrike: `Instead of using a weapon to make a melee attack, you can use a punch, kick, head-butt, or similar forceful blow. In game terms, this is an Unarmed Strike—a melee attack that involves you using your body to damage, grapple, or shove a target within 5 feet of you.
+//putting a pin in the weapon logic for now
+/*class Weapon{
+    constructor(name, range, rarity, weight, value, weaponCategory, properties, weaponMastery, dmg1, dmg2, dmgType, helloLogic, goodbyeLogic){
+        this.name = name;
+        this.range = range;
+        this.rarity = rarity;
+        this.weight = weight;
+        this.value = value;
+        this.type = weaponCategory; //either 'simple' or 'martial'
+        this.properties = properties; //array of properties
+        this.mastery = weaponMastery;
+        this.dmg1 = dmg1; //damage die for 1-handed use
+        if (dmg2) this.dmg2 = dmg2;
+        this.dmgType = dmgType;
+        this.helloLogic = helloLogic;
+        this.goodbyeLogic = goodbyeLogic;
+    }
 
-Whenever you use your Unarmed Strike, choose one of the following options for its effect.
+    // properties can expect a context object with the following:
+    // notes
+    // attackRoll to be rolled
+    // dmgRoll to be rolled
+    // dmg1 (default)
+    // dmg2
+    static properties = {
+        versatile: {
+            description: descriptions.versatile,
+            logic: function(ctx){
+                if ((character.equipmentSlots.mainHand && !character.equipmentSlots.offHand) || character.equipmentSlots.offHand && !character.equipmentSlots.mainHand)
+                    ctx.dmg1 = ctx.dmg2;
+            }
+        },
+        range: {
+            description: descriptions.range,
+            logic: function(ctx){
+                const isFar = prompt(`Target further than ranged weapon's normal range? yes/no`);
+                ctx.attackRoll = isFar.trim().charAt(0).toLowerCase === 'y' ? [2, 20, 'dis'] : ctx.attackRoll;
+            }
+        },
 
-Damage. You make an attack roll against the target. Your bonus to the roll equals your Strength modifier plus your Proficiency Bonus. On a hit, the target takes Bludgeoning damage equal to 1 plus your Strength modifier.
-
-Grapple. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or it has the Grappled condition. The DC for the saving throw and any escape attempts equals 8 plus your Strength modifier and Proficiency Bonus. This grapple is possible only if the target is no more than one size larger than you and if you have a hand free to grab it.
-
-Shove. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or you either push it 5 feet away or cause it to have the Prone condition. The DC for the saving throw equals 8 plus your Strength modifier and Proficiency Bonus. This shove is possible only if the target is no more than one size larger than you.`,
-
-meleeAttack: 'An attack with the weapon in your main hand. If main hand is empty, an unarmed strike instead.'
-}
+    }
+}*/
