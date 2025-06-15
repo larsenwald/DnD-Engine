@@ -11,19 +11,20 @@ Grapple. The target must succeed on a Strength or Dexterity saving throw (it cho
 
 Shove. The target must succeed on a Strength or Dexterity saving throw (it chooses which), or you either push it 5 feet away or cause it to have the Prone condition. The DC for the saving throw equals 8 plus your Strength modifier and Proficiency Bonus. This shove is possible only if the target is no more than one size larger than you.`,
 
-meleeAttack: 'An attack with the weapon in your main hand. If main hand is empty, an unarmed strike instead.'
+meleeAttack: 'An attack with the weapon in your main hand. If main hand is empty, an unarmed strike instead.',
+attack: `When you take the Attack action, you can make one attack roll with a weapon or an Unarmed Strike.
+
+Equipping and Unequipping Weapons. You can either equip or unequip one weapon when you make an attack as part of this action. You do so either before or after the attack. If you equip a weapon before an attack, you don't need to use it for that attack. Equipping a weapon includes drawing it from a sheath or picking it up. Unequipping a weapon includes sheathing, stowing, or dropping it.
+
+Moving Between Attacks. If you move on your turn and have a feature, such as Extra Attack, that gives you more than one attack as part of the Attack action, you can use some or all of that movement to move between those attacks.`
+
 }
 
 class Roll{
     static d(roll, sides, adv){//function(how many dice to roll, how many sides of each die). returns array of rolls
         const output = [];
-        for (let i = 0; i < roll; i++){
-            const roll = Math.floor(Math.random() * sides) + 1 ;
-            let critOrFail = null;
-            if (roll >= character.critCeil) critOrFail = 'crit';
-            if (roll === 1) critOrFail = 'fail';
-            output.push({roll: roll, critOrFail: critOrFail});
-        }
+        for (let i = 0; i < roll; i++) output.push(Math.floor(Math.random() * sides) + 1);
+
         //if adv is 'adv', sort the array so that the highest roll is first. if adv is 'dis', sort the array so that the lowest roll is first.
         if (adv === 'adv') output.sort((a,b) => b.roll - a.roll);
         if (adv === 'dis') output.sort((a,b) => a.roll - b.roll);
@@ -132,18 +133,14 @@ class Character{
        }
        this.playbook.action.push(
         new Action(
-            'Melee Attack',
-            descriptions.meleeAttack,
+            'Unarmed Attack',
+            `Make an attack roll against target. Bonus equals strength mod plus proficiency bonus. Damage equals 1 + strength mod.`,
             null,
             null,
             'action',
-            function(){
-                //if mainHand has something equipped, hit with that
-                if (this.equipmentSlots.mainHand){
-                    const rollObject = Roll.d(1,20)[0]
-                    const attackRoll = rollObject.roll //+ ;
-                }
-                
+            {attackRoll: [1, 20], attackMods: ['strMod', 'proficiencyBonus'], dmgRoll: [1, 1], dmgMods: ['strMod']},
+            function(ctx){
+
             }
         )
        )
@@ -279,6 +276,46 @@ class Character{
         }
         return false;
     }
+
+    //ability getters
+    get strength(){
+        return this.abilityScores.str;
+    };
+    get dexterity(){
+        return this.abilityScores.dex;
+    };
+    get constitution(){
+        return this.abilityScores.con;
+    };
+    get intelligence(){
+        return this.abilityScores.int;
+    };
+    get wisdom(){
+        return this.abilityScores.wis;
+    };
+    get charisma(){
+        return this.abilityScores.cha;
+    };
+    //ability mod getters
+    get strengthMod(){
+        return this.mod('ability', 'str');
+    };
+    get dexterityMod(){
+        return this.mod('ability', 'dex');
+    };
+    get constitutionMod(){
+        return this.mod('ability', 'con');
+    };
+    get intelligenceMod(){
+        return this.mod('ability', 'int');
+    };
+    get wisdomMod(){
+        return this.mod('ability', 'wis');
+    };
+    get charismaMod(){
+        return this.mod('ability', 'cha');
+    };
+
 }
 
 const idFeature = new IdGenerator();
@@ -295,13 +332,14 @@ class Feature{
 
 const idAction = new IdGenerator();
 class Action{
-    constructor(name, description, source, sourceId, actionType, logic){
+    constructor(name, description, source, sourceId, actionType, ctx, logic){
         this.name = name;
         this.description = description;
         this.source = source;
         this.sourceId = sourceId;
         this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
-        this.logic = logic;
+        this.ctx = ctx;
+        this.logic;
     }
 }
 

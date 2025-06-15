@@ -13,6 +13,8 @@ c.setBackground('Soldier', 'str', 'str', 'con', 'athletics', 'intimidation');
 /*
 the 'doing right now' stack:
 -continue creating a level 1 fighter
+-create a simple unarmed attack option to simulate what action flow looks like on a small scale
+-implement ability score getters
 */
 
 
