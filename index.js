@@ -40,8 +40,8 @@ class Character{
         };
         this.feats = [];
         this.proficiencies = {
-            saves: [],
-            skills: {//proficiencies can be 'none', 'half', 'proficient', or 'expertise'
+            save: [],
+            skill: {//proficiencies can be 'none', 'half', 'proficient', or 'expertise'
                 acrobatics: {proficiency: 'none', ability: 'dex'},
                 animalHandling: {proficiency: 'none', ability: 'wis'},
                 arcana: {proficiency: 'none', ability: 'int'},
@@ -62,7 +62,7 @@ class Character{
                 survival: {proficiency: 'none', ability: 'wis'},
             },
             armor: [],
-            weapons: []
+            weapon: []
         }
         //choose starting equipment
         this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
@@ -123,7 +123,7 @@ class Character{
                 //if mainHandMelee has something equipped, hit with that
                 if (this.equipmentSlots.mainHandMelee){
                     const rollObject = Roll.d(1,20)[0]
-                    const isProficient = 0;
+                    const isProficient = 0//this.equipmentSlots.mainHandMelee.weaponCategory, this.proficiencies.weapons
                     const attackRoll = rollObject.roll;
                 }
                 
@@ -155,8 +155,8 @@ class Character{
     mod(type, name){
         if (type === 'ability') return Math.floor((this.abilityScores[name]-10) / 2);
         if (type === 'skill'){
-            const skillAbility = this.proficiencies.skills[name].ability;
-            const skillProficiency = this.proficiencies.skills[name].proficiency;
+            const skillAbility = this.proficiencies.skill[name].ability;
+            const skillProficiency = this.proficiencies.skill[name].proficiency;
             const profMultiplier = skillProficiency === 'none' ? 0 : (skillProficiency === 'half' ? 0.5 : (skillProficiency === 'proficient' ? 1 : 2));
             return this.mod('ability', skillAbility) + Math.floor(this.proficiencyBonus * profMultiplier)//skill's respecive ability mod + proficiency(if proficient)
         }
@@ -213,7 +213,7 @@ class Character{
         this.abilityScores[bonus2]++;
         this.abilityScores[bonus3]++;
         for (let prof of skillProfiencies) 
-            this.proficiencies.skills[prof].proficiency = 'proficient';
+            this.proficiencies.skill[prof].proficiency = 'proficient';
     }
 
     addItem(json, equipmentSlot){
@@ -233,6 +233,38 @@ class Character{
             this.inventory.push(this.equipmentSlots[gearPiece.equipmentSlot]);
         this.equipmentSlots[gearPiece.equipmentSlot] = gearPiece;//--and THEN replace it with the new equipment
         this.inventory.splice(this.inventory.findIndex(ele => ele.name === name), 1);//delete the copy of the now equipped item
+    }
+
+    //this is a version of the hasProficiency method that only needs a name
+    /*hasProficiency(name){
+        const normalizedName = name.trim().toLowerCase();
+        const profs = this.proficiencies;
+        if (profs.skill[normalizedName])
+            return (profs.skill[normalizedName].proficiency === 'proficient' || profs.skill[normalizedName].proficiency === 'expertise');
+        for (let key in profs){
+            if (Array.isArray(profs[key])){
+                for (let prof of profs[key]){
+                    if (compareStr(normalizedName, prof))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }*/
+    hasProficiency(proficiencyType, name){
+        if (!this.proficiencies[proficiencyType])
+            throw new Error('This category of proficiencies does not exist.');
+        if (proficiencyType === 'skill'){
+            if (!this.proficiencies.skill[name])
+                throw new Error('This skill does not exist.');
+            return this.proficiencies.skill[name].proficiency === 'proficient' || this.proficiencies.skill[name].proficiency === 'expertise';
+        }
+
+        for (let prof of this.proficiencies[proficiencyType]){
+            if (compareStr(name, prof))
+                return true;
+        }
+        return false;
     }
 }
 

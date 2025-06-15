@@ -18,4 +18,4 @@ strike or the weapon in the mainhand.
 at the very least functional
 */
 
-c.proficiencies.weapons.push('Martial')
+c.proficiencies.weapon.push('Martial')
