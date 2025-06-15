@@ -19,7 +19,6 @@ Equipping and Unequipping Weapons. You can either equip or unequip one weapon wh
 Moving Between Attacks. If you move on your turn and have a feature, such as Extra Attack, that gives you more than one attack as part of the Attack action, you can use some or all of that movement to move between those attacks.`
 
 }
-
 class Roll{
     static d(roll, sides, adv){//function(how many dice to roll, how many sides of each die). returns array of rolls
         const output = [];
@@ -138,12 +137,27 @@ class Character{
             null,
             null,
             'action',
-            {attackRoll: [1, 20], attackMods: ['strMod', 'proficiencyBonus'], dmgRoll: [1, 1], dmgMods: ['strMod']},
+            {attackRoll: [1, 20], attackMods: ['strengthMod', 'proficiencyBonus'], dmgRoll: [1, 1], dmgMods: ['strengthMod']},
             function(ctx){
-
+                let attackRoll = Roll.d(...ctx.attackRoll)[0];
+                for (let mod of ctx.attackMods){
+                    if (typeof mod === 'string') attackRoll += character[mod];
+                    else if (typeof mod === 'number') attackRoll += mod;
+                };
+                let dmgRoll = Roll.d(...ctx.dmgRoll)[0];
+                for (let mod of ctx.dmgMods){
+                    if (typeof mod === 'string') dmgRoll += character[mod];
+                    else if (typeof mod === 'number') dmgRoll += mod;
+                }
+                ctx.finalVals = {
+                    attackRoll,
+                    dmgRoll,
+                }
+                return ctx;
             }
         )
        )
+       //if I give the action class a hooks property, I can use that to execute logic that modifies the action's ctx before the action is executed. The real question is, should hooks have a before and after property? Like, if whether the hook should be executed before or after the action's logic is executed.
 
        this.equipmentSlots = {
         head: null,
@@ -161,9 +175,7 @@ class Character{
 
        this.resources = {}
        this.critCeil = 20;
-       this.state = {
-        finesse: false,
-       }
+       this.state = {}
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -337,9 +349,11 @@ class Action{
         this.description = description;
         this.source = source;
         this.sourceId = sourceId;
-        this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
+        this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free'
         this.ctx = ctx;
-        this.logic;
+        this.logic = logic;
+        this.hooks = {before: [], after: []};
+        this.id = idAction.newId();
     }
 }
 
