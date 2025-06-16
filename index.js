@@ -107,16 +107,6 @@ class Character{
 
         //Step 5: Fill in details
         this.featuresArray = [];
-        /*
-        what a features object might look like (yes, we'll create a class for Features)
-        {
-            name: 'string',
-            source: 'string', (could be 'class', 'background', 'species', 'item', etc)
-            type: 'string', (either 'feat', 'feature', or 'trait. can't think of any other possibilites, but not sure)
-            action: {actionType: ('action', 'bonus', 'reaction', 'free', or 'passive'), ...other properties} (we might make action objects that hold logic and get pushed to their respective playbook arrays, but that may be outside the scope of this intentioally bare implementation. we'll see though.)
-            description: 'string'
-        }
-        */
        //Fill in numbers
        this.hp = {
         max: 0,
@@ -130,33 +120,6 @@ class Character{
         reaction: [],
         free: [],
        }
-       this.playbook.action.push(
-        new Action(
-            'Unarmed Attack',
-            `Make an attack roll against target. Bonus equals strength mod plus proficiency bonus. Damage equals 1 + strength mod.`,
-            null,
-            null,
-            'action',
-            {attackRoll: [1, 20], attackMods: ['strengthMod', 'proficiencyBonus'], dmgRoll: [1, 1], dmgMods: ['strengthMod']},
-            function(ctx){
-                let attackRoll = Roll.d(...ctx.attackRoll)[0];
-                for (let mod of ctx.attackMods){
-                    if (typeof mod === 'string') attackRoll += character[mod];
-                    else if (typeof mod === 'number') attackRoll += mod;
-                };
-                let dmgRoll = Roll.d(...ctx.dmgRoll)[0];
-                for (let mod of ctx.dmgMods){
-                    if (typeof mod === 'string') dmgRoll += character[mod];
-                    else if (typeof mod === 'number') dmgRoll += mod;
-                }
-                ctx.finalVals = {
-                    attackRoll,
-                    dmgRoll,
-                }
-                return ctx;
-            }
-        )
-       )
        //if I give the action class a hooks property, I can use that to execute logic that modifies the action's ctx before the action is executed. The real question is, should hooks have a before and after property? Like, if whether the hook should be executed before or after the action's logic is executed.
 
        this.equipmentSlots = {
@@ -201,29 +164,6 @@ class Character{
     
     get proficiencyBonus(){ return Math.ceil(this.level / 4) + 1 }
 
-    get features(){
-        let output = ``;
-        for (let feature of this.featuresArray) output += `id: ${feature.id} '${feature.name}'\n`;
-        return output;
-    }
-
-    addFeature(name, description, sourceType, source, helloLogic, goodbyeLogic){//helloLogic is logic that will be execute only ONCE when the feature is added. actionLogic is logic that will be executed when the action is used. goodbyeLogic is logic that will be executed when the feature is removed, likely to reverse whatever helloLogic did.
-        const feature = new Feature(name, actionType, description, sourceType, source, actionLogic);
-        feature.id = idFeature.newId();
-        helloLogic();
-        feature.goodbyeLogic = goodbyeLogic;
-        this.featuresArray.push(feature);
-    }
-
-    removeFeature(id){//for now, we'll only be able to delete features via their unique id
-        const featureIndex = this.featuresArray.findIndex(ele => ele.id === id);
-        const feature = this.featuresArray[featureIndex];
-
-        feature.goodbyeLogic();
-
-        this.featuresArray.splice(featureIndex, 1);
-    }
-
     setBackground(name, bonus1, bonus2, bonus3, ...skillProfiencies){
         if (bonus1 === bonus2 && bonus1 === bonus3) 
             throw new Error('You can either have 3 different ability bonuses, or 2 of the same and one different. You cannot have all 3 the same.');
@@ -238,41 +178,6 @@ class Character{
             this.proficiencies.skill[prof].proficiency = 'proficient';
     }
 
-    addItem(json, equipmentSlot){
-        const item = JSON.parse(json);
-        if (equipmentSlot)
-            item.equipmentSlot = equipmentSlot;
-        this.inventory.push(item);
-    }
-
-    equip(name){
-        const gearPiece = this.inventory.find(ele => ele.name === name);
-        if (!gearPiece)
-            throw new Error(`Couldn't find an item with a name of '${name}' in inventory.`);
-        if (!gearPiece.equipmentSlot)
-            throw new Error(`'${gearPiece}' is not an equippable item.`);
-        if (this.equipmentSlots[gearPiece.equipmentSlot])//if the equipment slot is full, push the item to be replaced to the inventory array--
-            this.inventory.push(this.equipmentSlots[gearPiece.equipmentSlot]);
-        this.equipmentSlots[gearPiece.equipmentSlot] = gearPiece;//--and THEN replace it with the new item
-        this.inventory.splice(this.inventory.findIndex(ele => ele.name === name), 1);//delete the copy of the now equipped item
-    }
-
-    //this is a version of the hasProficiency method that only needs a name
-    /*hasProficiency(name){
-        const normalizedName = name.trim().toLowerCase();
-        const profs = this.proficiencies;
-        if (profs.skill[normalizedName])
-            return (profs.skill[normalizedName].proficiency === 'proficient' || profs.skill[normalizedName].proficiency === 'expertise');
-        for (let key in profs){
-            if (Array.isArray(profs[key])){
-                for (let prof of profs[key]){
-                    if (compareStr(normalizedName, prof))
-                        return true;
-                }
-            }
-        }
-        return false;
-    }*/
     hasProficiency(proficiencyType, name){
         if (!this.proficiencies[proficiencyType])
             throw new Error('This category of proficiencies does not exist.');
@@ -329,73 +234,3 @@ class Character{
     };
 
 }
-
-const idFeature = new IdGenerator();
-class Feature{
-    constructor(name, actionType, description, sourceType, source, actionLogic){
-        this.name = name;
-        this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free', or 'passive'
-        this.description = description;
-        this.sourceType = sourceType; //either 'class', 'background', 'species', 'item', etc
-        this.source = source; //the name of the source
-        this.actionLogic = actionLogic; //a function that holds the logic of the feature. The logic will be pushed to the respective playbook array, but that'll be done via a method. I doubt this constructor will be called directly.
-    }
-}
-
-const idAction = new IdGenerator();
-class Action{
-    constructor(name, description, source, sourceId, actionType, ctx, logic){
-        this.name = name;
-        this.description = description;
-        this.source = source;
-        this.sourceId = sourceId;
-        this.actionType = actionType; //either 'action', 'bonus', 'reaction', 'free'
-        this.ctx = ctx;
-        this.logic = logic;
-        this.hooks = {before: [], after: []};
-        this.id = idAction.newId();
-    }
-}
-
-//putting a pin in the weapon logic for now
-/*class Weapon{
-    constructor(name, range, rarity, weight, value, weaponCategory, properties, weaponMastery, dmg1, dmg2, dmgType, helloLogic, goodbyeLogic){
-        this.name = name;
-        this.range = range;
-        this.rarity = rarity;
-        this.weight = weight;
-        this.value = value;
-        this.type = weaponCategory; //either 'simple' or 'martial'
-        this.properties = properties; //array of properties
-        this.mastery = weaponMastery;
-        this.dmg1 = dmg1; //damage die for 1-handed use
-        if (dmg2) this.dmg2 = dmg2;
-        this.dmgType = dmgType;
-        this.helloLogic = helloLogic;
-        this.goodbyeLogic = goodbyeLogic;
-    }
-
-    // properties can expect a context object with the following:
-    // notes
-    // attackRoll to be rolled
-    // dmgRoll to be rolled
-    // dmg1 (default)
-    // dmg2
-    static properties = {
-        versatile: {
-            description: descriptions.versatile,
-            logic: function(ctx){
-                if ((character.equipmentSlots.mainHand && !character.equipmentSlots.offHand) || character.equipmentSlots.offHand && !character.equipmentSlots.mainHand)
-                    ctx.dmg1 = ctx.dmg2;
-            }
-        },
-        range: {
-            description: descriptions.range,
-            logic: function(ctx){
-                const isFar = prompt(`Target further than ranged weapon's normal range? yes/no`);
-                ctx.attackRoll = isFar.trim().charAt(0).toLowerCase === 'y' ? [2, 20, 'dis'] : ctx.attackRoll;
-            }
-        },
-
-    }
-}*/
