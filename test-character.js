@@ -13,8 +13,10 @@ c.newFeature(`Savage Attacker`,
     'background'
 )
 c.proficiencies.tool.push(`Playing Cards`)
+//you get starting equipment from both background and class
 
 /*
 the 'doing right now' stack:
 -continue creating a level 1 fighter
+-make a 5etools json parsing method for adding new items
 */
