@@ -14,5 +14,3 @@ c.setBackground('Soldier', 'str', 'str', 'con', 'athletics', 'intimidation');
 the 'doing right now' stack:
 -continue creating a level 1 fighter
 */
-
-c.proficiencies.weapon.push('Martial')

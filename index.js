@@ -233,4 +233,25 @@ class Character{
         return this.mod('ability', 'cha');
     };
 
+
+    //adding stuff
+    newFeature(feature){
+        if (this.featuresArray.find(ele => compareStr(ele.name, feature.name)))
+            throw new Error(`A feature with the name '${feature.name}' already exists.`);
+        this.featuresArray.push(feature);
+    }
+    removeFeature(name){
+        const index = this.featuresArray.findIndex(ele => compareStr(ele.name, name));
+        if (index === -1)
+            throw new Error(`Couldn't find a feature named ${name}`);
+        this.featuresArray.splice(index, 1);
+    }
+}
+
+class Feature{
+    constructor(name, description, src){
+        this.name = name;
+        this.description = description;
+        this.src = src;
+    }
 }
