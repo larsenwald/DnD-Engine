@@ -17,5 +17,4 @@ c.proficiencies.tool.push(`Playing Cards`)
 /*
 the 'doing right now' stack:
 -continue creating a level 1 fighter
--give ability scores a modifier array of objects that hold name, srcId, and value
 */
