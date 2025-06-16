@@ -96,12 +96,12 @@ class Character{
 
         //Step 3: Determine Ability Scores
         this.abilityScores = {
-            str: 10,
-            dex: 10,
-            con: 10,
-            int: 10,
-            wis: 10,
-            cha: 10,
+            str: {value: 10, mods: []},
+            dex: {value: 10, mods: []},
+            con: {value: 10, mods: []},
+            int: {value: 10, mods: []},
+            wis: {value: 10, mods: []},
+            cha: {value: 10, mods: []},
         }
 
         //Step 4: Choose an Alignment
@@ -145,7 +145,12 @@ class Character{
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
     mod(type, name){
-        if (type === 'ability') return Math.floor((this.abilityScores[name]-10) / 2);
+        if (type === 'ability'){
+            let abilityScore = this.abilityScores[name].value;
+            const abilityMods = this.abilityScores[name].mods;
+            for (let mod of abilityMods) abilityScore += mod.value;
+            return Math.floor((abilityScore-10) / 2);            
+        };
         if (type === 'skill'){
             const skillAbility = this.proficiencies.skill[name].ability;
             const skillProficiency = this.proficiencies.skill[name].proficiency;
@@ -173,9 +178,9 @@ class Character{
         this.background.bonus1 = bonus1;
         this.background.bonus2 = bonus2;
         this.background.bonus3 = bonus3;
-        this.abilityScores[bonus1]++;
-        this.abilityScores[bonus2]++;
-        this.abilityScores[bonus3]++;
+        this.abilityScores[bonus1].mods.push({value: 1, src: `background: ${name}`});
+        this.abilityScores[bonus2].mods.push({value: 1, src: `background: ${name}`});
+        this.abilityScores[bonus3].mods.push({value: 1, src: `background: ${name}`});
         for (let prof of skillProfiencies) 
             this.proficiencies.skill[prof].proficiency = 'proficient';
     }
