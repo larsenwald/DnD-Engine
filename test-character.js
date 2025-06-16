@@ -8,9 +8,14 @@ c.proficiencies.armor.push('Light', 'Medium', 'Heavy', 'Shields');
 
 //Step 2: Determine origin
 c.setBackground('Soldier', 'str', 'str', 'con', 'athletics', 'intimidation');
-
+c.newFeature(`Savage Attacker`, 
+    `Once per turn when you a target with a weapon, you can roll the weapon's dmg dice twice and use either result.`,
+    'background'
+)
+c.proficiencies.tool.push(`Playing Cards`)
 
 /*
 the 'doing right now' stack:
 -continue creating a level 1 fighter
+-give ability scores a modifier array of objects that hold name, srcId, and value
 */

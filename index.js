@@ -40,6 +40,7 @@ class IdGenerator{
     }
     
 }
+const idGen = new IdGenerator();
 
 class Character{
     constructor(){//modeling the constructor after the order of the steps to create a new character in the 2024 PHB
@@ -81,7 +82,8 @@ class Character{
                 survival: {proficiency: 'none', ability: 'wis'},
             },
             armor: [],
-            weapon: []
+            weapon: [],
+            tool: []
         }
         //choose starting equipment
         this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
@@ -235,12 +237,12 @@ class Character{
 
 
     //adding stuff
-    newFeature(feature){
-        if (this.featuresArray.find(ele => compareStr(ele.name, feature.name)))
-            throw new Error(`A feature with the name '${feature.name}' already exists.`);
-        this.featuresArray.push(feature);
+    newFeature(name, description, src){
+        if (this.featuresArray.find(ele => compareStr(ele.name, name)))
+            throw new Error(`A feature with the name '${name}' already exists.`);
+        this.featuresArray.push(new Feature(name, description, src));
     }
-    removeFeature(name){
+    removeFeature(name){ //future me: we could potentially make it also delete all actions that have the feature's name as their source.
         const index = this.featuresArray.findIndex(ele => compareStr(ele.name, name));
         if (index === -1)
             throw new Error(`Couldn't find a feature named ${name}`);
@@ -253,5 +255,6 @@ class Feature{
         this.name = name;
         this.description = description;
         this.src = src;
+        this.id = idGen.newId();
     }
 }
