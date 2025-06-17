@@ -42,6 +42,19 @@ Mastery: Sap
 Mastery: Sap. If you hit a creature with this weapon, that creature has Disadvantage on its next attack roll before the start of your next turn.`,
 }
 
+async function get5eToolsObject(url) {
+    let output;
+    try {
+        const response = await fetch(`https://corsproxy.io/?${url}`);
+        output = await response.json();
+    } catch (error) {
+        console.log(error);
+        return;
+    }
+    return output;
+}
+
+
 const jsonArray = [
     `
 {
@@ -61,5 +74,16 @@ const jsonArray = [
 	"stealth": true,
 	"hasFluffImages": true,
 	"entries": []
-}`
+}`,
+
 ]
+
+
+let itemsObject;
+(async () => {
+    itemsObject = await get5eToolsObject(`https://5e.tools/data/items-base.json`);
+    console[itemsObject ? `log` : `error`](itemsObject ? `itemsObject loaded!` : `itemsObject failed.`)
+    for (let item of itemsObject.baseitem){//push all of the baseItem objects as json instead of js objects to the jsonArray
+        jsonArray.push(JSON.stringify(item))
+    }
+})();

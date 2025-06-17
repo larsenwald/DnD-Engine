@@ -18,5 +18,4 @@ c.proficiencies.tool.push(`Playing Cards`)
 /*
 the 'doing right now' stack:
 -continue creating a level 1 fighter
--make a 5etools json parsing method for adding new items
 */
