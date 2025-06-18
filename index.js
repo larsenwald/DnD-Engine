@@ -69,9 +69,10 @@ class Character{
         this.inventory = []; //coins will go in inventory. we'll have a method that can print how many u have
         //choose a species
         this.species = '';
-        this.speciesTraits = [];
+        //this.speciesTraits = [];  //decided to just let the featuresArray hold on to species traits for now
         this.size;
         this.speed;
+        this.darkvision = {has: false, range: 0};
         this.languages = [];
 
         //Step 3: Determine Ability Scores
@@ -165,6 +166,7 @@ class Character{
             this.proficiencies.skill[prof].proficiency = 'proficient';
     }
 
+
     hasProficiency(proficiencyType, name){
         if (!this.proficiencies[proficiencyType])
             throw new Error('This category of proficiencies does not exist.');
@@ -233,9 +235,9 @@ class Character{
             throw new Error(`Couldn't find a feature named ${name}`);
         this.featuresArray.splice(index, 1);
     }
-    newItem(name, amount = 1, note=null){//for now, to add a new item, you'll need to put its 5etools json in the jsonArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonArray automatically)
-        let json = jsonArray.find(ele => compareStr(JSON.parse(ele).name, name) && JSON.parse(ele).source === 'XPHB');//only looking for items from XPHB for now
-        if (!json) throw new Error(`Couldn't find an item with a name of '${name} in the jsonArray.`)
+    newItem(name, amount = 1, note=null){//for now, to add a new item, you'll need to put its 5etools json in the jsonItemsArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonItemsArray automatically)
+        let json = jsonItemsArray.find(ele => compareStr(JSON.parse(ele).name, name) && JSON.parse(ele).source === 'XPHB');//only looking for items from XPHB for now
+        if (!json) throw new Error(`Couldn't find an item with a name of '${name} in the jsonItemsArray.`)
         
         //if it's armor or a weapon, just push it immediately the amount of times equal to the amount value (recall each item will have a unique ID)
         if (JSON.parse(json).armor || JSON.parse(json).weapon) {

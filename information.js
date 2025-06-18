@@ -55,7 +55,7 @@ async function get5eToolsObject(url) {
 }
 
 
-const jsonArray = [
+const jsonItemsArray = [
     `
 {
 	"name": "Chain Mail",
@@ -76,29 +76,42 @@ const jsonArray = [
 	"entries": []
 }`, 
 `{
-	"name": "Gold Piece", 
-	"value": 100, 
-	"source": "XPHB", 
-	"weight": 0.02
+"name": "Gold Piece", 
+"value": 100, 
+"source": "XPHB", 
+"weight": 0.02
 }` //gold pieces aren't officially considered items within 5e tools, so we make our own. we might want to just store gold separately instead of in the inventory
 
 ]
+const jsonSpeciesArray = []
 
 
 let itemsObject;
 (async () => {
     itemsObject = await get5eToolsObject(`https://5e.tools/data/items-base.json`);
     console[itemsObject ? `log` : `error`](itemsObject ? `itemsObject loaded!` : `itemsObject failed.`)
-    for (let item of itemsObject.baseitem){//push all of the baseItem objects as json instead of js objects to the jsonArray
-        jsonArray.push(JSON.stringify(item))
+    for (let item of itemsObject.baseitem){//push all of the baseItem objects as json instead of js objects to the jsonItemsArray
+        jsonItemsArray.push(JSON.stringify(item))
     }
+	itemsObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
 })();
 
 let biggerItemsObject;
-(async () => { //this will push a lot of the non-weapon items to the jsonArray
+(async () => { //this will push a lot of the non-weapon item json to the jsonItemsArray
 	biggerItemsObject = await get5eToolsObject(`https://5e.tools/data/items.json`);
 	console[biggerItemsObject ? `log` : `error`](biggerItemsObject ? `biggerItemsObject loaded!` : `biggerItemsObject failed.`)
 	for (let item of biggerItemsObject.item){
-		jsonArray.push(JSON.stringify(item));
+		jsonItemsArray.push(JSON.stringify(item));
 	}
+	biggerItemsObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
+})();
+
+let speciesObject;
+(async () => {
+	speciesObject = await get5eToolsObject(`https://5e.tools/data/races.json`);
+	console[speciesObject ? `log` : `error`](speciesObject ? `speciesObject loaded!` : `speciesObject failed.`)
+	speciesObject.race.forEach(species => {
+		if (species.source === 'XPHB') jsonSpeciesArray.push(JSON.stringify(species));
+	});
+	speciesObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
 })();

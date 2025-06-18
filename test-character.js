@@ -3,7 +3,7 @@ let character = c; //the 'character' keyword will be used throughout the codebas
 
 let tries = 0;
 const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete. awful but it works for now
-    if (!itemsObject || !biggerItemsObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
+    if (!itemsObject || !biggerItemsObject || !speciesObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
         tries++;
         if (tries > 50){
             console.error(`Still waiting for something to load! Timed out.`)
@@ -52,6 +52,12 @@ c.newItem(`Flail`)
 c.newItem(`Javelin`, 8)
 c.newItem(`Dungeoneer's Pack`)
 c.newItem(`gold piece`, 4)
+c.newItem(`trinket`, 1, `a mummified goblin hand (entry #1 on the 'Trinkets' d100 table)`)
+
+//choose a species
+c.species = `Orc`;
+c.size = `Medium`;
+c.speed = 30;
 }
 
 
