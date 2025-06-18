@@ -245,8 +245,17 @@ class Character{
             return;
         }
 
-        //if it's neither, first check if it's in the inventory. if it is, increment the stack a number of times equal to the amount value
-        //if (this.inventory.find)
+        //if it's neither armor or weapon, first check if it's in the inventory. if it is, increment the stack a number of times equal to the amount value
+        let index = this.inventory.findIndex(ele => compareStr(JSON.parse(json).name, ele.name));
+        if (index !== -1){
+            this.inventory[index].amount += amount;
+            return;
+        }
+
+        //if it's not in the inventory, create a new item object, add a 'amount' property with a value equal to the amount argument
+        const item = new Item(json);
+        item.amount = amount;
+        this.inventory.push(item);
     }
 }
 
