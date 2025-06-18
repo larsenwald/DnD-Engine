@@ -87,3 +87,12 @@ let itemsObject;
         jsonArray.push(JSON.stringify(item))
     }
 })();
+
+let biggerItemsObject;
+(async () => { //this will push a lot of the non-weapon items to the jsonArray
+	biggerItemsObject = await get5eToolsObject(`https://5e.tools/data/items.json`);
+	console[biggerItemsObject ? `log` : `error`](biggerItemsObject ? `biggerItemsObject loaded!` : `biggerItemsObject failed.`)
+	for (let item of biggerItemsObject.item){
+		jsonArray.push(JSON.stringify(item));
+	}
+})();

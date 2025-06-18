@@ -2,8 +2,8 @@ const c = new Character();
 let character = c; //the 'character' keyword will be used throughout the codebase as a global reference to the current character
 
 let tries = 0;
-const waitForLoad = setInterval(() => { //setting a interval to keep checking for async fetches to complete. awful but it works for now
-    if (!itemsObject /*&& !otherThing && !anotherThing */){ //our check to see if all the async variables our character depends on have actually loaded
+const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete. awful but it works for now
+    if (!itemsObject || !biggerItemsObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
         tries++;
         if (tries > 50){
             console.error(`Still waiting for something to load! Timed out.`)
@@ -37,7 +37,7 @@ c.proficiencies.tool.push(`Playing Cards`)
 //background equipment
 c.newItem(`spear`)
 c.newItem(`shortbow`)
-
+c.newItem(`arrow`, 20);
 }
 
 
