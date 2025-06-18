@@ -233,10 +233,20 @@ class Character{
             throw new Error(`Couldn't find a feature named ${name}`);
         this.featuresArray.splice(index, 1);
     }
-    newItem(name){//for now, to add a new item, you'll need to put its 5etools json in the jsonArray variable located in the information.js file
-        const json = jsonArray.find(ele => compareStr(JSON.parse(ele).name, name))
+    newItem(name, amount = 1){//for now, to add a new item, you'll need to put its 5etools json in the jsonArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonArray automatically)
+        let json = jsonArray.find(ele => compareStr(JSON.parse(ele).name, name) && JSON.parse(ele).source === 'XPHB');//only looking for items from XPHB for now
         if (!json) throw new Error(`Couldn't find an item with a name of '${name} in the jsonArray.`)
-        this.inventory.push(new Item(json));
+        
+        //if it's armor or a weapon, just push it immediately the amount of times equal to the amount value (recall each item will have a unique ID)
+        if (JSON.parse(json).armor || JSON.parse(json).weapon) {
+            for (let i = 0; i < amount; i++){
+                this.inventory.push(new Item(json));
+            }
+            return;
+        }
+
+        //if it's neither, first check if it's in the inventory. if it is, increment the stack a number of times equal to the amount value
+        //if (this.inventory.find)
     }
 }
 
