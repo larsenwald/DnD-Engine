@@ -105,13 +105,3 @@ let biggerItemsObject;
 	}
 	biggerItemsObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
 })();
-
-let speciesObject;
-(async () => {
-	speciesObject = await get5eToolsObject(`https://5e.tools/data/races.json`);
-	console[speciesObject ? `log` : `error`](speciesObject ? `speciesObject loaded!` : `speciesObject failed.`)
-	speciesObject.race.forEach(species => {
-		if (species.source === 'XPHB') jsonSpeciesArray.push(JSON.stringify(species));
-	});
-	speciesObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
-})();

@@ -3,7 +3,7 @@ let character = c; //the 'character' keyword will be used throughout the codebas
 
 let tries = 0;
 const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete. awful but it works for now
-    if (!itemsObject || !biggerItemsObject || !speciesObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
+    if (!itemsObject || !biggerItemsObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
         tries++;
         if (tries > 50){
             console.error(`Still waiting for something to load! Timed out.`)
