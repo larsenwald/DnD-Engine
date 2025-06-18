@@ -233,14 +233,16 @@ class Character{
             throw new Error(`Couldn't find a feature named ${name}`);
         this.featuresArray.splice(index, 1);
     }
-    newItem(name, amount = 1){//for now, to add a new item, you'll need to put its 5etools json in the jsonArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonArray automatically)
+    newItem(name, amount = 1, note=null){//for now, to add a new item, you'll need to put its 5etools json in the jsonArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonArray automatically)
         let json = jsonArray.find(ele => compareStr(JSON.parse(ele).name, name) && JSON.parse(ele).source === 'XPHB');//only looking for items from XPHB for now
         if (!json) throw new Error(`Couldn't find an item with a name of '${name} in the jsonArray.`)
         
         //if it's armor or a weapon, just push it immediately the amount of times equal to the amount value (recall each item will have a unique ID)
         if (JSON.parse(json).armor || JSON.parse(json).weapon) {
             for (let i = 0; i < amount; i++){
-                this.inventory.push(new Item(json));
+                const item = new Item(json);
+                item.note = note;
+                this.inventory.push(item);
             }
             return;
         }
@@ -255,6 +257,7 @@ class Character{
         //if it's not in the inventory, create a new item object, add a 'amount' property with a value equal to the amount argument
         const item = new Item(json);
         item.amount = amount;
+        item.note = note;
         this.inventory.push(item);
     }
 }

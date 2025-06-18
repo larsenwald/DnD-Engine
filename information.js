@@ -74,7 +74,13 @@ const jsonArray = [
 	"stealth": true,
 	"hasFluffImages": true,
 	"entries": []
-}`,
+}`, 
+`{
+	"name": "Gold Piece", 
+	"value": 100, 
+	"source": "XPHB", 
+	"weight": 0.02
+}` //gold pieces aren't officially considered items within 5e tools, so we make our own. we might want to just store gold separately instead of in the inventory
 
 ]
 

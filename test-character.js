@@ -33,11 +33,25 @@ c.newFeature(`Savage Attacker`,
     'background'
 )
 c.proficiencies.tool.push(`Playing Cards`)
+
 //you get starting equipment from both background and class
-//background equipment
-c.newItem(`spear`)
-c.newItem(`shortbow`)
+
+//background starting equipment
+c.newItem(`spear`);
+c.newItem(`shortbow`);
 c.newItem(`arrow`, 20);
+c.newItem(`playing cards`);
+c.newItem(`healer's kit`);
+c.newItem(`quiver`);
+c.newItem(`traveler's clothes`);
+c.newItem(`gold piece`, 14);
+//class starting equipment
+c.newItem(`chain mail`);
+c.newItem(`Greatsword`)
+c.newItem(`Flail`)
+c.newItem(`Javelin`, 8)
+c.newItem(`Dungeoneer's Pack`)
+c.newItem(`gold piece`, 4)
 }
 
 
