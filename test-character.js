@@ -106,7 +106,7 @@ c.proficiencies.save.push(`str`, `con`)
 //passive perception method implemented
 c.hp = 10 + c.mod(`ability`, `con`);
 //initiative getter implemented
-
+//ac getter implemented
 
 //name your characters
 }
