@@ -93,7 +93,6 @@ let itemsObject;
     for (let item of itemsObject.baseitem){//push all of the baseItem objects as json instead of js objects to the jsonItemsArray
         jsonItemsArray.push(JSON.stringify(item))
     }
-	itemsObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
 })();
 
 let biggerItemsObject;
@@ -103,5 +102,4 @@ let biggerItemsObject;
 	for (let item of biggerItemsObject.item){
 		jsonItemsArray.push(JSON.stringify(item));
 	}
-	biggerItemsObject = 1; //so we can dump all of that js object data to be garbage collected while keeping the variable truthy
 })();

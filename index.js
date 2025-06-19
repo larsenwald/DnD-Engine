@@ -63,6 +63,7 @@ class Character{
             },
             armor: [],
             weapon: [],
+            weaponMastery: [],
             tool: []
         }
         //choose starting equipment
@@ -72,8 +73,7 @@ class Character{
         //this.speciesTraits = [];  //decided to just let the featuresArray hold on to species traits for now
         this.size;
         this.speed;
-        this.darkvision = {has: false, range: 0};
-        this.languages = [];
+        this.languages = [`Common`];
 
         //Step 3: Determine Ability Scores
         this.abilityScores = {
@@ -222,12 +222,21 @@ class Character{
         return this.mod('ability', 'cha');
     };
 
+    //checks
+    savingThrow(type){ //accounts for first three letters of string input. for example, it can take 'str' or 'strength'
+        const normalizedType = type.toLowerCase().trim().slice(0, 3);
+        return this.mod(`ability`, normalizedType) + Roll.d(1, 20)[0] + (this.proficiencies.save.includes(normalizedType) ? this.proficiencyBonus : 0);
+    }
+    check(type, name){// (skill||ability, acrobatics||animal handling||dexterity, etc)
+        
+    }
+
 
     //adding stuff
-    newFeature(name, description, src){
+    newFeature(name, description, src, srcId=null){
         if (this.featuresArray.find(ele => compareStr(ele.name, name)))
             throw new Error(`A feature with the name '${name}' already exists.`);
-        this.featuresArray.push(new Feature(name, description, src));
+        this.featuresArray.push(new Feature(name, description, src, srcId));
     }
     removeFeature(name){ //future me: we could potentially make it also delete all actions that have the feature's name as their source.
         const index = this.featuresArray.findIndex(ele => compareStr(ele.name, name));
@@ -265,10 +274,11 @@ class Character{
 }
 
 class Feature{
-    constructor(name, description, src){
+    constructor(name, description, src, srcId = null){
         this.name = name;
         this.description = description;
         this.src = src;
+        this.srcId = srcId;
         this.id = idGen.newId();
     }
 }
