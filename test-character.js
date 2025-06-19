@@ -102,6 +102,11 @@ c.proficiencies.weaponMastery.push(`Greatsword`, `shortbow`, `javelin`);
 
 //Fill in Numbers (saving throws, skills, passive perception, hp, hit dice, initiative, ac, attacks, spellcasting, spell slots, cantrips/prepared spells)
 c.proficiencies.save.push(`str`, `con`)
+//saving throw roll and skill check methods implemented
+//passive perception method implemented
+c.hp = 10 + c.mod(`ability`, `con`);
+//initiative getter implemented
+
 
 //name your characters
 }

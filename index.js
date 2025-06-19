@@ -151,11 +151,17 @@ class Character{
     //for Step 5, we need to write down passive perception. Figured I might as well make it dynamically called.
     get passivePerception(){ return 10 + this.mod('skill', 'perception') }
 
-    get initiative(){ return this.mod('ability', 'dex') }
-    get armorClass(){ 
-        const shieldBonus = (this.equipmentSlots.offHand && this.equipmentSlots.offHand.type === 'shield' ? this.equipmentSlots.offHand.ac : 0)
-        const armorBonus = (this.equipmentSlots.armor ? this.equipmentSlots.armor.ac : 0)
-        return 10 + this.mod('ability', 'dex') + armorBonus + shieldBonus
+    get initiative(){ return Roll.d(1, 20)[0].val + this.mod('ability', 'dex') };
+    get ac(){ 
+        const shieldBonus = (this.equipmentSlots.offHand && this.equipmentSlots.offHand.type.charAt(0) === 'S' ? this.equipmentSlots.offHand.ac : 0)
+        let armorBonus = null;
+        if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "LA")
+            armorBonus = (this.equipmentSlots.armor.ac - 10) + this.mod(`ability`, `dex`);
+        if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "MA")
+            armorBonus = (this.equipmentSlots.armor.ac - 10) + Math.min(this.mod(`ability`, `dex`), 2);
+        if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "HA")
+            armorBonus = this.equipmentSlots.armor.ac - 10;
+        return 10 + (armorBonus !== null ? armorBonus : this.mod('ability', 'dex')) + shieldBonus;
     }
     
     get proficiencyBonus(){ return Math.ceil(this.level / 4) + 1 }
