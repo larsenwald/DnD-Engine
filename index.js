@@ -2,11 +2,17 @@
 class Roll{
     static d(roll, sides, adv){//function(how many dice to roll, how many sides of each die). returns array of rolls
         const output = [];
-        for (let i = 0; i < roll; i++) output.push(Math.floor(Math.random() * sides) + 1);
+        for (let i = 0; i < roll; i++) {
+            const currentRoll = Math.floor(Math.random() * sides) + 1;
+            const rollObject = {val: currentRoll, d:sides};
+            if (currentRoll === sides) rollObject.crit = true;
+            if (currentRoll === 1) rollObject.fumble = true;
+            output.push(rollObject);
+        }
 
         //if adv is 'adv', sort the array so that the highest roll is first. if adv is 'dis', sort the array so that the lowest roll is first.
-        if (adv === 'adv') output.sort((a,b) => b.roll - a.roll);
-        if (adv === 'dis') output.sort((a,b) => a.roll - b.roll);
+        if (adv === 'adv') output.sort((a,b) => b.val - a.val);
+        if (adv === 'dis') output.sort((a,b) => a.val - b.val);
         return output;
     }
 }
@@ -122,11 +128,13 @@ class Character{
        this.resources = {}
        this.critCeil = 20;
        this.state = {}
+       this.hooks = [];
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
     mod(type, name){
         if (type === 'ability'){
+            name = name.toLowerCase().trim().slice(0, 3);
             let abilityScore = this.abilityScores[name].value;
             const abilityMods = this.abilityScores[name].mods;
             for (let mod of abilityMods) abilityScore += mod.value;
@@ -225,12 +233,38 @@ class Character{
     //checks
     savingThrow(type){ //accounts for first three letters of string input. for example, it can take 'str' or 'strength'
         const normalizedType = type.toLowerCase().trim().slice(0, 3);
-        return this.mod(`ability`, normalizedType) + Roll.d(1, 20)[0] + (this.proficiencies.save.includes(normalizedType) ? this.proficiencyBonus : 0);
+        return this.mod(`ability`, normalizedType) + Roll.d(1, 20)[0].val + (this.proficiencies.save.includes(normalizedType) ? this.proficiencyBonus : 0);
     }
     check(type, name){// (skill||ability, acrobatics||animal handling||dexterity, etc)
-        
+        return Roll.d(1,20)[0].val + this.mod(type, name);
     }
+    /*
+    check2(type, name){//going to experiment with ctx and hook design by implementing a check method that has a ctx object with an array of functions to be executed before and after the check is made. This way, we can have features that modify the check's ctx before the check is made, and features that trigger off of the check's result after the check is made.
+        const ctx = {
+            rolls: [[1, 20]], 
+            mods: [{val: this.mod(type, name), label: 'mod'}], 
+            result: {grandTotal: 0, rolls: []}
+        };
+        //run all 'before' hooks
+        this.hooks.forEach(hook => {
+            if (hook.for === 'check2' && hook.type === 'before') hook.logic(ctx)
+        });
+        //do the rolls now
+        ctx.rolls.forEach(rollObject => {
+            const rolls = Roll.d(...rollObject);
+            ctx.result.rolls.push(...rolls)
+        })
+        //run all 'after' hooks
+        this.hooks.forEach(hook =>{
+            if (hook.for === 'check2' && hook.type === 'after') hook.logic(ctx)
+        })
+        
+        ctx.result.rolls.forEach(roll => ctx.result.grandTotal += roll.val);
+        ctx.mods.forEach(mod => ctx.result.grandTotal += mod.val);
 
+        return ctx;
+    }
+    */
 
     //adding stuff
     newFeature(name, description, src, srcId=null){
