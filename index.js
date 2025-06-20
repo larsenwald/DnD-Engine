@@ -1,21 +1,3 @@
-
-class Roll{
-    static d(roll, sides, adv){//function(how many dice to roll, how many sides of each die). returns array of rolls
-        const output = [];
-        for (let i = 0; i < roll; i++) {
-            const currentRoll = Math.floor(Math.random() * sides) + 1;
-            const rollObject = {val: currentRoll, d:sides};
-            if (currentRoll === sides) rollObject.crit = true;
-            if (currentRoll === 1) rollObject.fumble = true;
-            output.push(rollObject);
-        }
-
-        //if adv is 'adv', sort the array so that the highest roll is first. if adv is 'dis', sort the array so that the lowest roll is first.
-        if (adv === 'adv') output.sort((a,b) => b.val - a.val);
-        if (adv === 'dis') output.sort((a,b) => a.val - b.val);
-        return output;
-    }
-}
 class IdGenerator{
     constructor(initialCount){
         this.currentId = initialCount ? initialCount-1 : -1;
@@ -271,6 +253,27 @@ class Character{
         return ctx;
     }
     */
+
+    attack(){
+        let ctx;
+        if (this.equipmentSlots.mainHand){
+            const weapon = this.equipmentSlots.mainHand
+            ctx = {
+                weapon: weapon,
+                attackRoll: [
+                    `d20`,
+                    `${this.proficiencies.weapon.find(prof => compareStr(prof, weapon.weaponCategory)) ? this.proficiencyBonus : 0} [proficiency]`,
+                    `${this.mod(`ability`, `strength`)} [strength]`
+                ],
+                damageRoll: [
+                    weapon.dmg1,
+                ]
+            }
+            //run 'before' hooks
+            //------------------
+            
+        }
+    }
 
     //adding stuff
     newFeature(name, description, src, srcId=null){

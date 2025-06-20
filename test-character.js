@@ -116,4 +116,5 @@ c.hp = 10 + c.mod(`ability`, `con`);
 /*
 the 'doing right now' stack:
 -continue creating a level 1 fighter
+-implement an attack action
 */
