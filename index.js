@@ -110,7 +110,16 @@ class Character{
        this.resources = {}
        this.critCeil = 20;
        this.state = {}
-       this.hooks = [];
+       this.hooks = [
+        new Hook(
+            'crit',
+            'attack',
+            'after',
+            function(ctx){
+                
+            },
+            null)
+    ];
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -270,7 +279,9 @@ class Character{
                 ]
             }
             //run 'before' hooks
-            //------------------
+            this.hooks.forEach(hook => {
+                if (hook.meantFor === 'attack' && hook.when === 'before') hook.logic(ctx);
+            });
             let attackRoll = ctx.attackRoll[0];
             for (let i = 1; i < ctx.attackRoll.length; i++) attackRoll += `+ ${ctx.attackRoll[i]}`;
             let damageRoll = ctx.damageRoll[0];
@@ -280,7 +291,9 @@ class Character{
             ctx.attackResult = attackRoll;
             ctx.damageResult = damageRoll;
             //run 'after' hooks
-            //------------------
+            this.hooks.forEach(hook => {
+                if (hook.meantFor === 'attack' && hook.when === 'after') hook.logic(ctx);
+            });
             return `${ctx.attackResult}\n ${ctx.damageResult}`
         }
         return `no weapon`; //we need to change this to be an unarmed strike action if the character has no weapon equipped in the main hand
@@ -341,5 +354,15 @@ class Item{
     constructor(json){
         Object.assign(this, JSON.parse(json));
         this.id = idGen.newId();
+    }
+}
+
+class Hook{
+    constructor(name, meantFor, when, logic, srcId){
+        this.name = name;
+        this.meantFor = meantFor; //what is this hook meant for? (e.g. 'attack', 'check2', etc)
+        this.when = when; //when is this hook meant to be executed? (e.g. 'before', 'after')
+        this.logic = logic; //the logic that will be executed when the hook is called
+        this.srcId = srcId; //the id of the thing that this hook is attached to (e.g. a feature, an item, etc)
     }
 }
