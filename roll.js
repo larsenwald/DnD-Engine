@@ -1,9 +1,4 @@
 class Roll {
-  /**
-   * Parses a dice roll string and returns formatted results
-   * @param {string} rollString - The dice notation string (e.g., "d20", "2d6+3", "d20adv")
-   * @returns {string} - Formatted roll results
-   */
   static d(roll, sides, adv){//function(how many dice to roll, how many sides of each die). returns array of rolls
         const output = [];
         for (let i = 0; i < roll; i++) {
