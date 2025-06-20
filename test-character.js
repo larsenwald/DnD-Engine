@@ -28,6 +28,7 @@ function characterTesting(){ //putting everything that gets called in the waitFo
 c.charClass = 'Fighter';
 c.level = 1;
 c.proficiencies.armor.push('Light', 'Medium', 'Heavy', 'Shields');
+c.proficiencies.weapon.push('Simple', 'Martial');
 
 //Step 2: Determine origin
 c.setBackground('Soldier', 'str', 'str', 'con', 'athletics', 'intimidation');

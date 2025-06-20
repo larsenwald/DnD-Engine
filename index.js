@@ -271,8 +271,19 @@ class Character{
             }
             //run 'before' hooks
             //------------------
-            
+            let attackRoll = ctx.attackRoll[0];
+            for (let i = 1; i < ctx.attackRoll.length; i++) attackRoll += `+ ${ctx.attackRoll[i]}`;
+            let damageRoll = ctx.damageRoll[0];
+            for (let i = 1; i < ctx.damageRoll.length; i++) damageRoll += `+ ${ctx.damageRoll[i]}`;
+            attackRoll = Roll.string(attackRoll);
+            damageRoll = Roll.string(damageRoll);
+            ctx.attackResult = attackRoll;
+            ctx.damageResult = damageRoll;
+            //run 'after' hooks
+            //------------------
+            return `${ctx.attackResult}\n ${ctx.damageResult}`
         }
+        return `no weapon`; //we need to change this to be an unarmed strike action if the character has no weapon equipped in the main hand
     }
 
     //adding stuff
