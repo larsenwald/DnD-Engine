@@ -82,16 +82,10 @@ class Character{
        this.hp = {
         max: 0,
         current: 0,
-        temporary: 0
+        temp: 0
        }
 
-       this.playbook = {//holds all the actions, bonus actions, etc
-        action: [],
-        bonus: [],
-        reaction: [],
-        free: [],
-       }
-       //if I give the action class a hooks property, I can use that to execute logic that modifies the action's ctx before the action is executed. The real question is, should hooks have a before and after property? Like, if whether the hook should be executed before or after the action's logic is executed.
+       this.actions = [];
 
        this.equipmentSlots = {
         head: null,
@@ -328,6 +322,12 @@ class Character{
         });
     }
 
+    shortRest(){
+        this.hooks.forEach(hook => {
+            if (hook.meantFor === 'short rest') hook.logic;
+        })
+    }
+
     //adding stuff
     newFeature(name, description, src, srcId=null){
         if (this.featuresArray.find(ele => compareStr(ele.name, name)))
@@ -380,6 +380,10 @@ class Character{
         const hook = new Hook(name, meantFor, when, logic, srcId);
         this.hooks.push(hook);
     }
+    newAction(name, type, srcId, logic){
+        const action = new Action(name, type, srcId, logic);
+        this.actions.push(action);
+    }
 }
 
 class Feature{
@@ -414,6 +418,14 @@ class Resource{
         this.name = name;
         this.srcId = srcId;
         this.charges = charges;
-        this.id = idGen.newId();
+    }
+}
+
+class Action{
+    constructor(name, type, srcId, logic){
+        this.name = name;
+        this.type = type; //'action', 'bonus', 'reaction'
+        this.srcId = srcId;
+        this.logic = logic;
     }
 }

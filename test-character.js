@@ -49,11 +49,16 @@ c.newResource('Savage Attacker',  c.featuresArray.find(feature => compareStr(fea
 c.newHook(
     `Savage Attacker`, 
     'attack', 
-    'before', 
+    'after', 
     function(ctx){
-        if (compareStr(prompt('Use savage attacker? y/n'), 'y')){
-            
-        }
+         if (c.resources.find(ele => ele.name === 'Savage Attacker').charges > 0 && compareStr(prompt('Use savage attacker? y/n'), 'y')){
+             let roll2 = ctx.damageResult.match(/[+-]?\s*(?:\d+d\d+|\d+)(?=[^:]*:)/g);
+             let rollString = '';
+             roll2.forEach(roll => rollString+= roll);
+             roll2 = Roll.string(rollString);
+             ctx.damageResult += `\nSavage Attacker damage reroll (pick this one or the original): ${roll2}`;
+             c.resources.find(ele => ele.name === 'Savage Attacker').charges--;
+         }
     }, 
     c.featuresArray.find(ele => ele.name === 'Savage Attacker').id
 );
@@ -89,7 +94,35 @@ c.newFeature(`Adrenaline Rush`,
     When you dash like this, gain temporary hp equal to your profiency bonus.`,
     `species`
 )
+c.newResource(
+    `Adrenaline Rush`, 
+    c.featuresArray.find(ele => ele.name === `Adrenaline Rush`).id,
+    c.proficiencyBonus,
+    new Hook(
+        `Adrenaline Rush`,
+        `short rest`,
+        null,
+        function(){
+            c.resources.find(ele => ele.name === `Adrenaline Rush`).charges = c.proficiencyBonus;
+        },
+        c.featuresArray.find(ele => ele.name === `Adrenaline Rush`).id
+    )
+)
+c.newAction(
+    `Adrenaline Rush`, 
+    `bonus`, 
+    c.featuresArray.find(ele => ele.name === `Adrenaline Rush`).id,
+    function(){
+        if (c.resources.find(ele => ele.name === `Adrenaline Rush`).charges > 0){
+            c.hp.temp += c.proficiencyBonus;
+            return `Base speed '${c.speed}' doubled to '${c.speed*2}' for this turn!`;
+        }
+    }
+)
+
 c.newFeature(`Darkvision`, `You have darkvision with a range of 120ft.`, `species`);
+c.darkvision = '120ft';
+
 c.newFeature(`Relentless Endurance`, `When reduced to 0 hp but not immediately killed, you can drop to 1 hp instead. Can only use once; refreshes on long rest.`, `species`);
 //Choose Languages (common is statically added in the default Character class)
 c.languages.push(`Orc`, `Giant`)
@@ -127,7 +160,7 @@ c.proficiencies.weaponMastery.push(`Greatsword`, `shortbow`, `javelin`);
 c.proficiencies.save.push(`str`, `con`)
 //saving throw roll and skill check methods implemented
 //passive perception method implemented
-c.hp = 10 + c.mod(`ability`, `con`);
+c.hp.max, c.hp.current = 10 + c.mod(`ability`, `con`);
 //initiative getter implemented
 //ac getter implemented
 //default attack action implemented
@@ -138,6 +171,6 @@ c.hp = 10 + c.mod(`ability`, `con`);
 
 /*
 the 'doing right now' stack:
--continue creating a level 1 fighter
--implement an attack action
+-continue automating the level 1 fighter functions
+- implement an hp loss/gain method and write logic for Relentless Endurance to hook into it
 */
