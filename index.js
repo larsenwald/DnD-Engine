@@ -107,7 +107,7 @@ class Character{
         misc: [],
        }
 
-       this.resources = {}
+       this.resources = []
        this.critCeil = 20;
        this.state = {}
        this.hooks = [
@@ -322,6 +322,12 @@ class Character{
         return `no weapon`; //we need to change this to be an unarmed strike action if the character has no weapon equipped in the main hand
     }
 
+    newTurn(){
+        this.hooks.forEach(hook => {
+            if (hook.meantFor === 'new turn') hook.logic();
+        });
+    }
+
     //adding stuff
     newFeature(name, description, src, srcId=null){
         if (this.featuresArray.find(ele => compareStr(ele.name, name)))
@@ -361,6 +367,19 @@ class Character{
         item.note = note;
         this.inventory.push(item);
     }
+    newResource(name, srcId, charges, hook){
+        const resource = new Resource(name, srcId, charges);
+        if (hook){
+            const hookObj = hook;
+            hookObj.srcId = resource.id;
+            this.hooks.push(hookObj);
+        }
+        this.resources.push(resource)
+    }
+    newHook(name, meantFor, when, logic, srcId){
+        const hook = new Hook(name, meantFor, when, logic, srcId);
+        this.hooks.push(hook);
+    }
 }
 
 class Feature{
@@ -387,5 +406,14 @@ class Hook{
         this.when = when; //when is this hook meant to be executed? (e.g. 'before', 'after')
         this.logic = logic; //the logic that will be executed when the hook is called
         this.srcId = srcId; //the id of the thing that this hook is attached to (e.g. a feature, an item, etc)
+    }
+}
+
+class Resource{
+    constructor(name, srcId, charges){
+        this.name = name;
+        this.srcId = srcId;
+        this.charges = charges;
+        this.id = idGen.newId();
     }
 }

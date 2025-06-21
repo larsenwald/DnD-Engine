@@ -32,10 +32,32 @@ c.proficiencies.weapon.push('Simple', 'Martial');
 
 //Step 2: Determine origin
 c.setBackground('Soldier', 'str', 'str', 'con', 'athletics', 'intimidation');
+
 c.newFeature(`Savage Attacker`, 
-    `Once per turn when you a target with a weapon, you can roll the weapon's dmg dice twice and use either result.`,
+    `Once per turn when you hit a target with a weapon, you can roll the weapon's dmg dice twice and use either result.`,
     'background'
 )
+c.newResource('Savage Attacker',  c.featuresArray.find(feature => compareStr(feature.name, 'savage attacker')).id, 1, new Hook(
+    null, 
+    'new turn', 
+    null,
+    function(){
+        c.resources.find(ele => ele.name === 'Savage Attacker').charges = 1;
+    },
+    )
+)
+c.newHook(
+    `Savage Attacker`, 
+    'attack', 
+    'before', 
+    function(ctx){
+        if (compareStr(prompt('Use savage attacker? y/n'), 'y')){
+            
+        }
+    }, 
+    c.featuresArray.find(ele => ele.name === 'Savage Attacker').id
+);
+
 c.proficiencies.tool.push(`Playing Cards`)
 
 //you get starting equipment from both background and class
