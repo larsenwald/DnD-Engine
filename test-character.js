@@ -108,7 +108,7 @@ c.proficiencies.save.push(`str`, `con`)
 c.hp = 10 + c.mod(`ability`, `con`);
 //initiative getter implemented
 //ac getter implemented
-
+//default attack action implemented
 //name your characters
 }
 
