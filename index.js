@@ -116,7 +116,31 @@ class Character{
             'attack',
             'after',
             function(ctx){
-                
+                const critCheck = /: \{[0-9]+!\}/;
+                if (critCheck.test(ctx.attackResult)){
+                    const getDice = /[0-9]+d[0-9]+/g;
+                    const damageDice = ctx.damageResult.match(getDice);
+                    let beforeColon = ''
+                    damageDice.forEach(roll => {
+                        beforeColon += `+ ${roll} (crit)`;
+                    });
+                    let afterColon = '';
+                    let toBeAdded = 0;
+                    damageDice.forEach(roll => {
+                        let parsedRoll = Roll.string(roll);
+                        afterColon += `+ ${parsedRoll.match(/\(?\{.+\}\)?/)[0]}`;
+                        toBeAdded += Number(parsedRoll.match(/= [0-9]+/)[0].match(/[0-9]+/)[0]);
+                    })
+                    const colonIndex = ctx.damageResult.indexOf(':');
+                    beforeColon = ctx.damageResult.slice(0, colonIndex) + ` ${beforeColon}`;
+                    const equalsIndex = ctx.damageResult.indexOf('=');
+                    afterColon = ctx.damageResult.slice(colonIndex+1, equalsIndex) + `${afterColon}`;
+                    let grandTotal = Number(ctx.damageResult.slice(equalsIndex+1)) + toBeAdded;
+                    ctx.damageResult = beforeColon + ':' + afterColon + ` = ${grandTotal}`;
+                    console.log()
+                    return;
+                }
+                console.log(`no crit`)
             },
             null)
     ];
