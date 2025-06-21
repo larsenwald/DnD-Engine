@@ -140,7 +140,6 @@ class Character{
                     console.log()
                     return;
                 }
-                console.log(`no crit`)
             },
             null)
     ];
@@ -318,7 +317,7 @@ class Character{
             this.hooks.forEach(hook => {
                 if (hook.meantFor === 'attack' && hook.when === 'after') hook.logic(ctx);
             });
-            return `${ctx.attackResult}\n ${ctx.damageResult}`
+            return `${ctx.attackResult}\n${ctx.damageResult}`
         }
         return `no weapon`; //we need to change this to be an unarmed strike action if the character has no weapon equipped in the main hand
     }
