@@ -123,7 +123,43 @@ c.newAction(
 c.newFeature(`Darkvision`, `You have darkvision with a range of 120ft.`, `species`);
 c.darkvision = '120ft';
 
-c.newFeature(`Relentless Endurance`, `When reduced to 0 hp but not immediately killed, you can drop to 1 hp instead. Can only use once; refreshes on long rest.`, `species`);
+c.newFeature(
+    `Relentless Endurance`, 
+    `When reduced to 0 hp but not immediately killed, you can drop to 1 hp instead. Can only use once; refreshes on long rest.`, 
+    `species`
+);
+c.newResource(
+    `Relentless Endurance`, 
+    c.featuresArray.find(ele => ele.name === `Relentless Endurance`).id, 
+    1, 
+    new Hook(
+        `Relentless Endurance reset`, 
+        'long rest', 
+        null,
+        function(){
+            c.resources.find(ele => ele.name === `Relentless Endurance`).charges = 1;
+        },
+        c.featuresArray.find(ele => ele.name === `Relentless Endurance`).id
+    )
+);
+c.newHook(
+    `Relentless Endurance`, 
+    `change hp`, 
+    null, 
+    function(ctx){
+        if (ctx.temp + ctx.current + ctx.change <= 0){
+            if (
+                c.resources.find(ele => ele.name === 'Relentless Endurance').charges > 0
+                &&
+                compareStr(prompt(`About to go down to zero health! Use relentless endurance? y/n`), 'y')
+            ){
+                c.hp.current = 1;
+                c.resources.find(ele => ele.name === 'Relentless Endurance').charges--;
+            }
+        }
+    }, 
+    c.feature(`relentless endurance`).id
+);
 //Choose Languages (common is statically added in the default Character class)
 c.languages.push(`Orc`, `Giant`)
 
@@ -160,11 +196,13 @@ c.proficiencies.weaponMastery.push(`Greatsword`, `shortbow`, `javelin`);
 c.proficiencies.save.push(`str`, `con`)
 //saving throw roll and skill check methods implemented
 //passive perception method implemented
-c.hp.max, c.hp.current = 10 + c.mod(`ability`, `con`);
+c.hp.max = 10 + c.mod(`ability`, `con`);
+c.hp.current = c.hp.max;
 //initiative getter implemented
 //ac getter implemented
 //default attack action implemented
-//name your characters
+
+//name your character
 }
 
 
@@ -172,5 +210,4 @@ c.hp.max, c.hp.current = 10 + c.mod(`ability`, `con`);
 /*
 the 'doing right now' stack:
 -continue automating the level 1 fighter functions
-- implement an hp loss/gain method and write logic for Relentless Endurance to hook into it
 */

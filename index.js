@@ -252,33 +252,6 @@ class Character{
     check(type, name){// (skill||ability, acrobatics||animal handling||dexterity, etc)
         return Roll.d(1,20)[0].val + this.mod(type, name);
     }
-    /*
-    check2(type, name){//going to experiment with ctx and hook design by implementing a check method that has a ctx object with an array of functions to be executed before and after the check is made. This way, we can have features that modify the check's ctx before the check is made, and features that trigger off of the check's result after the check is made.
-        const ctx = {
-            rolls: [[1, 20]], 
-            mods: [{val: this.mod(type, name), label: 'mod'}], 
-            result: {grandTotal: 0, rolls: []}
-        };
-        //run all 'before' hooks
-        this.hooks.forEach(hook => {
-            if (hook.for === 'check2' && hook.type === 'before') hook.logic(ctx)
-        });
-        //do the rolls now
-        ctx.rolls.forEach(rollObject => {
-            const rolls = Roll.d(...rollObject);
-            ctx.result.rolls.push(...rolls)
-        })
-        //run all 'after' hooks
-        this.hooks.forEach(hook =>{
-            if (hook.for === 'check2' && hook.type === 'after') hook.logic(ctx)
-        })
-        
-        ctx.result.rolls.forEach(roll => ctx.result.grandTotal += roll.val);
-        ctx.mods.forEach(mod => ctx.result.grandTotal += mod.val);
-
-        return ctx;
-    }
-    */
 
     attack(){
         let ctx;
@@ -324,8 +297,36 @@ class Character{
 
     shortRest(){
         this.hooks.forEach(hook => {
-            if (hook.meantFor === 'short rest') hook.logic;
+            if (hook.meantFor === 'short rest') hook.logic();
         })
+    }
+    longRest(){
+        this.hooks.forEach(hook => {
+            if (hook.meantFor === 'long rest') hook.logic();
+        })
+    }
+    
+    changeHp(negativeOrPositiveNumber){
+        const ctx = {
+            change: negativeOrPositiveNumber,
+            max: this.hp.max,
+            current: this.hp.current,
+            temp: this.hp.temp,
+        }
+        if (ctx.change < 0 && ctx.temp > 0){
+            const difference = ctx.temp + ctx.change;
+            if (difference >= 0) this.hp.temp = difference;
+            else if (difference < 0) {
+                this.hp.current += difference;
+                this.hp.temp = 0;
+            }
+        }
+        else this.hp.current += ctx.change;
+        if (this.hp.current > this.hp.max) this.hp.current = this.hp.max;
+        this.hooks.forEach(hook => {
+            if (hook.meantFor === 'change hp') hook.logic(ctx);
+        })
+        return `${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`
     }
 
     //adding stuff
@@ -383,6 +384,13 @@ class Character{
     newAction(name, type, srcId, logic){
         const action = new Action(name, type, srcId, logic);
         this.actions.push(action);
+    }
+
+    //helpers
+    feature(name){
+        const feature = this.featuresArray.find(ele => compareStr(ele.name, name));
+        if (!feature) throw new Error (`Couldn't find a feature with a name of '${name}'.`)
+        return feature;
     }
 }
 
