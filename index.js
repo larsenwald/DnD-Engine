@@ -372,7 +372,6 @@ class Character{
         const resource = new Resource(name, srcId, charges);
         if (hook){
             const hookObj = hook;
-            hookObj.srcId = resource.id;
             this.hooks.push(hookObj);
         }
         this.resources.push(resource)

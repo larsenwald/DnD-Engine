@@ -185,6 +185,46 @@ c.newFeature(
     You can use the feature twice; you regain one charge on short rest and regain all charges on long rest`,
     `fighter 1`
 )
+c.newResource(
+    `Second Wind`, 
+    c.feature(`Second Wind`).id, 
+    2, 
+    new Hook(
+        `Second Wind recharge short rest`, 
+        'short rest', 
+        null,
+        () => {
+            c.resources.find(ele => ele.name === `Second Wind`).charges ++;
+            if (c.resources.find(ele => ele.name === `Second Wind`).charges > 2)
+                c.resources.find(ele => ele.name === `Second Wind`).charges = 2;
+        },
+        c.feature(`Second Wind`).id
+    )
+)
+c.newHook(
+    `Second Wind recharge long rest`,
+    `long rest`,
+    null,
+    () => {
+        c.resources.find(ele => ele.name === `Second Wind`).charges = 2;
+    },
+    c.feature(`Second Wind`).id
+)
+c.newAction(
+    `Second Wind`, 
+    `bonus`, 
+    c.feature(`Second Wind`),
+    () => {
+        if (c.resources.find(ele => ele.name === `Second Wind`).charges > 0){
+            const roll = Roll.string(`1d10 + ${c.level} [level]`);
+            const rollValue = roll.match(/= [0-9]+/)[0].match(/[0-9]+/)[0];
+            c.resources.find(ele => ele.name === `Second Wind`).charges--;
+            c.changeHp(Number(rollValue));
+            return `healed for ${rollValue}`
+        }
+    }
+)
+
 c.newFeature(
     `Weapon Mastery`, 
     `Gain the weapon masteries of three kinds of simple or martial weapons. Once per long rest, you can swap one mastery out for another.`,
@@ -210,4 +250,5 @@ c.hp.current = c.hp.max;
 /*
 the 'doing right now' stack:
 -continue automating the level 1 fighter functions
+-make the armor class getter mutable via hooks, and then create the 'Defense' fighting style hook
 */
