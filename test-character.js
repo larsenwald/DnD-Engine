@@ -179,6 +179,18 @@ c.alignment = 'CG';
 //class features
 c.newFeature(`Fighting Style`, `Pick a fighting style feat. Whenever you gain a fighter level, you can switch it out for another.`, `fighter 1`);
 c.newFeature(`Defense`, `While wearing light, medium, or heavy armor, you have a +1 to ac.`, `Fighting Style`, c.featuresArray.find(ele => compareStr(ele.name, `fighting style`)).id);
+c.newHook(
+    `Defense`, 
+    `ac`, 
+    null, 
+    (ctx)=>{
+        const armorSlot = c.equipmentSlots.armor;
+        if (armorSlot && /[A-Z]A/i.test(armorSlot.type))
+            ctx.components.push(1);
+    }, 
+    c.featuresArray.find(feature => compareStr(feature.name, `defense`)).id
+);
+
 c.newFeature(
     `Second Wind`, 
     `As a bonus action, regain hp equal to 1d10 plus fighter level. 

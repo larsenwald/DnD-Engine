@@ -169,7 +169,13 @@ class Character{
             armorBonus = (this.equipmentSlots.armor.ac - 10) + Math.min(this.mod(`ability`, `dex`), 2);
         if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "HA")
             armorBonus = this.equipmentSlots.armor.ac - 10;
-        return 10 + (armorBonus !== null ? armorBonus : this.mod('ability', 'dex')) + shieldBonus;
+        const ctx = {
+            components: [10, (armorBonus !== null ? armorBonus : this.mod('ability', 'dex')), shieldBonus]
+        }
+        this.hooks.forEach(hook => {
+            if (hook.meantFor === `ac`) hook.logic(ctx);
+        })
+        return ctx.components.reduce((total, current) => total + current)
     }
     
     get proficiencyBonus(){ return Math.ceil(this.level / 4) + 1 }
