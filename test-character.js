@@ -56,7 +56,7 @@ c.newHook(
              let rollString = '';
              roll2.forEach(roll => rollString+= roll);
              roll2 = Roll.string(rollString);
-             ctx.damageResult += `\nSavage Attacker damage reroll (pick this one or the original): ${roll2}`;
+             ctx.notes.push(`Savage Attacker damage reroll (pick this one or the original): ${roll2}`);
              c.resources.find(ele => ele.name === 'Savage Attacker').charges--;
          }
     }, 
@@ -262,5 +262,4 @@ c.hp.current = c.hp.max;
 /*
 the 'doing right now' stack:
 -continue automating the level 1 fighter functions
--make the armor class getter mutable via hooks, and then create the 'Defense' fighting style hook
 */

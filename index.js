@@ -136,7 +136,9 @@ class Character{
                 }
             },
             null)
-    ];
+        ];
+         this.hooks.push(...WeaponRegistry.properties); //adding the weapon properties hooks to the character's hooks array
+         this.hooks.push(...WeaponRegistry.masteries); //
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -272,12 +274,14 @@ class Character{
                 ],
                 damageRoll: [
                     weapon.dmg1,
-                ]
+                ],
+                notes: [],
             }
             //run 'before' hooks
             this.hooks.forEach(hook => {
                 if (hook.meantFor === 'attack' && hook.when === 'before') hook.logic(ctx);
             });
+            if (ctx.cancelled) return `attack cancelled by hook '${ctx.cancelled}'`;
             let attackRoll = ctx.attackRoll[0];
             for (let i = 1; i < ctx.attackRoll.length; i++) attackRoll += `+ ${ctx.attackRoll[i]}`;
             let damageRoll = ctx.damageRoll[0];
@@ -290,7 +294,9 @@ class Character{
             this.hooks.forEach(hook => {
                 if (hook.meantFor === 'attack' && hook.when === 'after') hook.logic(ctx);
             });
-            return `${ctx.attackResult}\n${ctx.damageResult}`
+            let output = `${ctx.attackResult}\n${ctx.damageResult}`;
+            for (let note of ctx.notes) output += `\n${note}`;
+            return output;
         }
         return `no weapon`; //we need to change this to be an unarmed strike action if the character has no weapon equipped in the main hand
     }
@@ -440,5 +446,60 @@ class Action{
         this.type = type; //'action', 'bonus', 'reaction'
         this.srcId = srcId;
         this.logic = logic;
+    }
+}
+
+class WeaponRegistry{
+    static get properties(){
+        return [
+            new Hook(
+                `Heavy`,
+                `attack`,
+                `before`,
+                (ctx) => {
+                    if (character.equipmentSlots.mainHand.property.find(prop => prop.charAt(0) === 'H')) {
+                        const meleeOrRanged = character.equipmentSlots.mainHand.type;
+                        const strengthScore = character.strength;
+                        const dexScore = character.dexterity;
+
+                        if (meleeOrRanged.charAt(0) === 'M' && strengthScore < 13)
+                            ctx.attackRoll[0] = `d20dis [Heavy]`;
+                        if (meleeOrRanged.charAt(0) === 'R' && dexScore < 13)
+                            ctx.attackRoll[0] = `d20dis [Heavy]`;
+                    }
+                },
+                null
+            ),
+            new Hook(
+                `Two-Handed`,
+                `attack`,
+                `before`,
+                (ctx) => {
+                    if (character.equipmentSlots.mainHand.property.find(prop => prop.charAt(0) === '2')){
+                        if (character.equipmentSlots.mainHand && character.equipmentSlots.offHand){
+                            alert(`This weapon is two-handed! You cannot wield it with a shield or another weapon in your off-hand.`);
+                            ctx.cancelled = `Two-Handed`;
+                        }
+                    }
+                },
+                null
+            )
+        ]
+    }
+
+    static get masteries(){
+        return [
+            new Hook(
+                `Graze`,
+                `attack`,
+                `after`,
+                (ctx) => {
+                    if (/Graze/.test(ctx.weapon.mastery[0])){
+                        ctx.notes.push(`You have the graze mastery on this weapon. Even if you miss the attack, deal ${c.mod('ability', ctx.attackRoll[2].match(/\[[a-z]+\]/)[0].match(/[a-z]+/)[0])} '${ctx.weapon.dmgType}' damage`);
+                    }
+                },
+                null
+            )
+        ]
     }
 }
