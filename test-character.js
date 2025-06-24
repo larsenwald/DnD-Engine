@@ -225,7 +225,7 @@ c.newHook(
 c.newAction(
     `Second Wind`, 
     `bonus`, 
-    c.feature(`Second Wind`),
+    c.feature(`Second Wind`).id,
     () => {
         if (c.resources.find(ele => ele.name === `Second Wind`).charges > 0){
             const roll = Roll.string(`1d10 + ${c.level} [level]`);
@@ -253,7 +253,6 @@ c.hp.current = c.hp.max;
 //initiative getter implemented
 //ac getter implemented
 //default attack action implemented
-
 //name your character
 }
 
