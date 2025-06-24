@@ -1,12 +1,22 @@
-- The weapon class
-Weapons are a special kind of item in that they have a structure to them:
-```
-Weapon Mastery: Every weapon in 5e-2024 has a weapon mastery property, each that does something unique when the weapon is used
+- Equipping and unequipping
+equipping an item will splice it out of the inventory and into the respective
+slot. Unequipping will set the slot to null and push the item back into the
+inventory.
+Because items might have logic, we need to come up with a way for, when equipping
+the item, we create the logic and when unequipping, we destroy the logic. Destroying
+the logic is straightforward; just delete all hooks, actions, features etc that
+have a srcId that matches item.id. The issue is that we need to create logic for
+the item when equipping it, and we need to find a way that doesn't make it
+repetitive. We should only need to create the logic once, when the item is
+first equipped, then never again. This means we need to store the logic somewhere.
+Perhaps we can write logic in such a way that we never delete it, but rather
+just have it check if the item is equipped. But I'm not sure if this is a good
+idea separation-of-concerns wise.
 
-Weapon property: Weapons have other innate properties such as 'Light' or 'Two-Handed'.
-```
-
-- Action class
-should take a ctx and logic property that are determined on initialization. The ctx will hold all the building blocks of the logic. 
-It will be run through an action(...beforeHooks, ...afterHooks) method that will optionally perform something on the blocks either
-before or after the logic() runs.
+Okay, first idea:
+- just give each item object (when we need it) a logic property that is a function that handles
+all the instantiations of hooks, actions, features etc. It'll have this logic
+property always. Then, we write an equip method to call this logic function.
+Simple. When it comes to unequipping, the method will parse through ALL arrays
+in the Character object, deleting anything that has a srcId property that matches
+item.id.

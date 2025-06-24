@@ -261,4 +261,5 @@ c.hp.current = c.hp.max;
 /*
 the 'doing right now' stack:
 -continue automating the level 1 fighter functions
+- implement the storing and retrieving of item logic, as well as equipping/unequipping items
 */
