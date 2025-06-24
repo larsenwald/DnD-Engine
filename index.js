@@ -388,7 +388,7 @@ class Character{
         if (index === -1)
             throw new Error (`Couldn't find an item with an id of ${itemId} to equip.`);
         this.equipmentSlots[slot] = this.inventory.splice(index, 1)[0];
-        this.equipmentSlots[slot].logic();
+        this.equipmentSlots[slot].logic?.();
     }
     unequip(slot){
         const slotId = this.equipmentSlots[slot].id;
