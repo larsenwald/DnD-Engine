@@ -139,6 +139,8 @@ class Character{
         ];
          this.hooks.push(...WeaponRegistry.properties); //adding the weapon properties hooks to the character's hooks array
          this.hooks.push(...WeaponRegistry.masteries); //
+
+         this.inspiration = false;
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
