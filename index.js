@@ -387,6 +387,11 @@ class Character{
         const index = this.inventory.findIndex(ele => ele.id === itemId);
         if (index === -1)
             throw new Error (`Couldn't find an item with an id of ${itemId} to equip.`);
+        
+        //if slot already full, unequip the item inside it first
+        if (this.equipmentSlots[slot])
+            this.unequip(this.equipmentSlots[slot]);
+        
         this.equipmentSlots[slot] = this.inventory.splice(index, 1)[0];
         this.equipmentSlots[slot].logic?.();
     }
