@@ -1,5 +1,4 @@
 const c = new Character();
-let character = c; //the 'character' keyword will be used throughout the codebase as a global reference to the current character
 
 let tries = 0;
 const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete
@@ -236,7 +235,6 @@ c.newAction(
         }
     }
 )
-
 c.newFeature(
     `Weapon Mastery`, 
     `Gain the weapon masteries of three kinds of simple or martial weapons. Once per long rest, you can swap one mastery out for another.`,
@@ -261,5 +259,4 @@ c.hp.current = c.hp.max;
 /*
 the 'doing right now' stack:
 -continue automating the level 1 fighter functions
-- implement the storing and retrieving of item logic, as well as equipping/unequipping items
 */

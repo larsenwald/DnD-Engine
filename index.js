@@ -268,6 +268,7 @@ class Character{
         if (this.equipmentSlots.mainHand){
             const weapon = this.equipmentSlots.mainHand
             ctx = {
+                character: this,
                 weapon: weapon,
                 attackRoll: [
                     `d20`,
@@ -382,6 +383,24 @@ class Character{
         item.note = note;
         this.inventory.push(item);
     }
+    equip(itemId, slot){
+        const index = this.inventory.findIndex(ele => ele.id === itemId);
+        if (index === -1)
+            throw new Error (`Couldn't find an item with an id of ${itemId} to equip.`);
+        this.equipmentSlots[slot] = this.inventory.splice(index, 1)[0];
+        this.equipmentSlots[slot].logic();
+    }
+    unequip(slot){
+        const slotId = this.equipmentSlots[slot].id;
+        this.inventory.push(this.equipmentSlots[slot]);
+        this.equipmentSlots[slot] = null;
+
+        this.featuresArray = this.featuresArray.filter(ele => ele.srcId !== slotId);
+        this.actions = this.actions.filter(ele => ele.srcId !== slotId);
+        this.hooks = this.hooks.filter(ele => ele.srcId !== slotId);
+        this.resources = this.resources.filter(ele => ele.srcId !== slotId);
+    }
+
     newResource(name, srcId, charges, hook){
         const resource = new Resource(name, srcId, charges);
         if (hook){
@@ -422,6 +441,10 @@ class Item{
         Object.assign(this, JSON.parse(json));
         this.id = idGen.newId();
     }
+
+    static giveItemEquipLogic(item, logic){
+        item.logic = logic;
+    }
 }
 
 class Hook{
@@ -459,10 +482,10 @@ class WeaponRegistry{
                 `attack`,
                 `before`,
                 (ctx) => {
-                    if (character.equipmentSlots.mainHand.property.find(prop => prop.charAt(0) === 'H')) {
-                        const meleeOrRanged = character.equipmentSlots.mainHand.type;
-                        const strengthScore = character.strength;
-                        const dexScore = character.dexterity;
+                    if (ctx.character.equipmentSlots.mainHand.property.find(prop => prop.charAt(0) === 'H')) {
+                        const meleeOrRanged = ctx.character.equipmentSlots.mainHand.type;
+                        const strengthScore = ctx.character.strength;
+                        const dexScore = ctx.character.dexterity;
 
                         if (meleeOrRanged.charAt(0) === 'M' && strengthScore < 13)
                             ctx.attackRoll[0] = `d20dis [Heavy]`;
@@ -477,8 +500,8 @@ class WeaponRegistry{
                 `attack`,
                 `before`,
                 (ctx) => {
-                    if (character.equipmentSlots.mainHand.property.find(prop => prop.charAt(0) === '2')){
-                        if (character.equipmentSlots.mainHand && character.equipmentSlots.offHand){
+                    if (ctx.character.equipmentSlots.mainHand.property.find(prop => prop.charAt(0) === '2')){
+                        if (ctx.character.equipmentSlots.mainHand && ctx.character.equipmentSlots.offHand){
                             alert(`This weapon is two-handed! You cannot wield it with a shield or another weapon in your off-hand.`);
                             ctx.cancelled = `Two-Handed`;
                         }
@@ -497,7 +520,7 @@ class WeaponRegistry{
                 `after`,
                 (ctx) => {
                     if (/Graze/.test(ctx.weapon.mastery[0])){
-                        ctx.notes.push(`You have the graze mastery on this weapon. Even if you miss the attack, deal ${c.mod('ability', ctx.attackRoll[2].match(/\[[a-z]+\]/)[0].match(/[a-z]+/)[0])} '${ctx.weapon.dmgType}' damage`);
+                        ctx.notes.push(`You have the graze mastery on this weapon. Even if you miss the attack, deal ${ctx.character.mod('ability', ctx.attackRoll[2].match(/\[[a-z]+\]/)[0].match(/[a-z]+/)[0])} '${ctx.weapon.dmgType}' damage`);
                     }
                 },
                 null
