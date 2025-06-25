@@ -391,7 +391,7 @@ class Character{
         //if slot already full, unequip the item inside it first
         if (this.equipmentSlots[slot])
             this.unequip(this.equipmentSlots[slot]);
-        
+
         this.equipmentSlots[slot] = this.inventory.splice(index, 1)[0];
         this.equipmentSlots[slot].logic?.();
     }
@@ -423,11 +423,27 @@ class Character{
         this.actions.push(action);
     }
 
-    //helpers
+    //helper methods
     feature(name){
         const feature = this.featuresArray.find(ele => compareStr(ele.name, name));
         if (!feature) throw new Error (`Couldn't find a feature with a name of '${name}'.`)
         return feature;
+    }
+    get logInventory(){
+        this.inventory.forEach(ele => console.log(`Name: ${ele.name}\nId: ${ele.id}\namount: ${ele.amount ? ele.amount : 1}`))
+    }
+    logItem(name){
+        let itemsFound = 0;
+        this.inventory.forEach(ele => {
+            if (compareStr(name, ele.name)){
+                console.log(`Name: ${ele.name}\nId: ${ele.id}\namount: ${ele.amount ? ele.amount : 1}`);
+                itemsFound++;
+            }
+        });
+        if (itemsFound === 0) console.error(`Couldn't find an item with the name of '${name}'.`);
+    }
+    get logEquipment(){
+        Object.keys(this.equipmentSlots).forEach(key => console.log(`${key}: ${this.equipmentSlots[key] ? this.equipmentSlots[key].name : null}`));
     }
 }
 
