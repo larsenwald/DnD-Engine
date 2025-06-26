@@ -283,8 +283,9 @@ c.hitDice = {
 //default attack action implemented
 //name your character
 }
+
 function wizard(){
-    
+    c.charClass = `wizard`;
 }
 
 

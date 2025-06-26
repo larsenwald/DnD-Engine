@@ -503,6 +503,11 @@ class Character{
     get logEquipment(){
         Object.keys(this.equipmentSlots).forEach(key => console.log(`${key}: ${this.equipmentSlots[key] ? this.equipmentSlots[key].name : null}`));
     }
+
+    //static
+    static newCharacter(className){
+        
+    }
 }
 
 class Feature{
