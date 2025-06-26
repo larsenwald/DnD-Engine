@@ -240,7 +240,29 @@ c.newFeature(
     `Gain the weapon masteries of three kinds of simple or martial weapons. Once per long rest, you can swap one mastery out for another.`,
     `fighter 1`
 )
-c.proficiencies.weaponMastery.push(`Greatsword`, `shortbow`, `javelin`);
+c.newWeaponMastery(c.feature(`Weapon Mastery`).id, `Greatsword`, `Shortbow`, `Javelin`);
+c.newHook(
+    `Weapon Mastery switch`, 
+    `long rest`, 
+    null, 
+    (ctx)=>{
+        let userPrompt = `Would you like to switch out one of these weapon masteries for another? If yes, type in the one you wish to replace. If no, leave blank.`;
+        const masteries = ctx.character.proficiencies.weaponMastery.filter(mastery => mastery.srcId === c.feature(`Weapon Mastery`).id);
+        masteries.forEach(mastery => userPrompt += ` ${mastery.type} |`);
+
+        let response = prompt(userPrompt);
+        if (!response) return;
+        while (!masteries.find(mastery => compareStr(mastery.type, response))){
+            let notFound = `You don't have a mastery with a name of '${response}'. Either enter one of these masteries or leave it blank.`
+            masteries.forEach(mastery => notFound += ` ${mastery.type} |`);
+            response = prompt(notFound);
+            if (!response) return;
+        }
+        let replacement = prompt(`Enter the ${response} mastery's replacement.`)
+        ctx.character.proficiencies.weaponMastery.find(ele => compareStr(ele.type, `greatsword`) && ele.srcId === ctx.character.feature(`Weapon Mastery`).id).type = replacement;
+    }, 
+    c.feature(`Weapon Mastery`).id
+);
 
 //Fill in Numbers (saving throws, skills, passive perception, hp, hit dice, initiative, ac, attacks, spellcasting, spell slots, cantrips/prepared spells)
 c.proficiencies.save.push(`str`, `con`)

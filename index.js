@@ -476,6 +476,10 @@ class Character{
         const action = new Action(name, type, srcId, logic);
         this.actions.push(action);
     }
+    newWeaponMastery(srcId = null, ...type){
+        for (let t of type) this.proficiencies.weaponMastery.push(new WeaponMastery(t, srcId));
+    }
+
 
     //helper methods
     feature(name){
@@ -594,12 +598,19 @@ class WeaponRegistry{
                 `attack`,
                 `after`,
                 (ctx) => {
-                    if (/Graze/.test(ctx.weapon.mastery[0])){
+                    if (/Graze/.test(ctx.weapon.mastery[0]) && ctx.character.proficiencies.weaponMastery.find(mastery => compareStr(mastery.type, ctx.weapon.name))){
                         ctx.notes.push(`You have the graze mastery on this weapon. Even if you miss the attack, deal ${ctx.character.mod('ability', ctx.attackRoll[2].match(/\[[a-z]+\]/)[0].match(/[a-z]+/)[0])} '${ctx.weapon.dmgType}' damage`);
                     }
                 },
                 null
             )
         ]
+    }
+}
+
+class WeaponMastery{
+    constructor(type, srcId){
+        this.type = type;
+        this.srcId = srcId;
     }
 }
