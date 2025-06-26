@@ -505,7 +505,8 @@ class Character{
     }
 
     //static
-    static newCharacter(className){
+    static newCharacter(className, level = 1){
+        const char = new Character();
         
     }
 }

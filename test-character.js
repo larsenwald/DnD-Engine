@@ -2,9 +2,9 @@ const c = new Character();
 
 let tries = 0;
 const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete
-    if (!itemsObject || !biggerItemsObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
+    if (!itemsObject || !biggerItemsObject || !classesObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
         tries++;
-        if (tries > 50){
+        if (tries > 100){ //if we try for 10 seconds and it still hasn't loaded, something's probably wrong
             console.error(`Still waiting for something to load! Timed out.`)
             clearInterval(waitForLoad)
         }
@@ -13,19 +13,18 @@ const waitForLoad = setInterval(() => { //setting a interval to make the charact
 //now let's dump all of that js object data to be garbage collected
 itemsObject = null;
 biggerItemsObject = null;
-characterTesting(fighter);
+characterTesting(level1Fighter);
+console.log(`Character generation successful!`);
 //kill the interval, we only need this stuff to run once
 clearInterval(waitForLoad);
     }
 }, 100);
 
-
 function characterTesting(character){//putting everything that gets called in the waitForLoad interval into a function to keep the code cleaner
     character();
 }
 
-function fighter(){ 
-
+function level1Fighter(){ 
 //Step 1: Choose a class
 c.charClass = 'Fighter';
 c.level = 1;

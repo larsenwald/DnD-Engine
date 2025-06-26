@@ -20,6 +20,7 @@ const jsonItemsArray = [
 }` //gold pieces aren't officially considered items within 5e tools, so we make our own. we might want to just store gold separately instead of in the inventory
 
 ]
+const jsonClassesArray = [];
 
 let itemsObject;
 (async () => {
@@ -37,4 +38,33 @@ let biggerItemsObject;
 	for (let item of biggerItemsObject.item){
 		jsonItemsArray.push(JSON.stringify(item));
 	}
+})();
+
+const classes = [
+	`wizard`,
+	`fighter`,
+	`rogue`,
+	`cleric`,
+	`ranger`,
+	`bard`,
+	`sorcerer`,
+	`warlock`,
+	`druid`,
+	`monk`,
+	`paladin`,
+	`barbarian`
+];
+
+let classesObject;
+(async () => {
+	let placeHolder = [];
+	let classesLoaded = 0;
+	for (let className of classes) {
+		const classObject = await get5eToolsObject(`https://5e.tools/data/class/class-${className}.json`);
+		classesLoaded++;
+		placeHolder.push(classObject.class[1])//the class property of the class object is an array that holds the phb version of the class in index 0 and the xphb version in index 1
+	}
+	console.log(`${classesLoaded}/${classes.length} classes loaded!`)
+	classesObject = placeHolder;
+	jsonClassesArray.push(...classesObject);
 })();
