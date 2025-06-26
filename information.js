@@ -20,7 +20,8 @@ const jsonItemsArray = [
 }` //gold pieces aren't officially considered items within 5e tools, so we make our own. we might want to just store gold separately instead of in the inventory
 
 ]
-const jsonClassesArray = [];
+const classObjectsArray = [];
+const backgroundsObjectArray = [];
 
 let itemsObject;
 (async () => {
@@ -66,5 +67,13 @@ let classesObject;
 	}
 	console.log(`${classesLoaded}/${classes.length} classes loaded!`)
 	classesObject = placeHolder;
-	jsonClassesArray.push(...classesObject);
+	classObjectsArray.push(...classesObject);
+})();
+
+let backgroundsObject;
+(async () => {
+	let response = await get5eToolsObject(`https://5e.tools/data/backgrounds.json`);
+	backgroundsObject = response.background.filter(ele => ele.source === `XPHB`)
+	backgroundsObjectArray.push(...backgroundsObject);
+	console[backgroundsObject ? `log` : `error`](backgroundsObject ? `backgroundsObject loaded!` : `backgroundsObject failed.`)
 })();
