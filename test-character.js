@@ -13,15 +13,18 @@ const waitForLoad = setInterval(() => { //setting a interval to make the charact
 //now let's dump all of that js object data to be garbage collected
 itemsObject = null;
 biggerItemsObject = null;
-characterTesting();
+characterTesting(fighter);
 //kill the interval, we only need this stuff to run once
 clearInterval(waitForLoad);
     }
 }, 100);
 
 
+function characterTesting(character){//putting everything that gets called in the waitForLoad interval into a function to keep the code cleaner
+    character();
+}
 
-function characterTesting(){ //putting everything that gets called in the waitForLoad interval into a function to keep the code cleaner
+function fighter(){ 
 
 //Step 1: Choose a class
 c.charClass = 'Fighter';
@@ -280,7 +283,9 @@ c.hitDice = {
 //default attack action implemented
 //name your character
 }
-
+function wizard(){
+    
+}
 
 
 /*
