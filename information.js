@@ -22,6 +22,7 @@ const jsonItemsArray = [
 ]
 const classObjectsArray = [];
 const backgroundsObjectArray = [];
+const originFeatsObjectArray = [];
 
 let itemsObject;
 (async () => {
@@ -76,4 +77,12 @@ let backgroundsObject;
 	backgroundsObject = response.background.filter(ele => ele.source === `XPHB`)
 	backgroundsObjectArray.push(...backgroundsObject);
 	console[backgroundsObject ? `log` : `error`](backgroundsObject ? `backgroundsObject loaded!` : `backgroundsObject failed.`)
+})();
+
+let originFeatsObject;
+(async () => {
+	let response = await get5eToolsObject(`https://5e.tools/data/feats.json`);
+	originFeatsObject = response.feat.filter(ele => ele.source === `XPHB` && ele.category === 'O');
+	originFeatsObjectArray.push(...originFeatsObject);
+	console[originFeatsObject ? `log` : `error`](originFeatsObject ? `originFeatsObject loaded!` : `originFeatsObject failed.`)
 })();

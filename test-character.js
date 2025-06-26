@@ -2,7 +2,7 @@ const c = new Character();
 
 let tries = 0;
 const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete
-    if (!itemsObject || !biggerItemsObject || !classesObject || !backgroundsObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
+    if (!itemsObject || !biggerItemsObject || !classesObject || !backgroundsObject || !originFeatsObject/*&& !otherObject || !anotherObject */){ //our check to see if all the async variables our character depends on have actually loaded
         tries++;
         if (tries > 100){ //if we try for 10 seconds and it still hasn't loaded, something's probably wrong
             console.error(`Still waiting for something to load! Timed out.`)
@@ -15,6 +15,7 @@ itemsObject = null;
 biggerItemsObject = null;
 classesObject = null;
 backgroundsObject = null;
+originFeatsObject = null;
 characterTesting(level1Fighter);
 console.log(`Character generation successful!`);
 //kill the interval, we only need this stuff to run once

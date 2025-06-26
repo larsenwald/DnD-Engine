@@ -505,21 +505,23 @@ class Character{
     }
 
     //static
-    static newCharacter(className, level = 1){
+    static newCharacter(className, level = 1, backgroundName){
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
-            throw new Error(`Couldn't find a class with a name of ${className} in the classObjectsArray.`)
-        const obj = classObjectsArray.find(ele => compareStr(ele.name, className));
+            throw new Error(`Couldn't find a class with a name of ${className} in the classObjectsArray.`);
+        if (!backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)))
+            throw new Error(`Couldn't find a background with a name of ${backgroundName} in the backgroundObjectsArray.`);
+        const classObj = classObjectsArray.find(ele => compareStr(ele.name, className));
         const c = new Character(); 
 
         //write your level
         c.level = level;
         //note armor training
-        if (obj.startingProficiencies.armor){
-            obj.startProfciencies.armor.forEach(prof => {
+        if (classObj.startingProficiencies.armor){
+            classObj.startProfciencies.armor.forEach(prof => {
                 c.proficiencies.armor.push(prof)
             });
         };
-        
+
 
     }
 }
