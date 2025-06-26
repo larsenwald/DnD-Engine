@@ -248,6 +248,11 @@ c.proficiencies.save.push(`str`, `con`)
 //passive perception method implemented
 c.hp.max = 10 + c.mod(`ability`, `con`);
 c.hp.current = c.hp.max;
+c.hitDice = {
+    type: `d10`,
+    max: c.level,
+    current: c.level,
+}
 //initiative getter implemented
 //ac getter implemented
 //default attack action implemented

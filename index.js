@@ -141,6 +141,14 @@ class Character{
          this.hooks.push(...WeaponRegistry.masteries); //
 
          this.inspiration = false;
+
+         this.hitDice = {
+            type: '',
+            max: this.level,
+            current: this.level,
+        }
+
+        this.exhaustionLevel = 0;
     }
 
     //for Step 3, we're also meant to write down our ability modifiers. Let's just have a method that can dynamically return it. *edit done in step 5: The skill modifiers as well.
@@ -311,14 +319,60 @@ class Character{
     }
 
     shortRest(){
+        if (this.hp.current < 1)
+            throw new Error(`To start a short rest, you must have at least 1 hit point.`)
+
+        const userPrompt = `Would you like to spend some of your hit point dice to regain hit points? You currently have ${this.hitDice.current}. If yes, enter the number you'd like to use. Otherwise, you can just leave this blank.`
+        const ctx = {
+            character: this,
+            hitDiceToUse: Math.floor(this.hitDice.current > 0 ? prompt(userPrompt) : 0) || 0,
+        }
+        while (ctx.hitDiceToUse > this.hitDice.current)
+            ctx.hitDiceToUse = Math.floor(prompt(`You don't have that many hit dice. Please enter a value equal to or less than ${this.hitDice.current}`)) || 0;
+        ctx.roll = `${ctx.hitDiceToUse}${this.hitDice.type} [hit dice] + ${this.mod(`ability`, `con`) * ctx.hitDiceToUse} [con-mod times number-of-hit-dice]`;
+        ctx.minHealthGain = ctx.hitDiceToUse;
+
         this.hooks.forEach(hook => {
-            if (hook.meantFor === 'short rest') hook.logic();
+            if (hook.meantFor === 'short rest') hook.logic(ctx);
         })
+
+        let shortRestOutput = 'no hit dice used';
+        if (ctx.hitDiceToUse > 0){
+            shortRestOutput = Roll.string(ctx.roll);
+            const healthGained = Number(shortRestOutput.match(/= [0-9]+/)[0].match(/[0-9]+/)[0]);
+            const minHealthRegain = ctx.hitDiceToUse;
+            this.changeHp(healthGained < minHealthRegain ? minHealthRegain : healthGained);
+            if (healthGained < minHealthRegain) shortRestOutput += `\nGained a minimum of ${minHealthRegain} health. (minimum of 1 health per die spent)`
+            this.hitDice.current -= ctx.hitDiceToUse;
+        }
+        return shortRestOutput;
     }
+
     longRest(){
+        if (this.hp.current < 1)
+            throw new Error(`To start a long rest, you must have at least 1 hit point.`)
+
+        const ctx = {
+            character: this,
+            setHpTo: this.hp.max,
+            setHitDiceTo: this.hitDice.max,
+            exhaustionReducedBy: 1,
+            notes: null
+        }
+
         this.hooks.forEach(hook => {
-            if (hook.meantFor === 'long rest') hook.logic();
+            if (hook.meantFor === 'long rest') hook.logic(ctx);
         })
+
+        this.hp.current = ctx.setHpTo;
+        this.hitDice.current = ctx.setHitDiceTo;
+        let exhaustionReduced;
+        if (this.exhaustionLevel > 0){
+            this.exhaustionLevel -= ctx.exhaustionReducedBy;
+            exhaustionReduced = true;
+        }
+
+        return `Health set to ${ctx.setHpTo}, hit dice set to ${ctx.setHitDiceTo}${exhaustionReduced ? `, exhaustion reduced by ${ctx.exhaustionReducedBy}.` : `.`}${ctx.notes ? `\n${ctx.notes}` : ''}`;
     }
     
     changeHp(negativeOrPositiveNumber){
@@ -341,7 +395,7 @@ class Character{
         this.hooks.forEach(hook => {
             if (hook.meantFor === 'change hp') hook.logic(ctx);
         })
-        return `${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`
+        console.log(`${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`)
     }
 
     //adding stuff
