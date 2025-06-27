@@ -511,18 +511,35 @@ class Character{
         if (!backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)))
             throw new Error(`Couldn't find a background with a name of ${backgroundName} in the backgroundObjectsArray.`);
         const classObj = classObjectsArray.find(ele => compareStr(ele.name, className));
+        const backgroundObj = backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName));
         const c = new Character(); 
 
         //write your level
         c.level = level;
         //note armor training
         if (classObj.startingProficiencies.armor){
-            classObj.startProfciencies.armor.forEach(prof => {
+            classObj.startingProficiencies.armor.forEach(prof => {
                 c.proficiencies.armor.push(prof)
             });
         };
+        //Choose your background
+        //record your feat
+        const originFeat = Object.keys(backgroundObj.feats[0])[0].match(/[a-z]+ *[a-z]*;* *[a-z]*/)[0];
+        const originFeatNormalized = originFeat.match(/[a-z]+ *[a-z]*/)[0];
+        let originFeatDescription = '';
+        originFeatsObjectArray.find(ele => compareStr(ele.name, originFeatNormalized)).entries.forEach(ele => {
+            if (typeof ele === 'string') originFeatDescription += ele + `\n`;
+            else if (typeof ele === 'object') originFeatDescription += ele.entries[0] + '\n';
+        })
+        c.newFeature(
+            originFeat,
+            originFeatDescription,
+            'background',
+        )
 
+        
 
+        return c;
     }
 }
 

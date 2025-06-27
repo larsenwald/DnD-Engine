@@ -294,4 +294,5 @@ function wizard(){
 /*
 the 'doing right now' stack:
 -continue automating the level 1 fighter functions
+-contine working on the newCharacter static method
 */
