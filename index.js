@@ -524,8 +524,8 @@ class Character{
         };
         //Choose your background
         //record your feat
-        const originFeat = Object.keys(backgroundObj.feats[0])[0].match(/[a-z]+ *[a-z]*;* *[a-z]*/)[0];
-        const originFeatNormalized = originFeat.match(/[a-z]+ *[a-z]*/)[0];
+        const originFeat = Object.keys(backgroundObj.feats[0])[0].match(/[a-z]+ *[a-z]*;* *[a-z]*/i)[0];
+        const originFeatNormalized = originFeat.match(/[a-z]+ *[a-z]*/i)[0];
         let originFeatDescription = '';
         originFeatsObjectArray.find(ele => compareStr(ele.name, originFeatNormalized)).entries.forEach(ele => {
             if (typeof ele === 'string') originFeatDescription += ele + `\n`;
