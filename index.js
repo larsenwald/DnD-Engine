@@ -505,13 +505,28 @@ class Character{
     }
 
     //static
-    static newCharacter(className, level = 1, backgroundName){
+    static newCharacter(className, level = 1, backgroundName, backgroundBonuses = []){
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
             throw new Error(`Couldn't find a class with a name of ${className} in the classObjectsArray.`);
+        const classObj = classObjectsArray.find(ele => compareStr(ele.name, className));
+
         if (!backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)))
             throw new Error(`Couldn't find a background with a name of ${backgroundName} in the backgroundObjectsArray.`);
-        const classObj = classObjectsArray.find(ele => compareStr(ele.name, className));
         const backgroundObj = backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName));
+
+        if (!Array.isArray(backgroundBonuses) || backgroundBonuses.length !== 3)
+            throw new Error (`The background bonuses argument must be an array that has exactly three ability scores to increase by 1.`)
+        let abilityScoreImprovementChoicePool = [];
+        backgroundObj.ability.find(ele => ele.choose.weighted.from).choose.weighted.from.forEach(ele => abilityScoreImprovementChoicePool.push(ele));
+        backgroundBonuses.forEach(bonus => {
+            if (!abilityScoreImprovementChoicePool.includes(bonus))
+                throw new Error(`${bonus} is not one of the three ability scores you can increase for the ${backgroundName} background. You can only increase: ${[...abilityScoreImprovementChoicePool]}`)
+        });
+        for (let i = 0; i < backgroundBonuses.length; i++){//todo: make sure that there can't be three of same ability score at once. only 2 of same and 1 different, or all 3 different
+        }
+
+        
+        
         const c = new Character(); 
 
         //write your level
