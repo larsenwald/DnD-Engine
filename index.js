@@ -506,14 +506,17 @@ class Character{
 
     //static
     static newCharacter(className, level = 1, backgroundName, backgroundBonuses = []){
+        //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
             throw new Error(`Couldn't find a class with a name of ${className} in the classObjectsArray.`);
         const classObj = classObjectsArray.find(ele => compareStr(ele.name, className));
 
+        //validate background name
         if (!backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)))
             throw new Error(`Couldn't find a background with a name of ${backgroundName} in the backgroundObjectsArray.`);
         const backgroundObj = backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName));
 
+        //validate background bonuses: there are three ability scores && they are the right ones for the specific background && there are not three identical ones
         if (!Array.isArray(backgroundBonuses) || backgroundBonuses.length !== 3)
             throw new Error (`The background bonuses argument must be an array that has exactly three ability scores to increase by 1.`)
         let abilityScoreImprovementChoicePool = [];
@@ -550,7 +553,9 @@ class Character{
             originFeat,
             originFeatDescription,
             'background',
-        )
+        );
+        //note proficiencies
+        const backgroundSkillProfsArray = backgroundsObjectArray[2].entries[0].items.find(ele => /skill proficiencies/i.test(ele.name)).entry.match(/(?<=@skill )[a-z ]*(?=\|)/ig)//should return an array with both profs
 
         
 
