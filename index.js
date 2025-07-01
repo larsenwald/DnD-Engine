@@ -583,31 +583,28 @@ class Character{
         //choosing 2 skill proficiencies offered by class
         const validSkills = classObj.startingProficiencies.skills[0].choose.from; //array of class skill profs to choose from
         if (classSkillProfChoices.length !== 2)
-            throw new Error(`You must choose *two* skill proficiencies from the available list your chosen class provides: ${validSkills}`)
+            throw new Error(`You must choose *two* skill proficiencies from the available list your chosen class provides: ${validSkills.join(', ')}`)
         if (classSkillProfChoices.some(ele => ele.length < 3))
             throw new Error(`Both skill proficiency choices must be at least 3 characters long.`);
 
-        const userInputSkill1 = classSkillProfChoices[0]
-        const userInputSkill2 = classSkillProfChoices[1]
-        
-        const trueSkill1 = validSkills.find(ele => new RegExp(userInputSkill1, 'i').test(ele));
+        const userInputSkill1 = classSkillProfChoices[0];
+        const userInputSkill2 = classSkillProfChoices[1];
+
+        let trueSkill1 = validSkills.find(ele => new RegExp(`^${userInputSkill1}`, 'i').test(ele));
         if (!trueSkill1)
-            throw new Error (`'${userInputSkill1}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${validSkills}`);
-        let normalizedTrueSkill1 = trueSkill1.split(' ');
-        normalizedTrueSkill1.forEach((val, i, arr) => arr[i] = val.charAt(0).toUpperCase() + val.slice(1));
-        normalizedTrueSkill1 = normalizedTrueSkill1.join('');
-        normalizedTrueSkill1 = normalizedTrueSkill1.charAt(0).toLowerCase() + normalizedTrueSkill1.slice(1);
-        c.proficiencies.skill[normalizedTrueSkill1].proficiency = 'proficient';
-        const trueSkill2 = validSkills.find(ele => new RegExp(userInputSkill2, 'i').test(ele));
+            throw new Error (`'${userInputSkill1}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${validSkills.join(', ')}`);
+        trueSkill1 = toCamelCase(trueSkill1);
+        c.proficiencies.skill[trueSkill1].proficiency = 'proficient';
+
+        let trueSkill2 = validSkills.find(ele => new RegExp(`^${userInputSkill2}`, 'i').test(ele));
         if (!trueSkill2)
-            throw new Error(`'${userInputSkill2}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${validSkills}`);
+            throw new Error(`'${userInputSkill2}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${validSkills.join(', ')}`);
         if (trueSkill2 === trueSkill1)
             throw new Error(`You cannot pick the same class skill proficiency ('${trueSkill2}') twice`);
-        let normalizedTrueSkill2 = trueSkill2.split(' ');
-        normalizedTrueSkill2.forEach((val, i, arr) => arr[i] = val.charAt(0).toUpperCase() + val.slice(1));
-        normalizedTrueSkill2 = normalizedTrueSkill2.join('');
-        normalizedTrueSkill2 = normalizedTrueSkill2.charAt(0).toLowerCase() + normalizedTrueSkill2.slice(1);
-        c.proficiencies.skill[normalizedTrueSkill2].proficiency = 'proficient';
+        trueSkill2 = toCamelCase(trueSkill2);
+        c.proficiencies.skill[trueSkill2].proficiency = 'proficient';
+
+        //background and class both provide starting equipment
 
         
 
