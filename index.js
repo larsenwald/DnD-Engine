@@ -505,11 +505,22 @@ class Character{
     }
 
     //static
-    static newCharacter(className, level = 1, backgroundName, backgroundBonuses = []){
+    static newCharacter(
+        className, 
+        level = 1, 
+        backgroundName, 
+        backgroundBonuses = [], 
+        variableToolSelection, //a background may allow you to choose a tool proficiency from a list of options. if so, user must pass in their choice through the variableToolSelection argument
+        classSkillProfChoices = [],
+    ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
             throw new Error(`Couldn't find a class with a name of ${className} in the classObjectsArray.`);
         const classObj = classObjectsArray.find(ele => compareStr(ele.name, className));
+
+        //validate level
+        if (level < 1 || level > 20)
+            throw new Error(`Please choose a level between 1 and 20. ${level} is not a valid option.`);
 
         //validate background name
         if (!backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)))
@@ -555,12 +566,20 @@ class Character{
             'background',
         );
         //note proficiencies
-        const backgroundSkillProfsArray = backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)).entries[0].items.find(ele => /skill proficiencies/i.test(ele.name)).entry.match(/(?<=@skill )[a-z ]*(?=\|)/ig)//should return an array with both profs (i.e. ['Deception', 'Sleight of Hand'])
+        const backgroundSkillProfsArray = backgroundObj.entries[0].items.find(ele => /skill proficiencies/i.test(ele.name)).entry.match(/(?<=@skill )[a-z ]*(?=\|)/ig)//should return an array with both profs (i.e. ['Deception', 'Sleight of Hand'])
         Object.keys(c.proficiencies.skill).forEach(skill => {
             let regex = new RegExp(skill, 'i');
             if (regex.test(backgroundSkillProfsArray[0]) || regex.test(backgroundSkillProfsArray[1]))
                c.proficiencies.skill[skill].proficiency = 'proficient';
         });
+
+        //gotta circle back to tool proficiencies when I get the chance
+        const backgroundToolProf = Object.keys(backgroundObj.toolProficiencies[0])[0]
+        console.warn(backgroundToolProf + ` *Remember to circle back to tool proficiency logic*`);
+
+        const classSaveProficiencies = classObj.proficiency; //array ['str', 'con']
+        classSaveProficiencies.forEach(saveProf => c.proficiencies.save.push(saveProf));
+        console.log('c.proficiencies.save: ' + c.proficiencies.save);
 
         
 
