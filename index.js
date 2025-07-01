@@ -511,7 +511,7 @@ class Character{
         backgroundName, 
         backgroundBonuses = [], 
         variableToolSelection, //a background may allow you to choose a tool proficiency from a list of options. if so, user must pass in their choice through the variableToolSelection argument
-        classSkillProfChoices = [],
+        classSkillProfChoices = [],//must be an array of two skills
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -575,11 +575,36 @@ class Character{
 
         //gotta circle back to tool proficiencies when I get the chance
         const backgroundToolProf = Object.keys(backgroundObj.toolProficiencies[0])[0]
-        console.warn(backgroundToolProf + ` *Remember to circle back to tool proficiency logic*`);
+        console.warn(`*Remember to circle back to tool proficiency logic*`);
 
         const classSaveProficiencies = classObj.proficiency; //array ['str', 'con']
         classSaveProficiencies.forEach(saveProf => c.proficiencies.save.push(saveProf));
-        console.log('c.proficiencies.save: ' + c.proficiencies.save);
+
+        if (classSkillProfChoices.length !== 2)
+            throw new Error(`You must choose *two* skill proficiencies from the available list your chosen class provides: ${availableSkillProfChoices}`)
+        if (classSkillProfChoices[0].length < 3 || classSkillProfChoices[1].length < 3)
+            throw new Error(`Both skill proficiency choices must be at least 3 characters long.`);
+        const userInputSkill1 = classSkillProfChoices[0]
+        const userInputSkill2 = classSkillProfChoices[1]
+        const availableSkillProfChoices = classObj.startingProficiencies.skills[0].choose.from; //array of all available choices
+        const trueSkill1 = availableSkillProfChoices.find(ele => new RegExp(userInputSkill1, 'i').test(ele));
+        if (!trueSkill1)
+            throw new Error (`'${userInputSkill1}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${availableSkillProfChoices}`);
+        let normalizedTrueSkill1 = trueSkill1.split(' ');
+        normalizedTrueSkill1.forEach((val, i, arr) => arr[i] = val.charAt(0).toUpperCase() + val.slice(1));
+        normalizedTrueSkill1 = normalizedTrueSkill1.join('');
+        normalizedTrueSkill1 = normalizedTrueSkill1.charAt(0).toLowerCase() + normalizedTrueSkill1.slice(1);
+        c.proficiencies.skill[normalizedTrueSkill1].proficiency = 'proficient';
+        const trueSkill2 = availableSkillProfChoices.find(ele => new RegExp(userInputSkill2, 'i').test(ele));
+        if (!trueSkill2)
+            throw new Error(`'${userInputSkill2}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${availableSkillProfChoices}`);
+        if (trueSkill2 === trueSkill1)
+            throw new Error(`You cannot pick the same class skill proficiency ('${trueSkill2}') twice`);
+        let normalizedTrueSkill2 = trueSkill2.split(' ');
+        normalizedTrueSkill2.forEach((val, i, arr) => arr[i] = val.charAt(0).toUpperCase() + val.slice(1));
+        normalizedTrueSkill2 = normalizedTrueSkill2.join('');
+        normalizedTrueSkill2 = normalizedTrueSkill2.charAt(0).toLowerCase() + normalizedTrueSkill2.slice(1);
+        c.proficiencies.skill[normalizedTrueSkill2].proficiency = 'proficient';
 
         
 
