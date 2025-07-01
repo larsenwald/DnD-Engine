@@ -601,9 +601,9 @@ class Character{
         let trueSkill2 = validSkills.find(ele => new RegExp(`^${userInputSkill2}`, 'i').test(ele));
         if (!trueSkill2)
             throw new Error(`'${userInputSkill2}' is not a valid skill available in your pool of skill proficiency choices. Available choices: ${validSkills.join(', ')}`);
+        trueSkill2 = toCamelCase(trueSkill2);
         if (trueSkill2 === trueSkill1)
             throw new Error(`You cannot pick the same class skill proficiency ('${trueSkill2}') twice`);
-        trueSkill2 = toCamelCase(trueSkill2);
         c.proficiencies.skill[trueSkill2].proficiency = 'proficient';
 
         //background and class both provide starting equipment
