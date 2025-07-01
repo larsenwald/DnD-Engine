@@ -39,7 +39,10 @@ let biggerItemsObject;
 	console[biggerItemsObject ? `log` : `error`](biggerItemsObject ? `biggerItemsObject loaded!` : `biggerItemsObject failed.`)
 	for (let item of biggerItemsObject.item){
 		jsonItemsArray.push(JSON.stringify(item));
-	}
+	};
+	for (let item of biggerItemsObject.itemGroup){
+		jsonItemsArray.push(JSON.stringify(item));
+	};
 })();
 
 const classes = [

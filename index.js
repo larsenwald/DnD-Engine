@@ -412,7 +412,7 @@ class Character{
     }
     newItem(name, amount = 1, note=null){//for now, to add a new item, you'll need to put its 5etools json in the jsonItemsArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonItemsArray automatically)
         let json = jsonItemsArray.find(ele => compareStr(JSON.parse(ele).name, name) && JSON.parse(ele).source === 'XPHB');//only looking for items from XPHB for now
-        if (!json) throw new Error(`Couldn't find an item with a name of '${name} in the jsonItemsArray.`)
+        if (!json) throw new Error(`Couldn't find an item with a name of '${name}' in the jsonItemsArray.`)
         
         //if it's armor or a weapon, just push it immediately the amount of times equal to the amount value (recall each item will have a unique ID)
         if (JSON.parse(json).armor || JSON.parse(json).weapon) {
@@ -512,6 +512,8 @@ class Character{
         backgroundBonuses = [], 
         variableToolSelection, //a background may allow you to choose a tool proficiency from a list of options. if so, user must pass in their choice through the variableToolSelection argument
         classSkillProfChoices = [],//must be an array of two skills
+        backgroundStartingEquipmentLetter,
+        classStartingEquipmentNumber
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -605,6 +607,13 @@ class Character{
         c.proficiencies.skill[trueSkill2].proficiency = 'proficient';
 
         //background and class both provide starting equipment
+        backgroundObj.startingEquipment[0][backgroundStartingEquipmentLetter].forEach(item => {
+            if (item.value){
+                c.newItem(`Gold Piece`, item.value/100);
+                return;
+            }
+            c.newItem(item.item.match(/[a-z \p{P}]*(?=\|)/u)[0], item.quantity ? item.quanitity : undefined)
+        })
 
         
 
