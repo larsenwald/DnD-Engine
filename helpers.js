@@ -20,3 +20,14 @@ function toTitleCase(string){
     }
     return strings.join(' ');
 }
+
+function toCamelCase(string){
+    let normalizedString =
+    string.split(' ')
+    .map(ele => ele = ele.charAt(0).toUpperCase() + ele.slice(1).toLowerCase())
+    .join('');
+
+    normalizedString = normalizedString.charAt(0).toLowerCase() + normalizedString.slice(1);
+    
+    return normalizedString;
+}
