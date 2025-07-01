@@ -526,7 +526,7 @@ class Character{
                 throw new Error(`${bonus} is not one of the three ability scores you can increase for the ${backgroundName} background. You can only increase: ${[...abilityScoreImprovementChoicePool]}`)
         });
         if (backgroundBonuses[0] === backgroundBonuses[1] && backgroundBonuses[1] === backgroundBonuses[2])
-            throw new Error (`You cannot have three identical bonuses. Only three of same and one different, or all three different.`);
+            throw new Error (`You cannot have three identical bonuses. Only two of same and one different, or all three different.`);
 
         
         
@@ -555,7 +555,12 @@ class Character{
             'background',
         );
         //note proficiencies
-        const backgroundSkillProfsArray = backgroundsObjectArray[2].entries[0].items.find(ele => /skill proficiencies/i.test(ele.name)).entry.match(/(?<=@skill )[a-z ]*(?=\|)/ig)//should return an array with both profs
+        const backgroundSkillProfsArray = backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)).entries[0].items.find(ele => /skill proficiencies/i.test(ele.name)).entry.match(/(?<=@skill )[a-z ]*(?=\|)/ig)//should return an array with both profs (i.e. ['Deception', 'Sleight of Hand'])
+        Object.keys(c.proficiencies.skill).forEach(skill => {
+            let regex = new RegExp(skill, 'i');
+            if (regex.test(backgroundSkillProfsArray[0]) || regex.test(backgroundSkillProfsArray[1]))
+               c.proficiencies.skill[skill].proficiency = 'proficient';
+        });
 
         
 
