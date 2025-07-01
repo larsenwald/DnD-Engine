@@ -522,8 +522,8 @@ class Character{
             if (!abilityScoreImprovementChoicePool.includes(bonus))
                 throw new Error(`${bonus} is not one of the three ability scores you can increase for the ${backgroundName} background. You can only increase: ${[...abilityScoreImprovementChoicePool]}`)
         });
-        for (let i = 0; i < backgroundBonuses.length; i++){//todo: make sure that there can't be three of same ability score at once. only 2 of same and 1 different, or all 3 different
-        }
+        if (backgroundBonuses[0] === backgroundBonuses[1] && backgroundBonuses[1] === backgroundBonuses[2])
+            throw new Error (`You cannot have three identical bonuses. Only three of same and one different, or all three different.`);
 
         
         
