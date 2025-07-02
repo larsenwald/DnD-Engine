@@ -91,6 +91,9 @@ let originFeatsObject;
 })();
 
 let speciesObject;
-async () => {
-	const response = get5eToolsObject()
-}
+(async () => {
+	const response = await get5eToolsObject(`https://5e.tools/data/races.json`);
+	speciesObject = response.race.filter(ele => ele.source === `XPHB`);
+	console[speciesObject ? `log` : `error`](speciesObject ? `speciesObject loaded!` : `speciesObject failed.`)
+	speciesObjectsArray.push(...speciesObject);
+})();

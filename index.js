@@ -628,6 +628,8 @@ class Character{
         const trinketDescription = itemObjectsArray.find(ele => ele.name === 'Trinket' && ele.source === 'XPHB').entries[1].rows[trinketTableNumber ? trinketTableNumber - 1 : randomIntegerBetween(0, 99)][1];
         c.newItem(`Trinket`, undefined, trinketDescription);
         
+        //species
+        //to-do: a lot of the species objects have choices involved, and not in any way consistent enough to programmatically parse. I might just have to manually add each species object to an array and give each species object a 'choices' property that's easy to parse.
 
         return c;
     }
