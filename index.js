@@ -526,9 +526,9 @@ class Character{
             throw new Error(`Please choose a level between 1 and 20. ${level} is not a valid option.`);
 
         //validate background name
-        if (!backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName)))
+        if (!backgroundObjectArray.find(ele => compareStr(ele.name, backgroundName)))
             throw new Error(`Couldn't find a background with a name of ${backgroundName} in the backgroundObjectsArray.`);
-        const backgroundObj = backgroundsObjectArray.find(ele => compareStr(ele.name, backgroundName));
+        const backgroundObj = backgroundObjectArray.find(ele => compareStr(ele.name, backgroundName));
 
         //validate background bonuses: there are three ability scores && they are the right ones for the specific background && there are not three identical ones
         if (!Array.isArray(backgroundBonuses) || backgroundBonuses.length !== 3)
@@ -559,7 +559,7 @@ class Character{
         const originFeat = Object.keys(backgroundObj.feats[0])[0].match(/[a-z]+ *[a-z]*;* *[a-z]*/i)[0];
         const originFeatNormalized = originFeat.match(/[a-z]+ *[a-z]*/i)[0];
         let originFeatDescription = '';
-        originFeatsObjectArray.find(ele => compareStr(ele.name, originFeatNormalized)).entries.forEach(ele => {
+        originFeatObjectsArray.find(ele => compareStr(ele.name, originFeatNormalized)).entries.forEach(ele => {
             if (typeof ele === 'string') originFeatDescription += ele + `\n`;
             else if (typeof ele === 'object') originFeatDescription += ele.entries[0] + '\n';
         })

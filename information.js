@@ -20,8 +20,9 @@ const itemObjectsArray = [
 	} //gold pieces aren't officially considered items within 5e tools, so we make our own. we might want to just store gold separately instead of in the inventory
 ]
 const classObjectsArray = [];
-const backgroundsObjectArray = [];
-const originFeatsObjectArray = [];
+const backgroundObjectsArray = [];
+const originFeatObjectsArray = [];
+const speciesObjectsArray = []
 
 let itemsObject;
 (async () => {
