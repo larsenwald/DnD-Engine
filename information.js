@@ -78,7 +78,7 @@ let backgroundsObject;
 (async () => {
 	let response = await get5eToolsObject(`https://5e.tools/data/backgrounds.json`);
 	backgroundsObject = response.background.filter(ele => ele.source === `XPHB`)
-	backgroundsObjectArray.push(...backgroundsObject);
+	backgroundObjectsArray.push(...backgroundsObject);
 	console[backgroundsObject ? `log` : `error`](backgroundsObject ? `backgroundsObject loaded!` : `backgroundsObject failed.`)
 })();
 
@@ -86,6 +86,11 @@ let originFeatsObject;
 (async () => {
 	let response = await get5eToolsObject(`https://5e.tools/data/feats.json`);
 	originFeatsObject = response.feat.filter(ele => ele.source === `XPHB` && ele.category === 'O');
-	originFeatsObjectArray.push(...originFeatsObject);
+	originFeatObjectsArray.push(...originFeatsObject);
 	console[originFeatsObject ? `log` : `error`](originFeatsObject ? `originFeatsObject loaded!` : `originFeatsObject failed.`)
 })();
+
+let speciesObject;
+async () => {
+	const response = get5eToolsObject()
+}
