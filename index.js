@@ -513,7 +513,7 @@ class Character{
         variableToolSelection, //a background may allow you to choose a tool proficiency from a list of options. if so, user must pass in their choice through the variableToolSelection argument
         classSkillProfChoices = [],//must be an array of two skills
         backgroundStartingEquipmentLetter,
-        classStartingEquipmentNumber
+        classStartingEquipmentLetter
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -614,6 +614,14 @@ class Character{
             }
             c.newItem(item.item.match(/[a-z \p{P}]*(?=\|)/u)[0], item.quantity ? item.quanitity : undefined)
         })
+
+        classObj.startingEquipment.defaultData[0][classStartingEquipmentLetter].forEach(item => {
+            if (item.value){
+                c.newItem(`Gold Piece`, item.value/100);
+                return;
+            }
+            c.newItem(item.item.match(/[a-z \p{P}]*(?=\|)/u)[0], item.quantity ? item.quanitity : undefined)
+        });
 
         
 
