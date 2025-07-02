@@ -513,7 +513,8 @@ class Character{
         variableToolSelection, //a background may allow you to choose a tool proficiency from a list of options. if so, user must pass in their choice through the variableToolSelection argument
         classSkillProfChoices = [],//must be an array of two skills
         backgroundStartingEquipmentLetter,
-        classStartingEquipmentLetter
+        classStartingEquipmentLetter,
+        trinketTableNumber, //will be random if undefined
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -623,6 +624,9 @@ class Character{
             c.newItem(item.item.match(/[a-z \p{P}]*(?=\|)/u)[0], item.quantity ? item.quanitity : undefined)
         });
 
+        //trinket logic (the free trinket that all characters get at level 1)
+        const trinketDescription = itemObjectsArray.find(ele => ele.name === 'Trinket' && ele.source === 'XPHB').entries[1].rows[trinketTableNumber ? trinketTableNumber - 1 : randomIntegerBetween(0, 99)][1];
+        c.newItem(`Trinket`, undefined, trinketDescription);
         
 
         return c;
