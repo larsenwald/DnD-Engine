@@ -410,14 +410,14 @@ class Character{
             throw new Error(`Couldn't find a feature named ${name}`);
         this.featuresArray.splice(index, 1);
     }
-    newItem(name, amount = 1, note=null){//for now, to add a new item, you'll need to put its 5etools json in the jsonItemsArray variable located in the information.js file (though currently we have an async function that fetches all the base items from 5etools and adds them to the jsonItemsArray automatically)
-        let json = jsonItemsArray.find(ele => compareStr(JSON.parse(ele).name, name) && JSON.parse(ele).source === 'XPHB');//only looking for items from XPHB for now
-        if (!json) throw new Error(`Couldn't find an item with a name of '${name}' in the jsonItemsArray.`)
-        
+    newItem(name, amount = 1, note=null){
+        let itemObj = itemObjectsArray.find(ele => compareStr(ele.name, name) && ele.source === 'XPHB');//only looking for items from XPHB for now
+        if (!itemObj) throw new Error(`Couldn't find an item with a name of '${name}' in the itemsArray.`)
+
         //if it's armor or a weapon, just push it immediately the amount of times equal to the amount value (recall each item will have a unique ID)
-        if (JSON.parse(json).armor || JSON.parse(json).weapon) {
+        if (itemObj.armor || itemObj.weapon) {
             for (let i = 0; i < amount; i++){
-                const item = new Item(json);
+                const item = new Item(itemObj);
                 item.note = note;
                 this.inventory.push(item);
             }
@@ -425,14 +425,14 @@ class Character{
         }
 
         //if it's neither armor or weapon, first check if it's in the inventory. if it is, increment the stack a number of times equal to the amount value
-        let index = this.inventory.findIndex(ele => compareStr(JSON.parse(json).name, ele.name));
+        let index = this.inventory.findIndex(ele => compareStr(itemObj.name, ele.name));
         if (index !== -1){
             this.inventory[index].amount += amount;
             return;
         }
 
         //if it's not in the inventory, create a new item object, add a 'amount' property with a value equal to the amount argument
-        const item = new Item(json);
+        const item = new Item(itemObj);
         item.amount = amount;
         item.note = note;
         this.inventory.push(item);
@@ -640,8 +640,8 @@ class Feature{
 }
 
 class Item{
-    constructor(json){
-        Object.assign(this, JSON.parse(json));
+    constructor(itemObj){
+        Object.assign(this, itemObj);
         this.id = idGen.newId();
     }
 
