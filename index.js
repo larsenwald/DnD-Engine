@@ -515,6 +515,8 @@ class Character{
         backgroundStartingEquipmentLetter,
         classStartingEquipmentLetter,
         trinketTableNumber, //will be random if undefined
+        speciesName,
+        chosenSize,
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -526,9 +528,9 @@ class Character{
             throw new Error(`Please choose a level between 1 and 20. ${level} is not a valid option.`);
 
         //validate background name
-        if (!backgroundObjectArray.find(ele => compareStr(ele.name, backgroundName)))
+        if (!backgroundObjectsArray.find(ele => compareStr(ele.name, backgroundName)))
             throw new Error(`Couldn't find a background with a name of ${backgroundName} in the backgroundObjectsArray.`);
-        const backgroundObj = backgroundObjectArray.find(ele => compareStr(ele.name, backgroundName));
+        const backgroundObj = backgroundObjectsArray.find(ele => compareStr(ele.name, backgroundName));
 
         //validate background bonuses: there are three ability scores && they are the right ones for the specific background && there are not three identical ones
         if (!Array.isArray(backgroundBonuses) || backgroundBonuses.length !== 3)
@@ -542,6 +544,10 @@ class Character{
         if (backgroundBonuses[0] === backgroundBonuses[1] && backgroundBonuses[1] === backgroundBonuses[2])
             throw new Error (`You cannot have three identical bonuses. Only two of same and one different, or all three different.`);
 
+        //validate species name
+        if (!speciesObjectsArray.find(ele => compareStr(ele.name, speciesName)))
+            throw new Error(`Couldn't find a species with a name of ${speciesName} in the speciesObjectsArray.`);
+        const speciesObj = speciesObjectsArray.find(ele => compareStr(ele.name, speciesName));
         
         
         const c = new Character(); 
@@ -556,7 +562,7 @@ class Character{
         };
         //Choose your background
         //record your feat
-        const originFeat = Object.keys(backgroundObj.feats[0])[0].match(/[a-z]+ *[a-z]*;* *[a-z]*/i)[0];
+        const originFeat = toTitleCase(Object.keys(backgroundObj.feats[0])[0].match(/[a-z]+ *[a-z]*;* *[a-z]*/i)[0]);
         const originFeatNormalized = originFeat.match(/[a-z]+ *[a-z]*/i)[0];
         let originFeatDescription = '';
         originFeatObjectsArray.find(ele => compareStr(ele.name, originFeatNormalized)).entries.forEach(ele => {
@@ -613,7 +619,7 @@ class Character{
                 c.newItem(`Gold Piece`, item.value/100);
                 return;
             }
-            c.newItem(item.item.match(/[a-z \p{P}]*(?=\|)/u)[0], item.quantity ? item.quanitity : undefined)
+            c.newItem(item.item.match(/^[^|]+/)[0], item.quantity ? item.quanitity : undefined)
         })
 
         classObj.startingEquipment.defaultData[0][classStartingEquipmentLetter].forEach(item => {
@@ -621,7 +627,7 @@ class Character{
                 c.newItem(`Gold Piece`, item.value/100);
                 return;
             }
-            c.newItem(item.item.match(/[a-z \p{P}]*(?=\|)/u)[0], item.quantity ? item.quanitity : undefined)
+            c.newItem(item.item.match(/^[^|]+/)[0], item.quantity ? item.quanitity : undefined)
         });
 
         //trinket logic (the free trinket that all characters get at level 1)
@@ -629,7 +635,18 @@ class Character{
         c.newItem(`Trinket`, undefined, trinketDescription);
         
         //species
-        
+        //record species traits
+        entriesToMarkdownArray(speciesObj.entries).forEach(ele => {
+            c.newFeature(ele.match(/(?<=^### )[^\n]*(?=\n)/)[0], ele.match(/^.*?\n(.*)$/s)[1], `species`);
+        })
+
+        if (chosenSize && !speciesObj.size.includes(chosenSize.charAt(0).toUpperCase()))
+            throw new Error (`Chosen size of '${chosenSize}' not one of the available options for species. Options are: ${[...speciesObj.size].join(`\n`)}.`)
+        c.size = chosenSize ?? speciesObj.size[0];
+        if (c.size.toLowerCase() === 'm')
+            c.size = 'Medium';
+        if (c.size.toLowerCase() === 's')
+            c.size = 'Small';
 
         return c;
     }
