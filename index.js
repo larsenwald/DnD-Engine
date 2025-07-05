@@ -520,7 +520,7 @@ class Character{
         knownLanguages = [],
         baseAbilityScores = [],
         alignment,
-        
+
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -640,7 +640,7 @@ class Character{
         
         //species
         //record species traits
-        entriesToMarkdownArray(speciesObj.entries).forEach(ele => {
+        speciesEntriesToMarkdownArray(speciesObj.entries).forEach(ele => {
             c.newFeature(ele.match(/(?<=^### )[^\n]*(?=\n)/)[0], ele.match(/^.*?\n(.*)$/s)[1], `species`);
         })
         //record size
@@ -666,12 +666,20 @@ class Character{
             throw new Error (`For baseAbilityScores: expected 6 ability scores between 3 (lowest possible roll) and 18 (highest possible roll)`);
         let index = 0;
         for (let key in c.abilityScores){
-            console.log(key, baseAbilityScores[index])
             c.abilityScores[key].value = baseAbilityScores[index];
             index++;
         }
         c.setBackground(toTitleCase(backgroundName), backgroundBonuses[0], backgroundBonuses[1], backgroundBonuses[2])
 
+        //write down class features
+        let classFeatureArray = classFeaturesToMarkdownArray(classObj.expandedClassFeatures);
+        for (let i = 0; i < classFeatureArray.length; i++){
+            if (classFeatureArray[i].match(/(?<=### Lv )\d+(?= –)/)[0] <= level){
+                c.newFeature(classFeatureArray[i].match(/(?<=^### )[^\n]*(?=\n)/)[0], classFeatureArray[i].match(/^.*?\n(.*)$/s)[1], `class`);
+            }
+        }
+
+        //hp logic
 
         return c;
     }

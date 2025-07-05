@@ -67,6 +67,7 @@ let classesObject;
 	for (let className of classes) {
 		const classObject = await get5eToolsObject(`https://5e.tools/data/class/class-${className}.json`);
 		classesLoaded++;
+		classObject.class[1].expandedClassFeatures = classObject.classFeature.filter(ele => ele.source === 'XPHB');
 		placeHolder.push(classObject.class[1])//the class property of the class object is an array that holds the phb version of the class in index 0 and the xphb version in index 1
 	}
 	console.log(`${classesLoaded}/${classes.length} classes loaded!`)
