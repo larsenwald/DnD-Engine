@@ -517,6 +517,10 @@ class Character{
         trinketTableNumber, //will be random if undefined
         speciesName,
         chosenSize,
+        knownLanguages = [],
+        baseAbilityScores = [],
+        alignment,
+        
     ){
         //validate className
         if (!classObjectsArray.find(ele => compareStr(ele.name, className)))
@@ -639,7 +643,7 @@ class Character{
         entriesToMarkdownArray(speciesObj.entries).forEach(ele => {
             c.newFeature(ele.match(/(?<=^### )[^\n]*(?=\n)/)[0], ele.match(/^.*?\n(.*)$/s)[1], `species`);
         })
-
+        //record size
         if (chosenSize && !speciesObj.size.includes(chosenSize.charAt(0).toUpperCase()))
             throw new Error (`Chosen size of '${chosenSize}' not one of the available options for species. Options are: ${[...speciesObj.size].join(`\n`)}.`)
         c.size = chosenSize ?? speciesObj.size[0];
@@ -647,6 +651,27 @@ class Character{
             c.size = 'Medium';
         if (c.size.toLowerCase() === 's')
             c.size = 'Small';
+        //record speed
+        c.speed = speciesObj.speed;
+        
+        //choose languages
+        if (knownLanguages.length > 0){
+            knownLanguages.forEach(ele => {
+                c.languages.push(ele);
+            })
+        };
+
+        //Determine Ability Scores
+        if (baseAbilityScores.length !== 6 || baseAbilityScores.some(ele => ele > 18 || ele < 3))
+            throw new Error (`For baseAbilityScores: expected 6 ability scores between 3 (lowest possible roll) and 18 (highest possible roll)`);
+        let index = 0;
+        for (let key in c.abilityScores){
+            console.log(key, baseAbilityScores[index])
+            c.abilityScores[key].value = baseAbilityScores[index];
+            index++;
+        }
+        c.setBackground(toTitleCase(backgroundName), backgroundBonuses[0], backgroundBonuses[1], backgroundBonuses[2])
+
 
         return c;
     }
