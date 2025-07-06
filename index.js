@@ -85,6 +85,22 @@ class Character{
         temp: 0
        }
 
+       //spellCasting
+       this.spellCasting = {
+        spellcastingAbility: '',
+        spellSaveDc: {
+            val: null,
+            mods: []
+        },
+        spellAtkMod: {
+            val: null,
+            mods: [],
+        },
+        cantripProgression: [],
+        preparedSpellsProgression: [],
+        spellSlotProgression: [],
+       };
+
        this.actions = [];
 
        this.equipmentSlots = {
@@ -695,6 +711,13 @@ class Character{
         c.hitDice.max = level;
         c.hitDice.current = level;
         c.hitDice.type = 'd' + classObj.hd.faces;
+
+        //spellCasting
+        c.spellCasting.spellcastingAbility = classObj.spellcastingAbility;
+        c.spellCasting.cantripProgression = classObj.cantripProgression;
+        c.spellCasting.preparedSpellsProgression = classObj.preparedSpellsProgression;
+        c.spellCasting.spellSlotProgression = 0 //should be an array of objs {level : 1, amt: 1}
+
 
         return c;
     }
