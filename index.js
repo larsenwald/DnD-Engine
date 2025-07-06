@@ -520,6 +520,7 @@ class Character{
         knownLanguages = [],
         baseAbilityScores = [],
         alignment,
+        maxHp,
 
     ){
         //validate className
@@ -679,7 +680,21 @@ class Character{
             }
         }
 
-        //hp logic
+        //hp and hitdice logic
+        const classBaseHp = classObj.hd.faces + c.mod(`ability`, `con`);
+        if (level > 1 && (!maxHp || !Number.isInteger(maxHp) || maxHp < classBaseHp))
+            throw new Error (`Level is above 1; expected a 'maxHp' argument that is an integer greater than the class's base hp.`);
+
+        if (level === 1)
+            c.hp.max = classBaseHp;
+        else
+            c.hp.max = maxHp;
+
+        c.hp.current = c.hp.max;
+
+        c.hitDice.max = level;
+        c.hitDice.current = level;
+        c.hitDice.type = 'd' + classObj.hd.faces;
 
         return c;
     }
