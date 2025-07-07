@@ -87,18 +87,10 @@ class Character{
 
        //spellCasting
        this.spellCasting = {
-        spellcastingAbility: '',
-        spellSaveDc: {
-            val: null,
-            mods: []
-        },
-        spellAtkMod: {
-            val: null,
-            mods: [],
-        },
-        cantripProgression: [],
-        preparedSpellsProgression: [],
-        spellSlotProgression: [],
+        ability: '',
+        cantripsAllowed: {}, //`wizard: 3` or `druid: 4` for example
+        preparedSpellsAllowed: 0,
+        spellSlots: {},//`lvl1: 2`, `lvl2: 1` etc
        };
 
        this.actions = [];
@@ -277,6 +269,43 @@ class Character{
     get charismaMod(){
         return this.mod('ability', 'cha');
     };
+
+    spellSaveDc(){
+        if (!this.spellCasting.ability)
+            throw new Error(`Character does not have spellcasting ability.`);
+        const ctx = {
+            character: this,
+            base: 8,
+            mods: [
+                `${this.mod(`ability`, this.spellCasting.ability)} [${this.spellCasting.ability}]`,
+                `${this.proficiencyBonus} [proficiency]`
+            ],
+            notes: ''
+        }
+        this.hooks.filter(hook => hook.meantFor === 'spell save dc').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base + '';
+        ctx.mods.forEach(mod => rollString += `+ ${mod}`);
+
+        return Roll.string(rollString) + `\nNotes: ${ctx.notes}`;
+    }
+
+    spellAttackMod(){
+        if (!this.spellCasting.ability)
+            throw new Error(`Character does not have spellcasting ability.`);
+        const ctx = {
+            character: this,
+            base: this.mod(`ability`, this.spellCasting.ability) + `[${this.spellCasting.ability}]`,
+            mods: [`${this.proficiencyBonus} [proficiency]`],
+            notes: ''
+        }
+        this.hooks.filter(hook => hook.meantFor === 'spell attack mod').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        ctx.mods.forEach(mod => rollString += `+ ${mod}`);
+
+        return Roll.string(rollString) + `\nNotes: ${ctx.notes}`;
+    }
 
     //checks
     savingThrow(type){ //accounts for first three letters of string input. for example, it can take 'str' or 'strength'
@@ -713,12 +742,22 @@ class Character{
         c.hitDice.type = 'd' + classObj.hd.faces;
 
         //spellCasting
-        c.spellCasting.spellcastingAbility = classObj.spellcastingAbility;
-        c.spellCasting.cantripProgression = classObj.cantripProgression;
-        c.spellCasting.preparedSpellsProgression = classObj.preparedSpellsProgression;
-        c.spellCasting.spellSlotProgression = 0 //should be an array of objs {level : 1, amt: 1}
+        if (classObj.spellcastingAbility){
+            c.spellCasting.ability = classObj.spellcastingAbility;
+            c.spellCasting.cantripsAllowed[className] = classObj.cantripProgression[level-1];
+            c.spellCasting.preparedSpellsAllowed = classObj.preparedSpellsProgression[level-1]
 
+            let normalSpellSlotTable = false;
+            classObj.classTableGroups.find(ele => ele.title?.includes('Spell Slots'))?.rowsSpellProgression[level-1].forEach((slot, i) => {
+            if (slot > 0)
+                c.spellCasting.spellSlots['lvl' + (i+1)] = slot;
+            normalSpellSlotTable = true;
+            });
 
+            if (!normalSpellSlotTable && compareStr(className, `warlock`))
+                c.spellCasting.spellSlots['lvl' + classObj.classTableGroups[0].rows[level-1][4]] = classObjectsArray[7].classTableGroups[0].rows[level-1][3];
+            else if (!normalSpellSlotTable) throw new Error (`Couldn't find the table of spell slots and levels for this class.`)
+        }
         return c;
     }
 }
