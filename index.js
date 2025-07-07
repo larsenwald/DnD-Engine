@@ -632,9 +632,20 @@ class Character{
                c.proficiencies.skill[skill].proficiency = 'proficient';
         });
 
-        //gotta circle back to tool proficiencies when I get the chance
         const backgroundToolProf = Object.keys(backgroundObj.toolProficiencies[0])[0]
-        console.warn(`*Remember to circle back to tool proficiency logic*`);
+        if (backgroundToolProf.includes('any')){
+            if (!variableToolSelection) throw new Error (`You are required to enter the tool to gain proficiency with if your background offers choices.`)
+
+            const arr = backgroundToolProf.match(/[A-Z][a-z]+/g);
+            if (arr[0] === 'Artisans') arr[0] = `Artisan's`;
+            if (arr[1] === 'Tool') arr[1] = `Tools`;
+
+            const itemCategory = itemObjectsArray.find(ele => ele.name === arr.join(' ') && ele.source === 'XPHB');
+            const item = itemCategory.items.find(ele => ele.includes(toTitleCase(variableToolSelection)));
+            if (!item) throw new Error (`Couldn't find the tool proficiency '${variableToolSelection}' in the ones available to this background. Ones available to you are: \n${itemCategory.items.join(', ')}`)
+
+            c.proficiencies.tool.push(item.match(/^[^\|]+/gm)[0]);
+        } else c.proficiencies.tool.push(backgroundToolProf);
 
         const classSaveProficiencies = classObj.proficiency; //array ['str', 'con']
         classSaveProficiencies.forEach(saveProf => c.proficiencies.save.push(saveProf));
