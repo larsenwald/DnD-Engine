@@ -755,7 +755,7 @@ class Character{
         //spellCasting
         if (classObj.spellcastingAbility){
             c.spellCasting.ability = classObj.spellcastingAbility;
-            c.spellCasting.cantripsAllowed[className] = classObj.cantripProgression[level-1];
+            c.spellCasting.cantripsAllowed[className] = classObj.cantripProgression?.[level-1] ? classObj.cantripProgression[level-1] : 0;
             c.spellCasting.preparedSpellsAllowed = classObj.preparedSpellsProgression[level-1]
 
             let normalSpellSlotTable = false;
