@@ -1,7 +1,7 @@
-async function get5eToolsObject(url) {
+async function get5eToolsObject(dataFilePath) {
     let output;
     try {
-        const response = await fetch(`https://corsproxy.io/?${url}`);
+        const response = await fetch(`https://larsenwald.github.io/5etools/data/${dataFilePath}`);
         output = await response.json();
     } catch (error) {
         console.log(error);
@@ -26,7 +26,7 @@ const speciesObjectsArray = []
 
 let itemsObject;
 (async () => {
-    itemsObject = await get5eToolsObject(`https://5e.tools/data/items-base.json`);
+    itemsObject = await get5eToolsObject(`items-base.json`);
     console[itemsObject ? `log` : `error`](itemsObject ? `itemsObject loaded!` : `itemsObject failed.`)
     for (let item of itemsObject.baseitem){
         itemObjectsArray.push(item)
@@ -35,7 +35,7 @@ let itemsObject;
 
 let biggerItemsObject;
 (async () => { //this will push a lot of the non-weapon item objects to the itemObjectsArray
-	biggerItemsObject = await get5eToolsObject(`https://5e.tools/data/items.json`);
+	biggerItemsObject = await get5eToolsObject(`items.json`);
 	console[biggerItemsObject ? `log` : `error`](biggerItemsObject ? `biggerItemsObject loaded!` : `biggerItemsObject failed.`)
 	for (let item of biggerItemsObject.item){
 		itemObjectsArray.push(item);
@@ -65,7 +65,7 @@ let classesObject;
 	let placeHolder = [];
 	let classesLoaded = 0;
 	for (let className of classes) {
-		const classObject = await get5eToolsObject(`https://5e.tools/data/class/class-${className}.json`);
+		const classObject = await get5eToolsObject(`class/class-${className}.json`);
 		classesLoaded++;
 		classObject.class[1].expandedClassFeatures = classObject.classFeature.filter(ele => ele.source === 'XPHB');
 		placeHolder.push(classObject.class[1])//the class property of the class object is an array that holds the phb version of the class in index 0 and the xphb version in index 1
@@ -77,7 +77,7 @@ let classesObject;
 
 let backgroundsObject;
 (async () => {
-	let response = await get5eToolsObject(`https://5e.tools/data/backgrounds.json`);
+	let response = await get5eToolsObject(`backgrounds.json`);
 	backgroundsObject = response.background.filter(ele => ele.source === `XPHB`)
 	backgroundObjectsArray.push(...backgroundsObject);
 	console[backgroundsObject ? `log` : `error`](backgroundsObject ? `backgroundsObject loaded!` : `backgroundsObject failed.`)
@@ -85,7 +85,7 @@ let backgroundsObject;
 
 let originFeatsObject;
 (async () => {
-	let response = await get5eToolsObject(`https://5e.tools/data/feats.json`);
+	let response = await get5eToolsObject(`feats.json`);
 	originFeatsObject = response.feat.filter(ele => ele.source === `XPHB` && ele.category === 'O');
 	originFeatObjectsArray.push(...originFeatsObject);
 	console[originFeatsObject ? `log` : `error`](originFeatsObject ? `originFeatsObject loaded!` : `originFeatsObject failed.`)
@@ -93,7 +93,7 @@ let originFeatsObject;
 
 let speciesObject;
 (async () => {
-	const response = await get5eToolsObject(`https://5e.tools/data/races.json`);
+	const response = await get5eToolsObject(`races.json`);
 	speciesObject = response.race.filter(ele => ele.source === `XPHB`);
 	console[speciesObject ? `log` : `error`](speciesObject ? `speciesObject loaded!` : `speciesObject failed.`)
 	speciesObjectsArray.push(...speciesObject);
