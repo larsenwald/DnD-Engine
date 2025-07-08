@@ -605,7 +605,8 @@ class Character{
         const c = new Character();
 
         c.name = charName;
-
+        c.charClass = className;
+        
         //write your level
         c.level = level;
         //note armor training

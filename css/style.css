@@ -24,7 +24,6 @@ body {
   position: relative;
 }
 
-/* HTML: <div class="loader"></div> */
 .loader {
   position: absolute;
   top: 5%;
@@ -35,7 +34,7 @@ body {
   padding: 8px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #25b09b;
+  background: #cc9e1e;
   --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
   -webkit-mask: var(--_m);
   mask: var(--_m);
@@ -73,6 +72,8 @@ body {
   gap: 1vw;
 
   padding: 2%;
+
+  cursor: pointer;
 }
 
 #character-container .card img {
