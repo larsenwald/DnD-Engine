@@ -1,9 +1,10 @@
 # My D&D Engine.
+
 A personal study on OOP and game engine design.
 
 ## Main ideas
 
-Everything that happens in the game (i.e. taking an action, modifying HP, checking for a bonus) should be an *event-like process*. Initially, I started with an `Event` class, but now I'm looking into an alternative hook-based approach.
+Everything that happens in the game (i.e. taking an action, modifying HP, checking for a bonus) should be an _event-like process_. Initially, I started with an `Event` class, but now I'm looking into an alternative hook-based approach.
 
 ### Original idea: An 'Event' Class
 
@@ -15,6 +16,7 @@ A character equips a magical helm that gives +2 to attack rolls when below 50% H
 → When the event runs, it checks HP and applies the bonus if the condition is met.
 
 ### Revised Idea: Hook + Context Model
+
 - Ditching the universal `Event` class.
 - Every major event (i.e. attackRoll(), savingThrow(), get hp()) is a method on the character.
 - These methods:
@@ -31,4 +33,6 @@ This could potentially give us a far more straightforward implementation than a 
 
 - Expanding upon the basic character sheet to include streamlined actions via logic insertion (see the Feature and Action class) ✅ DONE
 
-- Continue adding any other functionality to make the transition from CLI to GUI as seamless as possible.
+- Continue adding any other functionality to make the transition from CLI to GUI as seamless as possible. ✅ DONE
+
+- Implementing a basic GUI for the character sheet. This will be an interface that allows users to create and manage characters, play the game, and interact with the engine in a more visual way. Biggest to do is to implement an input/output system with a UI design similar to Apple's 'Spotlight' search.
