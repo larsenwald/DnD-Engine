@@ -3,7 +3,7 @@ function executeWhenLoaded(){
 
     const characters = [
         Character.newCharacter(
-            `Hector`,
+            `Hector Morenis`,
             `Fighter`,
             3,
             `Soldier`,
@@ -19,7 +19,25 @@ function executeWhenLoaded(){
             [15, 14, 13, 12, 10, 8],
             `NG`,
             26
-        )
+        ),
+        Character.newCharacter(
+            `Exponentia Beladres`,
+            `Wizard`,
+            2,
+            `Sage`,
+            ['int', 'int', 'con'],
+            'spellbook',
+            ['arcana', 'history'],
+            `A`,
+            `B`,
+            undefined,
+            `elf`,
+            `medium`,
+            [`elvish`, `common`],
+            [8, 10, 12, 14, 16, 18],
+            `LN`,
+            18
+        ),
     ];
 
     const characterContainer = document.querySelector(`#character-container`);
@@ -29,7 +47,7 @@ function executeWhenLoaded(){
     else{
         characters.forEach(character => {
             characterContainer.innerHTML +=
-                `<div class="card">
+                `<div class="card" data-character-name="${character.name}">
                     <img src="" alt="" />
                     <div class="name-and-class">
                     <h3>${character.name}</h3>
@@ -37,5 +55,17 @@ function executeWhenLoaded(){
                     </div>
                 </div>`
         })
+
+        document.querySelectorAll(`#character-container .card`).forEach(card => {
+            card.addEventListener(`click`, (event)=>{
+                renderCharacter(characters.find(ele => ele.name === event.currentTarget.getAttribute(`data-character-name`)));
+            })
+        });
     }
+}
+
+let currentCharacter;
+function renderCharacter(characterObject){
+    currentCharacter = characterObject;
+    console.log(currentCharacter)
 }
