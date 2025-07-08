@@ -29,6 +29,7 @@ function characterTesting(character){//putting everything that gets called in th
 }
 
 function level1Fighter(){ 
+c.name = 'Hector'
 //Step 1: Choose a class
 c.charClass = 'Fighter';
 c.level = 1;

@@ -12,6 +12,7 @@ const idGen = new IdGenerator();
 
 class Character{
     constructor(){//modeling the constructor after the order of the steps to create a new character in the 2024 PHB
+        this.name;
         //Step 1: Choose a class
         this.charClass = '';
         this.subclass = '';
@@ -551,6 +552,7 @@ class Character{
 
     //static
     static newCharacter(
+        charName,
         className, 
         level = 1, 
         backgroundName, 
@@ -600,7 +602,9 @@ class Character{
         const speciesObj = speciesObjectsArray.find(ele => compareStr(ele.name, speciesName));
         
         
-        const c = new Character(); 
+        const c = new Character();
+
+        c.name = charName;
 
         //write your level
         c.level = level;
