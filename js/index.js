@@ -1,30 +1,51 @@
-const characters = [
-    {name: `Hector Morenis`, class: `Fighter`, subclass: `Champion`, level: 3}
-];
+function executeWhenLoaded(){
+    document.querySelector(`.loader`).classList.add(`hidden`);
 
-const characterContainer = document.querySelector(`#character-container`);
+    const characters = [
+        Character.newCharacter(
+            `Hector`,
+            `Fighter`,
+            3,
+            `Soldier`,
+            ['str', 'str', 'con'],
+            'dice set',
+            ['athletics', 'insight'],
+            `B`,
+            `C`,
+            undefined,
+            `human`,
+            `medium`,
+            [`orc`, `elvish`],
+            [15, 14, 13, 12, 10, 8],
+            `NG`,
+            26
+        )
+    ];
 
-if (characters.length === 0)
-    document.querySelector(`#no-characters-message`).classList.remove(`hidden`);
-else{
-    characters.forEach(character => {
-        const cardEle = document.createElement(`div`);
-        cardEle.classList.add(`card`);
-        characterContainer.appendChild(cardEle);
+    const characterContainer = document.querySelector(`#character-container`);
 
-        const img = document.createElement(`img`);
-        cardEle.appendChild(img);
+    if (characters.length === 0)
+        document.querySelector(`#no-characters-message`).classList.remove(`hidden`);
+    else{
+        characters.forEach(character => {
+            const cardEle = document.createElement(`div`);
+            cardEle.classList.add(`card`);
+            characterContainer.appendChild(cardEle);
 
-        const nameAndClass = document.createElement(`div`);
-        cardEle.appendChild(nameAndClass);
+            const img = document.createElement(`img`);
+            cardEle.appendChild(img);
 
-        const h3 = document.createElement(`h3`);
-        h3.innerText = character.name;
-        nameAndClass.appendChild(h3);
+            const nameAndClass = document.createElement(`div`);
+            cardEle.appendChild(nameAndClass);
 
-        const p = document.createElement(`p`);
-        p.innerText = `Level ${character.level} ${character.subclass} ${character.class}`;
-        nameAndClass.appendChild(p);
-        
-    })
+            const h3 = document.createElement(`h3`);
+            h3.innerText = character.name;
+            nameAndClass.appendChild(h3);
+
+            const p = document.createElement(`p`);
+            p.innerText = `Level ${character.level} ${character.subclass} ${character.class}`;
+            nameAndClass.appendChild(p);
+            
+        })
+    }
 }

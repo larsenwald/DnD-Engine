@@ -18,6 +18,7 @@ backgroundsObject = null;
 originFeatsObject = null;
 speciesObject = null;
 characterTesting(level1Fighter);
+executeWhenLoaded();
 console.log(`Character generation successful!`);
 //kill the interval, we only need this stuff to run once
 clearInterval(waitForLoad);
