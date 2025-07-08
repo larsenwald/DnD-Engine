@@ -29,4 +29,6 @@ This could potentially give us a far more straightforward implementation than a 
 
 - Implementing a basic 'character sheet CLI'. Something that provides all of the base functionality of a character sheet but without the extensive automation that I have planned for the engine. The end product will be an application with basic rolling functionality and character data storage (non-persistant); something that I'd be able to use in a real D&D session. ✅ DONE
 
-- Expanding upon the basic character sheet to include streamlined actions via logic insertion (see the Feature and Action class)
+- Expanding upon the basic character sheet to include streamlined actions via logic insertion (see the Feature and Action class) ✅ DONE
+
+- Continue adding any other functionality to make the transition from CLI to GUI as seamless as possible.
