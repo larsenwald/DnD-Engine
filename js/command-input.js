@@ -13,18 +13,18 @@ commandInput.addEventListener(`keydown`, (event)=>{
     }
 })
 
-const commands = {
+const commandsMap = {
     'strength check': {propertyName: 'check', args: [`ability`, `str`]},
 }
 
 function executeCommand(string){
-    if (!commands[string])
+    if (!commandsMap[string])
         return `Hmm, I don't know that one.`;
 
-    if (typeof currentCharacter[commands[string].propertyName] === `function`)
-        return currentCharacter[commands[string].propertyName](...commands[string].args);
+    if (typeof currentCharacter[commandsMap[string].propertyName] === `function`)
+        return currentCharacter[commandsMap[string].propertyName](...commandsMap[string].args);
 
-    return currentCharacter[commands[string].propertyName];
+    return currentCharacter[commandsMap[string].propertyName];
 }
 
 

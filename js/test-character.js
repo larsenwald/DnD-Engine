@@ -293,10 +293,3 @@ c.hitDice = {
 function wizard(){
     c.charClass = `wizard`;
 }
-
-
-/*
-the 'doing right now' stack:
--continue automating the level 1 fighter functions
--contine working on the newCharacter static method
-*/
