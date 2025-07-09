@@ -1,4 +1,5 @@
 const c = new Character();
+const executeWhenLoaded = []; //functions
 
 let tries = 0;
 const waitForLoad = setInterval(() => { //setting a interval to make the characterTesting() wait for async fetches to complete
@@ -18,7 +19,7 @@ backgroundsObject = null;
 originFeatsObject = null;
 speciesObject = null;
 characterTesting(level1Fighter);
-executeWhenLoaded();
+executeWhenLoaded.forEach(funct => funct());
 console.log(`Character generation successful!`);
 //kill the interval, we only need this stuff to run once
 clearInterval(waitForLoad);

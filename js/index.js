@@ -1,4 +1,4 @@
-function executeWhenLoaded(){
+executeWhenLoaded.push(function() {
     document.querySelector(`.loader`).classList.add(`hidden`);
 
     const characters = [
@@ -62,7 +62,8 @@ function executeWhenLoaded(){
             })
         });
     }
-}
+
+})
 
 let currentCharacter;
 function renderCharacter(characterObject){
