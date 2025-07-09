@@ -68,4 +68,6 @@ let currentCharacter;
 function renderCharacter(characterObject){
     currentCharacter = characterObject;
     console.log(currentCharacter)
+
+    document.querySelector(`#character-page`).classList.add(`hidden`);
 }
