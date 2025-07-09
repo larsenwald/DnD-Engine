@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel:wght@400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
@@ -14,7 +14,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="character-page">
+    <div id="character-list-page">
       <h2 id="characters-title">Characters</h2>
       <div id="character-container">
         <div class="loader"></div>
@@ -26,6 +26,23 @@
           </p>
         </div>
       </div>
+    </div>
+    <div id="character-page" class="hidden">
+      <div id="command-input-wrapper">
+        <img
+          src="images/icons/icons8-dungeons-and-dragons.svg"
+          alt="qwef"
+          id="command-input-icon"
+        />
+        <input
+          type="text"
+          id="command-input"
+          placeholder="Enter a command..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <div id="command-log"></div>
     </div>
     <script src="js/data.js"></script>
     <script src="js/helpers.js"></script>

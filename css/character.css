@@ -1,0 +1,48 @@
+#character-page {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#command-input-wrapper {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  translate: -50%;
+
+  width: 40%;
+  aspect-ratio: 2/0.16;
+
+  animation: fade-in 1s;
+}
+#command-input {
+  width: 100%;
+  height: 100%;
+  padding-left: 8%;
+
+  background: rgba(179, 179, 179, 0.233);
+  border-radius: 0.5vw;
+  border: none;
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+
+  font-family: "Anonymous Pro", sans-serif;
+  font-size: 1vw;
+  font-weight: bold;
+  color: rgb(75, 75, 75);
+
+  transition: box-shadow 0.3s;
+}
+#command-input::placeholder {
+  font-weight: normal;
+}
+#command-input:focus {
+  outline: none;
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.4);
+}
+#command-input-icon {
+  position: absolute;
+  left: 1%;
+  top: 50%;
+  translate: 0 -50%;
+  width: 6%;
+}

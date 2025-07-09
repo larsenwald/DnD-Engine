@@ -69,5 +69,6 @@ function renderCharacter(characterObject){
     currentCharacter = characterObject;
     console.log(currentCharacter)
 
-    document.querySelector(`#character-page`).classList.add(`hidden`);
+    document.querySelector(`#character-list-page`).classList.add(`hidden`);
+    document.querySelector(`#character-page`).classList.remove(`hidden`);
 }
