@@ -200,7 +200,7 @@ class Character{
         const val = roll.match(/= ([0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
 
-        return {val: val, breakdown: breakdown}//Roll.string(rollString) + (ctx.notes ? `\n${ctx.notes}` : '');
+        return {val: val, breakdown: breakdown}
     }
 
     get initiative(){
@@ -489,9 +489,9 @@ class Character{
         return {val: val, breakdown: breakdown};
     };
 
-    spellSaveDc(){
+    get spellSaveDc(){
         if (!this.spellCasting.ability)
-            throw new Error(`Character does not have spellcasting ability.`);
+            return `Character does not have spellcasting ability.`;
         const ctx = {
             character: this,
             base: 8,
@@ -506,12 +506,16 @@ class Character{
         let rollString = ctx.base + '';
         ctx.mods.forEach(mod => rollString += `+ ${mod}`);
 
-        return Roll.string(rollString) + `\nNotes: ${ctx.notes}`;
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
+
+        return {val: val, breakdown: breakdown};
     }
 
-    spellAttackMod(){
+    get spellAttackMod(){
         if (!this.spellCasting.ability)
-            throw new Error(`Character does not have spellcasting ability.`);
+            return `Character does not have spellcasting ability.`;
         const ctx = {
             character: this,
             base: this.mod(`ability`, this.spellCasting.ability) + `[${this.spellCasting.ability}]`,
@@ -523,7 +527,11 @@ class Character{
         let rollString = ctx.base;
         ctx.mods.forEach(mod => rollString += `+ ${mod}`);
 
-        return Roll.string(rollString) + `\nNotes: ${ctx.notes}`;
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
+
+        return {val: val, breakdown: breakdown};
     }
 
     //checks
