@@ -138,7 +138,6 @@ const multiStepCommands = {
 }
 const multiStepCommandToggle = {
     command: null,
-    ogBoxShadow: null,
 }
 
 function executeCommand(string){
@@ -148,8 +147,7 @@ function executeCommand(string){
         const command = multiStepCommandToggle.command;
         multiStepCommandToggle.command = null;
 
-        commandInput.style.boxShadow = multiStepCommandToggle.ogBoxShadow;
-        multiStepCommandToggle.ogBoxShadow = null;
+        commandInput.style.boxShadow = '';
 
         return multiStepCommands[command].onEnter(string);
     }
@@ -160,8 +158,7 @@ function executeCommand(string){
     if (multiStepCommands[string]){
         multiStepCommandToggle.command = string;
 
-        multiStepCommandToggle.ogBoxShadow = getComputedStyle(commandInput).getPropertyValue('box-shadow');
-        let boxShadow = multiStepCommandToggle.ogBoxShadow;
+        let boxShadow = getComputedStyle(commandInput).boxShadow;
         boxShadow = boxShadow.replace(/rgba\(.*\)/, multiStepCommands[string].borderColor);
 
         commandInput.style.boxShadow = boxShadow;
