@@ -283,22 +283,36 @@ class Character{
 
     //ability getters
     get strength(){
-        return this.abilityScores.str.mods.reduce((val, current) => val + current.value, this.abilityScores.str.value);
+        const ctx = new Ctx(this, this.abilityScores.str.mods.reduce((val, current) => val + current.value, this.abilityScores.str.value));
+
+        this.hooks.filter(hook => hook.meantFor === 'strength').forEach(hook => hook.logic(ctx));
+
+        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
     };
     get dexterity(){
-        return this.abilityScores.dex.mods.reduce((val, current) => val + current.value, this.abilityScores.dex.value);
+        const ctx = new Ctx(this, this.abilityScores.dex.mods.reduce((val, current) => val + current.value, this.abilityScores.dex.value));
+        this.hooks.filter(hook => hook.meantFor === 'dexterity').forEach(hook => hook.logic(ctx));
+        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
     };
     get constitution(){
-        return this.abilityScores.con.mods.reduce((val, current) => val + current.value, this.abilityScores.con.value);
+        const ctx = new Ctx(this, this.abilityScores.con.mods.reduce((val, current) => val + current.value, this.abilityScores.con.value));
+        this.hooks.filter(hook => hook.meantFor === 'constitution').forEach(hook => hook.logic(ctx));
+        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
     };
     get intelligence(){
-        return this.abilityScores.int.mods.reduce((val, current) => val + current.value, this.abilityScores.int.value);
+        const ctx = new Ctx(this, this.abilityScores.int.mods.reduce((val, current) => val + current.value, this.abilityScores.int.value));
+        this.hooks.filter(hook => hook.meantFor === 'intelligence').forEach(hook => hook.logic(ctx));
+        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
     };
     get wisdom(){
-        return this.abilityScores.wis.mods.reduce((val, current) => val + current.value, this.abilityScores.wis.value);
+        const ctx = new Ctx(this, this.abilityScores.wis.mods.reduce((val, current) => val + current.value, this.abilityScores.wis.value));
+        this.hooks.filter(hook => hook.meantFor === 'wisdom').forEach(hook => hook.logic(ctx));
+        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
     };
     get charisma(){
-        return this.abilityScores.cha.mods.reduce((val, current) => val + current.value, this.abilityScores.cha.value);
+        const ctx = new Ctx(this, this.abilityScores.cha.mods.reduce((val, current) => val + current.value, this.abilityScores.cha.value));
+        this.hooks.filter(hook => hook.meantFor === 'charisma').forEach(hook => hook.logic(ctx));
+        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
     };
     //ability mod getters
     get strengthMod(){
