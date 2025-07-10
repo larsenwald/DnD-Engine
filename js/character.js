@@ -534,13 +534,42 @@ class Character{
         return {val: val, breakdown: breakdown};
     }
 
-    //checks
-    savingThrow(type){ //accounts for first three letters of string input. for example, it can take 'str' or 'strength'
+    //checks/saves
+    savingThrow(type){
         const normalizedType = type.toLowerCase().trim().slice(0, 3);
-        return this.mod(`ability`, normalizedType) + Roll.d(1, 20)[0].val + (this.proficiencies.save.includes(normalizedType) ? this.proficiencyBonus : 0);
+        const ctx = new Ctx(this, `d20`, [{val: this.mod('ability', normalizedType), label: `${normalizedType} mod`}]);
+
+        if (this.proficiencies.save.includes(normalizedType))
+            ctx.mods.push({val: this.proficiencyBonus, label: 'proficiency'});
+
+        this.hooks.filter(h => (h.meantFor === `${normalizedType} saving throw` || h.meantFor === `saving throw`) && h.when === `before`).forEach(h => h.logic(ctx));
+
+        let rollString = ctx.base;
+        ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
+        ctx.rolled = Roll.string(rollString);
+
+        this.hooks.filter(h => (h.meantFor === `${normalizedType} saving throw` || h.meantFor === `saving throw`) && h.when === `after`).forEach(h => h.logic(ctx));
+
+        const val = ctx.rolled.match(/= ([0-9]+)/)[1];
+        const breakdown = ctx.rolled + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     }
-    check(type, name){// (skill||ability, acrobatics||animal handling||dexterity, etc)
-        return Roll.d(1,20)[0].val + this.mod(type, name);
+    check(type, name){
+        const ctx = new Ctx(this, `d20`, [{val: this.mod(type, name), label: `${name} mod`}]);
+
+        this.hooks.filter(h => (h.meantFor === `${name.toLowerCase()} check` || h.meantFor === `check`) && h.when === `before`).forEach(h => h.logic(ctx));
+
+        let rollString = ctx.base;
+        ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
+        ctx.rolled = Roll.string(rollString);
+
+        this.hooks.filter(h => (h.meantFor === `${name.toLowerCase()} check` || h.meantFor === `check`) && h.when === `after`).forEach(h => h.logic(ctx));
+
+        const val = ctx.rolled.match(/= ([0-9]+)/)[1];
+        const breakdown = ctx.rolled + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     }
 
     attack(){
