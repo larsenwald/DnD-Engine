@@ -289,7 +289,7 @@ class Character{
 
         let rollString = ctx.base;
         if (ctx.mods.length > 0){
-            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
         }else{
             rollString += '';
         }
@@ -306,7 +306,7 @@ class Character{
 
         let rollString = ctx.base;
         if (ctx.mods.length > 0){
-            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
         }else{
             rollString += '';
         }
@@ -323,7 +323,7 @@ class Character{
 
         let rollString = ctx.base;
         if (ctx.mods.length > 0){
-            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
         }else{
             rollString += '';
         }
@@ -340,7 +340,7 @@ class Character{
 
         let rollString = ctx.base;
         if (ctx.mods.length > 0){
-            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
         }else{
             rollString += '';
         }
@@ -357,7 +357,7 @@ class Character{
 
         let rollString = ctx.base;
         if (ctx.mods.length > 0){
-            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
         }else{
             rollString += '';
         }
@@ -374,7 +374,7 @@ class Character{
 
         let rollString = ctx.base;
         if (ctx.mods.length > 0){
-            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
         }else{
             rollString += '';
         }
@@ -387,22 +387,106 @@ class Character{
     };
     //ability mod getters
     get strengthMod(){
-        return this.mod('ability', 'str');
+        const ctx = new Ctx(this, this.mod('ability', 'str'));
+        this.hooks.filter(hook => hook.meantFor === 'strength modifier').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get dexterityMod(){
-        return this.mod('ability', 'dex');
+        const ctx = new Ctx(this, this.mod('ability', 'dex'));
+        this.hooks.filter(hook => hook.meantFor === 'dexterity modifier').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get constitutionMod(){
-        return this.mod('ability', 'con');
+        const ctx = new Ctx(this, this.mod('ability', 'con'));
+        this.hooks.filter(hook => hook.meantFor === 'constitution modifier').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get intelligenceMod(){
-        return this.mod('ability', 'int');
+        const ctx = new Ctx(this, this.mod('ability', 'int'));
+        this.hooks.filter(hook => hook.meantFor === 'intelligence modifier').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get wisdomMod(){
-        return this.mod('ability', 'wis');
+        const ctx = new Ctx(this, this.mod('ability', 'wis'));
+        this.hooks.filter(hook => hook.meantFor === 'wisdom modifier').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get charismaMod(){
-        return this.mod('ability', 'cha');
+        const ctx = new Ctx(this, this.mod('ability', 'cha'));
+        this.hooks.filter(hook => hook.meantFor === 'charisma modifier').forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.val} [${mod.label}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
 
     spellSaveDc(){
