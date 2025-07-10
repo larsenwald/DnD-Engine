@@ -200,7 +200,9 @@ class Character{
     }
 
     get initiative(){
-        
+        const ctx = {
+
+        }
         return Roll.d(1, 20)[0].val + this.mod('ability', 'dex') 
     };
     get ac(){ 
@@ -907,5 +909,14 @@ class WeaponMastery{
     constructor(type, srcId){
         this.type = type;
         this.srcId = srcId;
+    }
+}
+
+class Ctx{
+    constructor(characterObject, base, mods=[], notes=''){
+        this.character = characterObject;
+        this.base = base;
+        this.mods = mods;
+        this.notes = notes;
     }
 }
