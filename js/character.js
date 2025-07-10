@@ -178,9 +178,31 @@ class Character{
     }
 
     //for Step 5, we need to write down passive perception. Figured I might as well make it dynamically called.
-    get passivePerception(){ return 10 + this.mod('skill', 'perception') }
+    get passivePerception(){
+        const ctx = {
+            character: this,
+            base: 10,
+            mods: [
+                {
+                    val: this.mod('skill', 'perception'),
+                    label: 'perception mod'
+                },
+            ],
+            notes: '',
+        }
 
-    get initiative(){ return Roll.d(1, 20)[0].val + this.mod('ability', 'dex') };
+        this.hooks.filter(hook => hook.meantFor === `passive perception`).forEach(hook => hook.logic(ctx));
+
+        let rollString = `${ctx.base} [base]`
+        ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
+
+        return Roll.string(rollString) + (ctx.notes ? `\n${ctx.notes}` : '');
+    }
+
+    get initiative(){
+        
+        return Roll.d(1, 20)[0].val + this.mod('ability', 'dex') 
+    };
     get ac(){ 
         const shieldBonus = (this.equipmentSlots.offHand && this.equipmentSlots.offHand.type.charAt(0) === 'S' ? this.equipmentSlots.offHand.ac : 0)
         let armorBonus = null;

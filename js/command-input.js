@@ -14,17 +14,19 @@ commandInput.addEventListener(`keydown`, (event)=>{
 })
 
 const commandsMap = {
-    'strength check': {propertyName: 'check', args: [`ability`, `str`]},
+    'passive perception': 'passivePerception',
 }
 
 function executeCommand(string){
     if (!commandsMap[string])
         return `Hmm, I don't know that one.`;
 
-    if (typeof currentCharacter[commandsMap[string].propertyName] === `function`)
+    if (typeof currentCharacter[commandsMap[string].propertyName] === `function`){
+        console.log(`is function`);
         return currentCharacter[commandsMap[string].propertyName](...commandsMap[string].args);
-
-    return currentCharacter[commandsMap[string].propertyName];
+    }
+    console.log(`is not function`)
+    return currentCharacter[commandsMap[string]];
 }
 
 
