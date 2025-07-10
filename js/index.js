@@ -48,7 +48,7 @@ executeWhenLoaded.push(function() {
         characters.forEach(character => {
             characterContainer.innerHTML +=
                 `<div class="card" data-character-name="${character.name}">
-                    <img src="" alt="" />
+                    <img src="images/class-badges/${character.charClass.toLowerCase()}.webp" alt="${character.charClass} badge" />
                     <div class="name-and-class">
                     <h3>${character.name}</h3>
                     <p>${`Level ${character.level} ${character.subclass} ${character.charClass}`}</p>
