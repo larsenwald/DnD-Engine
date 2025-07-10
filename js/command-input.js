@@ -59,20 +59,109 @@ const commandsMap = {
     'spell attack bonus': 'spellAttackBonus',
     'spell attack': 'spellAttackBonus',
 
+    'strength save': {propertyName: 'savingThrow', args: ['strength']},
+    'str save': {propertyName: 'savingThrow', args: ['strength']},
+    'dexterity save': {propertyName: 'savingThrow', args: ['dexterity']},
+    'dex save': {propertyName: 'savingThrow', args: ['dexterity']},
+    'constitution save': {propertyName: 'savingThrow', args: ['constitution']},
+    'con save': {propertyName: 'savingThrow', args: ['constitution']},
+    'intelligence save': {propertyName: 'savingThrow', args: ['intelligence']},
+    'int save': {propertyName: 'savingThrow', args: ['intelligence']},
+    'wisdom save': {propertyName: 'savingThrow', args: ['wisdom']},
+    'wis save': {propertyName: 'savingThrow', args: ['wisdom']},
+    'charisma save': {propertyName: 'savingThrow', args: ['charisma']},
+    'cha save': {propertyName: 'savingThrow', args: ['charisma']},
+
+    'strength check': {propertyName: 'check', args: ['ability', 'strength']},
+    'str check': {propertyName: 'check', args: ['ability', 'strength']},
+    'dexterity check': {propertyName: 'check', args: ['ability', 'dexterity']},
+    'dex check': {propertyName: 'check', args: ['ability', 'dexterity']},
+    'constitution check': {propertyName: 'check', args: ['ability', 'constitution']},
+    'con check': {propertyName: 'check', args: ['ability', 'constitution']},
+    'intelligence check': {propertyName: 'check', args: ['ability', 'intelligence']},
+    'int check': {propertyName: 'check', args: ['ability', 'intelligence']},
+    'wisdom check': {propertyName: 'check', args: ['ability', 'wisdom']},
+    'wis check': {propertyName: 'check', args: ['ability', 'wisdom']},
+    'charisma check': {propertyName: 'check', args: ['ability', 'charisma']},
+    'cha check': {propertyName: 'check', args: ['ability', 'charisma']},
+
+    'acrobatics check': {propertyName: 'check', args: ['skill', 'acrobatics']},
+    'animal handling check': {propertyName: 'check', args: ['skill', 'animalHandling']},
+    'arcana check': {propertyName: 'check', args: ['skill', 'arcana']},
+    'athletics check': {propertyName: 'check', args: ['skill', 'athletics']},
+    'deception check': {propertyName: 'check', args: ['skill', 'deception']},
+    'history check': {propertyName: 'check', args: ['skill', 'history']},
+    'insight check': {propertyName: 'check', args: ['skill', 'insight']},
+    'intimidation check': {propertyName: 'check', args: ['skill', 'intimidation']},
+    'investigation check': {propertyName: 'check', args: ['skill', 'investigation']},
+    'medicine check': {propertyName: 'check', args: ['skill', 'medicine']},
+    'nature check': {propertyName: 'check', args: ['skill', 'nature']},
+    'perception check': {propertyName: 'check', args: ['skill', 'perception']},
+    'performance check': {propertyName: 'check', args: ['skill', 'performance']},
+    'persuasion check': {propertyName: 'check', args: ['skill', 'persuasion']},
+    'religion check': {propertyName: 'check', args: ['skill', 'religion']},
+    'sleight of hand check': {propertyName: 'check', args: ['skill', 'sleightOfHand']},
+    'stealth check': {propertyName: 'check', args: ['skill', 'stealth']},
+    'survival check': {propertyName: 'check', args: ['skill', 'survival']},
+
+    'attack': {propertyName: 'attack', args: []},
+    'new turn': {propertyName: 'newTurn', args: []},
+    'short rest': {propertyName: 'shortRest', args: []},
+    'long rest': {propertyName: 'longRest', args: []},
+}
+
+const multiStepCommands = {
+    'heal': {
+        borderColor: `green`, 
+        propertyName: 'heal', 
+        onEnter: (val) => {
+            return currentCharacter.changeHp(val);
+        }
+    },
+    'damage': {
+        borderColor: `red`, 
+        propertyName: 'damage', 
+        onEnter: (val) => {
+            return currentCharacter.changeHp(-Math.abs(val));
+        }
+    },
+}
+const multiStepCommandToggle = {
+    command: null,
+    ogBoxShadow: null,
 }
 
 function executeCommand(string){
-    //normalize
-    string = string.toLowerCase().trim();
+    string = string.toLowerCase().trim(); //normalize
 
-    if (!commandsMap[string])
+    if (multiStepCommandToggle.command){
+        const command = multiStepCommandToggle.command;
+        multiStepCommandToggle.command = null;
+
+        commandInput.style.boxShadow = multiStepCommandToggle.ogBoxShadow;
+        multiStepCommandToggle.ogBoxShadow = null;
+
+        return multiStepCommands[command].onEnter(string);
+    }
+
+    if (!commandsMap[string] && !multiStepCommands[string])
         return `Hmm, I don't know that one.`;
+
+    if (multiStepCommands[string]){
+        multiStepCommandToggle.command = string;
+
+        multiStepCommandToggle.ogBoxShadow = getComputedStyle(commandInput).getPropertyValue('box-shadow');
+        let boxShadow = multiStepCommandToggle.ogBoxShadow;
+        boxShadow = boxShadow.replace(/rgba\(.*\)/, multiStepCommands[string].borderColor);
+
+        commandInput.style.boxShadow = boxShadow;
+        return `${multiStepCommands[string].propertyName} mode active`;
+    }
 
     if (typeof currentCharacter[commandsMap[string].propertyName] === `function`)
         return currentCharacter[commandsMap[string].propertyName](...commandsMap[string].args);
 
     return currentCharacter[commandsMap[string]];
 }
-
 
 })

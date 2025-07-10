@@ -128,17 +128,3 @@ body {
   font-size: max(15px, 2.5cqw);
   font-style: italic;
 }
-
-/* HELPERS */
-.hidden {
-  display: none !important;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}

@@ -677,6 +677,9 @@ class Character{
     }
     
     changeHp(negativeOrPositiveNumber){
+        if (!Number.isInteger(Number(negativeOrPositiveNumber)))
+            return `Must enter a negative or positive integer.`
+
         const ctx = {
             change: negativeOrPositiveNumber,
             max: this.hp.max,
