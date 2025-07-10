@@ -197,7 +197,7 @@ class Character{
         ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
 
         return {val: val, breakdown: breakdown}
@@ -214,7 +214,7 @@ class Character{
 
         this.hooks.filter(hook => hook.meantFor === `initiative` && hook.when === `after`).forEach(hook => hook.logic(ctx));
 
-        const val = ctx.rolled.match(/= ([0-9]+)/)[1]
+        const val = ctx.rolled.match(/= (-*[0-9]+)/)[1]
         const breakdown = ctx.rolled + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -242,7 +242,7 @@ class Character{
         ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
         const roll = Roll.string(rollString);
 
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -295,7 +295,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -312,7 +312,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -329,7 +329,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -346,7 +346,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -363,7 +363,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -380,7 +380,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -398,7 +398,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -415,7 +415,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -432,7 +432,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -449,7 +449,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -466,7 +466,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -483,7 +483,7 @@ class Character{
         }
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -507,7 +507,7 @@ class Character{
         ctx.mods.forEach(mod => rollString += `+ ${mod}`);
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
 
         return {val: val, breakdown: breakdown};
@@ -528,7 +528,7 @@ class Character{
         ctx.mods.forEach(mod => rollString += `+ ${mod}`);
 
         const roll = Roll.string(rollString);
-        const val = roll.match(/= ([0-9]+)/)[1];
+        const val = roll.match(/= (-*[0-9]+)/)[1];
         const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
 
         return {val: val, breakdown: breakdown};
@@ -550,7 +550,7 @@ class Character{
 
         this.hooks.filter(h => (h.meantFor === `${normalizedType} saving throw` || h.meantFor === `saving throw`) && h.when === `after`).forEach(h => h.logic(ctx));
 
-        const val = ctx.rolled.match(/= ([0-9]+)/)[1];
+        const val = ctx.rolled.match(/= (-*[0-9]+)/)[1];
         const breakdown = ctx.rolled + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
@@ -566,7 +566,7 @@ class Character{
 
         this.hooks.filter(h => (h.meantFor === `${name.toLowerCase()} check` || h.meantFor === `check`) && h.when === `after`).forEach(h => h.logic(ctx));
 
-        const val = ctx.rolled.match(/= ([0-9]+)/)[1];
+        const val = ctx.rolled.match(/= (-*[0-9]+)/)[1];
         const breakdown = ctx.rolled + (ctx.notes ? ctx.notes : '');
 
         return {val: val, breakdown: breakdown};
