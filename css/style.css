@@ -119,7 +119,9 @@ body {
   width: 15%;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  border: solid;
+
+  object-fit: cover;
+  object-position: center;
 }
 #character-container .card .name-and-class h3 {
   font-size: max(20px, 5cqw);
