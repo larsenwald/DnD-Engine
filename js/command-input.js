@@ -5,9 +5,12 @@ const commandInput = document.querySelector(`#command-input`);
 const commandLog = document.querySelector(`#command-log`);
 
 commandInput.addEventListener(`keydown`, (event)=>{
-    if (event.key === 'Enter'){
+    if (event.key === 'Enter' && commandInput.value.trim() !== ''){
         const input = commandInput.value;
         commandInput.value = '';
+
+        if (input === 'clear')
+            return commandLog.innerHTML = '';
 
         const output = executeCommand(input);
 
@@ -125,6 +128,13 @@ const multiStepCommands = {
             return currentCharacter.changeHp(-Math.abs(val));
         }
     },
+    'roll': {
+        borderColor: `goldenrod`,
+        propertyName: 'roll',
+        onEnter: (val) => {
+            return Roll.string(val);
+        }
+    }
 }
 const multiStepCommandToggle = {
     command: null,
