@@ -696,7 +696,7 @@ class Character{
         this.hooks.forEach(hook => {
             if (hook.meantFor === 'change hp') hook.logic(ctx);
         })
-        console.log(`${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`)
+        return `${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`
     }
 
     //adding stuff
