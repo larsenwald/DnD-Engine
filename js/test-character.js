@@ -192,9 +192,9 @@ c.newHook(
     `ac`, 
     null, 
     (ctx)=>{
-        const armorSlot = c.equipmentSlots.armor;
+        const armorSlot = ctx.character.equipmentSlots.armor;
         if (armorSlot && /[A-Z]A/i.test(armorSlot.type))
-            ctx.components.push(1);
+            ctx.mods.push({val: 1, label: `Defense`});
     }, 
     c.featuresArray.find(feature => compareStr(feature.name, `defense`)).id
 );

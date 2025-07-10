@@ -196,31 +196,56 @@ class Character{
         let rollString = `${ctx.base} [base]`
         ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
 
-        return Roll.string(rollString) + (ctx.notes ? `\n${ctx.notes}` : '');
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? `\n${ctx.notes}` : '');
+
+        return {val: val, breakdown: breakdown}//Roll.string(rollString) + (ctx.notes ? `\n${ctx.notes}` : '');
     }
 
     get initiative(){
-        const ctx = {
+        const ctx = new Ctx(this, `d20`, [{val: this.mod('ability', 'dex'), label: 'dex mod'}]);
 
-        }
-        return Roll.d(1, 20)[0].val + this.mod('ability', 'dex') 
+        this.hooks.filter(hook => hook.meantFor === `initiative` && hook.when === `before`).forEach(hook => hook.logic(ctx));
+
+        let rollString = ctx.base;
+        ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
+        ctx.rolled = Roll.string(rollString);
+
+        this.hooks.filter(hook => hook.meantFor === `initiative` && hook.when === `after`).forEach(hook => hook.logic(ctx));
+
+        const val = ctx.rolled.match(/= ([0-9]+)/)[1]
+        const breakdown = ctx.rolled + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get ac(){ 
         const shieldBonus = (this.equipmentSlots.offHand && this.equipmentSlots.offHand.type.charAt(0) === 'S' ? this.equipmentSlots.offHand.ac : 0)
         let armorBonus = null;
+
         if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "LA")
             armorBonus = (this.equipmentSlots.armor.ac - 10) + this.mod(`ability`, `dex`);
         if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "MA")
             armorBonus = (this.equipmentSlots.armor.ac - 10) + Math.min(this.mod(`ability`, `dex`), 2);
         if (this.equipmentSlots.armor && this.equipmentSlots.armor.type.slice(0, 2) === "HA")
             armorBonus = this.equipmentSlots.armor.ac - 10;
-        const ctx = {
-            components: [10, (armorBonus !== null ? armorBonus : this.mod('ability', 'dex')), shieldBonus]
-        }
+
+        const ctx = new Ctx(this, 10, [{val: armorBonus !== null ? armorBonus : this.mod('ability', 'dex'), label: armorBonus ? `armor` : `dex mod`}])
+        if (shieldBonus)
+            ctx.mods.push({val: shieldBonus, label: 'shield'})
+
         this.hooks.forEach(hook => {
             if (hook.meantFor === `ac`) hook.logic(ctx);
         })
-        return ctx.components.reduce((total, current) => total + current)
+
+        let rollString = ctx.base;
+        ctx.mods.forEach(mod => rollString += `+ ${mod.val} [${mod.label}]`);
+        const roll = Roll.string(rollString);
+
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     }
     
     get proficiencyBonus(){ return Math.ceil(this.level / 4) + 1 }
