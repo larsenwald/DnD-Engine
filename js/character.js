@@ -287,32 +287,103 @@ class Character{
 
         this.hooks.filter(hook => hook.meantFor === 'strength').forEach(hook => hook.logic(ctx));
 
-        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get dexterity(){
         const ctx = new Ctx(this, this.abilityScores.dex.mods.reduce((val, current) => val + current.value, this.abilityScores.dex.value));
         this.hooks.filter(hook => hook.meantFor === 'dexterity').forEach(hook => hook.logic(ctx));
-        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get constitution(){
         const ctx = new Ctx(this, this.abilityScores.con.mods.reduce((val, current) => val + current.value, this.abilityScores.con.value));
         this.hooks.filter(hook => hook.meantFor === 'constitution').forEach(hook => hook.logic(ctx));
-        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get intelligence(){
         const ctx = new Ctx(this, this.abilityScores.int.mods.reduce((val, current) => val + current.value, this.abilityScores.int.value));
         this.hooks.filter(hook => hook.meantFor === 'intelligence').forEach(hook => hook.logic(ctx));
-        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get wisdom(){
         const ctx = new Ctx(this, this.abilityScores.wis.mods.reduce((val, current) => val + current.value, this.abilityScores.wis.value));
         this.hooks.filter(hook => hook.meantFor === 'wisdom').forEach(hook => hook.logic(ctx));
-        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     get charisma(){
         const ctx = new Ctx(this, this.abilityScores.cha.mods.reduce((val, current) => val + current.value, this.abilityScores.cha.value));
         this.hooks.filter(hook => hook.meantFor === 'charisma').forEach(hook => hook.logic(ctx));
-        return {val: ctx.base, breakdown: ctx.notes ? ctx.notes : 'No breakdown available.'};
+
+        let rollString = ctx.base;
+        if (ctx.mods.length > 0){
+            rollString += ' + ' + ctx.mods.map(mod => `${mod.value} [${mod.source}]`).join(' + ');
+        }else{
+            rollString += '';
+        }
+
+        const roll = Roll.string(rollString);
+        const val = roll.match(/= ([0-9]+)/)[1];
+        const breakdown = roll + (ctx.notes ? ctx.notes : '');
+
+        return {val: val, breakdown: breakdown};
     };
     //ability mod getters
     get strengthMod(){
