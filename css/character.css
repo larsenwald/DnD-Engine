@@ -55,6 +55,7 @@
   width: 100%;
   aspect-ratio: 2/0.4;
   overflow-y: auto;
+  overflow-x: visible;
 
   position: absolute;
   top: 120%;
@@ -64,5 +65,9 @@
 }
 #command-log p {
   width: fit-content;
-  cursor: pointer;
+  transition: transform 0.1s;
+}
+#command-log p:hover {
+  transform: translateX(2%);
+  cursor: default;
 }
