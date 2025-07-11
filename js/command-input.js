@@ -183,24 +183,56 @@ function executeCommand(string){
     return currentCharacter[commandsMap[string]];
 }
 
-// logic for autocomplete
+// START OF AUTOCOMPLETE LOGIC
 const autoComplete = document.querySelector('#command-input-autocomplete');
 const allCommands = [
     ...Object.keys(commandsMap), 
     ...Object.keys(multiStepCommands)
 ];
+commandInput.addEventListener('input', autoCompleteEventListenerLogic);
 
-function space(amount=1){ //helper to return HTML friendly 'space' characters
-    const space = '&nbsp;' //an HTML friendly space char
+//clear auto complete when tab or enter is pressed. if tab, concatenate the commandInput and autoComplete strings
+commandInput.addEventListener('keydown', autoCompleteTabOrEnter);
 
-    let output = '';
-    for (let i = 0; i < amount; i++)
-        output += space;
+function autoCompleteEventListenerLogic(event){
+    if (commandInput.value !== ''){
+        const currentInput = commandInput.value;
+        const strLength = currentInput.length;
 
-    return output;
+        const regex = new RegExp(`^` + currentInput, 'm');
+        const matches = allCommands.filter(command => regex.test(command));
+
+        if (matches[0])
+            autoComplete.innerHTML = space(strLength) + matches[0].slice(strLength);
+        else
+            autoComplete.innerHTML = '';
+
+        return;
+    }
+
+    if (commandInput.value === '')
+        autoComplete.innerHTML = '';
 }
 
-autoComplete.innerHTML = `${space(3)}eng`
+function autoCompleteTabOrEnter(event){
+    if (event.key === 'Tab'){
+        event.preventDefault();
 
+        commandInput.value = 
+            commandInput.value + 
+            autoComplete.innerHTML.replaceAll('&nbsp;', ''); //get rid of the HTML friendly spaces
+
+        autoComplete.innerHTML = '';
+        return;
+    }
+
+    if (event.key === 'Enter')
+        autoComplete.innerHTML = '';
+}
+
+function space(amount=1){ //helper to return HTML friendly 'space' characters
+    return '&nbsp;'.repeat(amount);
+}
+//END OF AUTOCOMPLETE LOGIC
 
 })
