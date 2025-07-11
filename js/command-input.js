@@ -15,12 +15,24 @@ commandInput.addEventListener(`keydown`, (event)=>{
         const output = executeCommand(input);
 
         if (typeof output === 'object'){
-            commandLog.innerHTML = `> ${output.val}<br>` + commandLog.innerHTML;
+            const ele = document.createElement(`p`);
+            ele.innerHTML = `> ${output.val}`;
+
+            if (output.breakdown){
+                tippy(ele, {
+                    content: output.breakdown
+                });
+            };
+
+            commandLog.prepend(ele);
+            //commandLog.innerHTML = `> ${output.val}<br>` + commandLog.innerHTML;
             //logic to give the innerHTML a tooltip with output.breakdown goes here
             return;
         }
 
-        commandLog.innerHTML = `> ${output}<br>` + commandLog.innerHTML;
+        const ele = document.createElement('p')
+        ele.innerHTML = `<p>> ${output}</p>`
+        commandLog.prepend(ele);
     }
 })
 
