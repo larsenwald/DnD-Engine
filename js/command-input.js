@@ -187,7 +187,8 @@ function executeCommand(string){
 const autoComplete = document.querySelector('#command-input-autocomplete');
 const allCommands = [
     ...Object.keys(commandsMap), 
-    ...Object.keys(multiStepCommands)
+    ...Object.keys(multiStepCommands),
+    'clear',
 ];
 commandInput.addEventListener('input', autoCompleteEventListenerLogic);
 
