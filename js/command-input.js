@@ -183,4 +183,24 @@ function executeCommand(string){
     return currentCharacter[commandsMap[string]];
 }
 
+// logic for autocomplete
+const autoComplete = document.querySelector('#command-input-autocomplete');
+const allCommands = [
+    ...Object.keys(commandsMap), 
+    ...Object.keys(multiStepCommands)
+];
+
+function space(amount=1){ //helper to return HTML friendly 'space' characters
+    const space = '&nbsp;' //an HTML friendly space char
+
+    let output = '';
+    for (let i = 0; i < amount; i++)
+        output += space;
+
+    return output;
+}
+
+autoComplete.innerHTML = `${space(3)}eng`
+
+
 })

@@ -51,6 +51,27 @@
   user-select: none;
 }
 
+#command-input-autocomplete {
+  margin-left: 9%;
+
+  position: absolute;
+  top: 0;
+
+  width: calc(100% - 9%);
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+
+  pointer-events: none;
+
+  font-family: "Anonymous Pro", sans-serif;
+  font-size: 1vw;
+  font-weight: bold;
+  color: rgb(75, 75, 75);
+}
+
 #command-log {
   width: 100%;
   aspect-ratio: 2/0.4;
