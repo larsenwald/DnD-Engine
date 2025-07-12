@@ -29,21 +29,31 @@
       </div>
     </div>
     <div id="character-page" class="hidden">
-      <div id="command-input-wrapper">
-        <img
-          src="images/icons/icons8-dungeons-and-dragons.svg"
-          alt="qwef"
-          id="command-input-icon"
-        />
-        <input
-          type="text"
-          id="command-input"
-          placeholder="Enter a command..."
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <div id="command-input-autocomplete" class=""></div>
+      <div id="command-line">
+        <div id="command-input-wrapper">
+          <img
+            src="images/icons/icons8-dungeons-and-dragons.svg"
+            alt="qwef"
+            id="command-input-icon"
+          />
+          <input
+            type="text"
+            id="command-input"
+            placeholder="Enter a command..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div id="command-input-autocomplete" class=""></div>
+        </div>
         <div id="command-log"></div>
+      </div>
+      <div id="bottom-grid">
+        <div class="orb-component">
+          <div id="health-orb">
+            <div class="orb-fluid"></div>
+            <p class="orb-number">err</p>
+          </div>
+        </div>
       </div>
     </div>
     <script src="js/data.js"></script>
@@ -54,6 +64,7 @@
     <script src="js/test-character.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <script src="js/health-orb.js"></script>
     <script src="js/index.js"></script>
     <script src="js/command-input.js"></script>
   </body>

@@ -72,4 +72,6 @@ function renderCharacter(characterObject){
 
     document.querySelector(`#character-list-page`).classList.add(`hidden`);
     document.querySelector(`#character-page`).classList.remove(`hidden`);
+
+    initializeHealthOrb(characterObject);
 }

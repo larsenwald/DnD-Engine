@@ -680,12 +680,19 @@ class Character{
         if (!Number.isInteger(Number(negativeOrPositiveNumber)))
             return `Must enter a negative or positive integer.`
 
+        negativeOrPositiveNumber = Number(negativeOrPositiveNumber);
+
         const ctx = {
             change: negativeOrPositiveNumber,
             max: this.hp.max,
             current: this.hp.current,
             temp: this.hp.temp,
         }
+        
+        this.hooks.forEach(hook => {
+            if (hook.meantFor === 'change hp') hook.logic(ctx);
+        });
+
         if (ctx.change < 0 && ctx.temp > 0){
             const difference = ctx.temp + ctx.change;
             if (difference >= 0) this.hp.temp = difference;
@@ -695,10 +702,9 @@ class Character{
             }
         }
         else this.hp.current += ctx.change;
+
         if (this.hp.current > this.hp.max) this.hp.current = this.hp.max;
-        this.hooks.forEach(hook => {
-            if (hook.meantFor === 'change hp') hook.logic(ctx);
-        })
+
         return `${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`
     }
 

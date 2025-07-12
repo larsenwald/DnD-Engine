@@ -130,14 +130,18 @@ const multiStepCommands = {
         borderColor: `green`, 
         propertyName: 'heal', 
         onEnter: (val) => {
-            return currentCharacter.changeHp(val);
+            const output = currentCharacter.changeHp(Math.abs(val));
+            updateHealth();
+            return output;
         }
     },
     'damage': {
         borderColor: `red`, 
         propertyName: 'damage', 
         onEnter: (val) => {
-            return currentCharacter.changeHp(-Math.abs(val));
+            const output = currentCharacter.changeHp(-Math.abs(val));
+            updateHealth();
+            return output;
         }
     },
     'roll': {
