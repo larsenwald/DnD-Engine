@@ -129,7 +129,8 @@ const commandsMap = {
 const multiStepCommands = {
     'heal': {
         borderColor: `green`, 
-        propertyName: 'heal', 
+        propertyName: 'heal',
+        placeholderText: 'Enter amount to heal',
         onEnter: (val) => {
             const output = currentCharacter.changeHp(Math.abs(val));
             updateHealth();
@@ -139,6 +140,7 @@ const multiStepCommands = {
     'damage': {
         borderColor: `red`, 
         propertyName: 'damage', 
+        placeholderText: 'Enter amount of damage',
         onEnter: (val) => {
             const output = currentCharacter.changeHp(-Math.abs(val));
             updateHealth();
@@ -148,6 +150,7 @@ const multiStepCommands = {
     'roll': {
         borderColor: `goldenrod`,
         propertyName: 'roll',
+        placeholderText: 'Enter roll (e.g. 1d20+5)',
         onEnter: (val) => {
             return Roll.string(val);
         }
@@ -156,6 +159,7 @@ const multiStepCommands = {
 const multiStepCommandToggle = {
     command: null,
 }
+//if a multi step command is in the input, hitting space will toggle it
 commandInput.addEventListener('keydown', (event)=>{
     if (event.key === ' ' && Object.keys(multiStepCommands).includes(commandInput.value)){
         event.preventDefault(); //prevent space from being added to input
@@ -163,12 +167,13 @@ commandInput.addEventListener('keydown', (event)=>{
         commandInput.value = '';
     }
 });
+//if a multi step command is active, hitting escape will turn it off
 commandInput.addEventListener('keydown', (event)=>{
     if (event.key === 'Escape' && multiStepCommandToggle.command){
         multiStepCommandToggle.command = null;
         commandInput.style.boxShadow = '';
         commandInput.value = '';
-        autoComplete.innerHTML = '';
+        commandInput.placeholder = 'Enter a command...';
     }
 })
 //MULTI STEP COMMANDS END
@@ -179,6 +184,8 @@ function executeCommand(string){
     if (multiStepCommandToggle.command){
         const command = multiStepCommandToggle.command;
         multiStepCommandToggle.command = null;
+
+        commandInput.placeholder = 'Enter a command...';
 
         commandInput.style.boxShadow = '';
 
@@ -193,6 +200,8 @@ function executeCommand(string){
 
         let boxShadow = getComputedStyle(commandInput).boxShadow;
         boxShadow = boxShadow.replace(/rgba\(.*\)/, multiStepCommands[string].borderColor);
+
+        commandInput.placeholder = multiStepCommands[string].placeholderText;
 
         commandInput.style.boxShadow = boxShadow;
         return `${multiStepCommands[string].propertyName} mode active`;
