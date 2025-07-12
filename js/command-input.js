@@ -125,6 +125,7 @@ const commandsMap = {
     'long rest': {propertyName: 'longRest', args: []},
 }
 
+//MULTI STEP COMMANDS START
 const multiStepCommands = {
     'heal': {
         borderColor: `green`, 
@@ -155,6 +156,22 @@ const multiStepCommands = {
 const multiStepCommandToggle = {
     command: null,
 }
+commandInput.addEventListener('keydown', (event)=>{
+    if (event.key === ' ' && Object.keys(multiStepCommands).includes(commandInput.value)){
+        event.preventDefault(); //prevent space from being added to input
+        executeCommand(commandInput.value);
+        commandInput.value = '';
+    }
+});
+commandInput.addEventListener('keydown', (event)=>{
+    if (event.key === 'Escape' && multiStepCommandToggle.command){
+        multiStepCommandToggle.command = null;
+        commandInput.style.boxShadow = '';
+        commandInput.value = '';
+        autoComplete.innerHTML = '';
+    }
+})
+//MULTI STEP COMMANDS END
 
 function executeCommand(string){
     string = string.toLowerCase().trim(); //normalize
