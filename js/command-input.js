@@ -137,9 +137,9 @@ const multiStepCommands = {
             return output;
         }
     },
-    'damage': {
+    'harm': {
         borderColor: `red`, 
-        propertyName: 'damage', 
+        propertyName: 'harm', 
         placeholderText: 'Enter amount of damage',
         onEnter: (val) => {
             const output = currentCharacter.changeHp(-Math.abs(val));
@@ -153,6 +153,26 @@ const multiStepCommands = {
         placeholderText: 'Enter roll (e.g. 1d20+5)',
         onEnter: (val) => {
             return Roll.string(val);
+        }
+    },
+    'gain temp hp': {
+        borderColor: `deepskyblue`,
+        propertyName: 'gain temp hp',
+        placeholderText: 'Enter amount of temporary HP to gain',
+        onEnter: (val) => {
+            const output = currentCharacter.changeTempHp('gain', Math.abs(val));
+            updateHealth();
+            return output;
+        }
+    },
+    'lose temp hp': {
+        borderColor: `dodgerblue`,
+        propertyName: 'lose temp hp',
+        placeholderText: 'Enter amount of temporary HP to lose',
+        onEnter: (val) => {
+            const output = currentCharacter.changeTempHp('lose', Math.abs(val));
+            updateHealth();
+            return output;
         }
     }
 }

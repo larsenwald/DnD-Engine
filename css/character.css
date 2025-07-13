@@ -116,10 +116,12 @@
 /* HEALTH ORB COMPONENT START */
 .orb-component {
   user-select: none;
-  width: 80%;
+  width: max(80%, 137px);
   aspect-ratio: 1/1;
 
   margin: auto;
+
+  position: relative;
 }
 #health-orb {
   width: 100%;
@@ -157,6 +159,36 @@
   text-shadow: #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
     #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
     #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px;
+}
+
+#temp-health-shield {
+  width: max(30%, 65px);
+  aspect-ratio: 1;
+  background: #90c9ff;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+#temp-health-shield:hover {
+  translate: 0 -10%;
+}
+#temp-health-number {
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+
+  pointer-events: none;
+  user-select: none;
 }
 /* HEALTH ORB COMPONENT END */
 

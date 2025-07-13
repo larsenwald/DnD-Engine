@@ -708,6 +708,29 @@ class Character{
         return `${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`
     }
 
+    changeTempHp(loseOrGain, amount){
+        if (!Number.isInteger(Number(amount)))
+            return `Must enter a negative or positive integer.`;
+
+        if (loseOrGain === 'lose'){
+            const ogTempHp = this.hp.temp;
+
+            this.hp.temp -= amount;
+
+            //clamp
+            if (this.hp.temp < 0) this.hp.temp = 0;
+
+            return `Lost ${amount} temp health from ${ogTempHp} to ${this.hp.temp}`;
+        }
+        if (loseOrGain === 'gain'){
+            const ogTempHp = this.hp.temp;
+
+            this.hp.temp += amount;
+
+            return `Gained ${amount} temp health from ${ogTempHp} to ${this.hp.temp}`;
+        }
+    }
+
     //adding stuff
     newFeature(name, description, src, srcId=null){
         if (this.featuresArray.find(ele => compareStr(ele.name, name)))
