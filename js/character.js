@@ -705,7 +705,7 @@ class Character{
 
         if (this.hp.current > this.hp.max) this.hp.current = this.hp.max;
 
-        return `${ctx.change > 0 ? 'Gained' : 'Lost'} ${ctx.change} health.`
+        return `${ctx.change > 0 ? 'Gained' : 'Damaged for'} ${ctx.change} health.`
     }
 
     changeTempHp(loseOrGain, amount){
