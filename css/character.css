@@ -298,10 +298,11 @@
   justify-content: center;
   text-align: center;
 }
-
-#character-sheet #ac-init-speed .number {
+#ac-init-speed div input {
   font-size: 50px;
+  background: none;
 }
+
 #character-sheet #ac-init-speed .label {
   font-size: 12px;
   font-style: italic;
@@ -315,7 +316,7 @@
 }
 
 #initiative {
-  border: double 8px;
+  border: dotted 2px;
 }
 #initiative .number {
   margin-top: -12px;
@@ -325,7 +326,7 @@
 }
 
 #speed {
-  border: double 8px;
+  border: dotted 2px;
 }
 #speed .number {
   margin-top: -12px;
