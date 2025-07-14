@@ -204,3 +204,138 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
+
+/* CHARACTER SHEET START */
+
+#character-sheet {
+  width: min(800px, 90%);
+  height: 800px;
+  border: double 3px;
+
+  font-family: "Alice", serif;
+}
+
+#character-sheet input {
+  border: none;
+  outline: none;
+
+  field-sizing: content;
+  min-width: 10px;
+
+  font-family: "Alice", serif;
+  font-size: 20px;
+}
+
+#character-sheet .header {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  height: 500px;
+}
+
+#info {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#info button {
+  font-family: "Alice", serif;
+  border: black solid 2px;
+  border-radius: 10px;
+
+  font-size: 19px;
+  padding: 12px 8px;
+  background: white;
+  min-width: 169.5px;
+
+  cursor: pointer;
+  transition: all 0.3s, transform 0.1s;
+}
+#info button:hover {
+  filter: brightness(80%);
+}
+#info button:active {
+  transform: scale(0.9);
+}
+
+#name-n-class .character-name {
+  font-size: 55px;
+  font-weight: 100;
+}
+#name-n-class .character-class {
+  font-size: 20px;
+}
+
+#info .ui-group {
+  margin-top: 28px;
+}
+
+#health-prof-insp {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 19px;
+}
+
+#ac-init-speed {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 15px;
+}
+
+#ac-init-speed div {
+  width: 120px;
+  height: 120px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#character-sheet #ac-init-speed .number {
+  font-size: 50px;
+}
+#character-sheet #ac-init-speed .label {
+  font-size: 12px;
+  font-style: italic;
+}
+
+#character-sheet #armor-class {
+  background-image: url("/images/ui/shield.webp");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#initiative {
+  border: double 8px;
+}
+#initiative .number {
+  margin-top: -12px;
+}
+#initiative .label {
+  margin-top: 5px;
+}
+
+#speed {
+  border: double 8px;
+}
+#speed .number {
+  margin-top: -12px;
+}
+#speed .label {
+  margin-top: 5px;
+}
+
+#rests {
+  margin-top: 35px;
+}
+
+/* CHARACTER SHEET END */

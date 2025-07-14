@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel:wght@400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alice&family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Bonheur+Royale&family=Cinzel:wght@400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/helpers.css" />
@@ -15,7 +15,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="character-list-page">
+    <div id="character-list-page" class="hidden">
       <h2 id="characters-title">Characters</h2>
       <div id="character-container">
         <div class="loader"></div>
@@ -47,6 +47,7 @@
         </div>
         <div id="command-log"></div>
       </div>
+      <!-- BOTTOM GRID START -->
       <div id="bottom-grid">
         <div class="orb-component">
           <div id="health-orb">
@@ -58,6 +59,63 @@
           </div>
         </div>
         <div id="action-bar"></div>
+      </div>
+      <!-- BOTTOM GRID END -->
+    </div>
+    <div id="character-sheet" class="">
+      <div class="header">
+        <!-- column 1 of grid -->
+        <img src="" alt="character image" />
+        <!-- column 1 of grid end -->
+        <!-- column 2 of grid -->
+        <div id="info">
+          <div id="name-n-class">
+            <h1 class="character-name">Gargin Ullurpa</h1>
+            <p class="character-class">
+              Level <span class="level">(lvl)</span>
+              <span class="subclass">(subclass)</span>
+              <span class="class">(class)</span>
+            </p>
+          </div>
+          <div class="ui-group">
+            <div id="health-prof-insp">
+              <p id="health">
+                <span class="bold italicized">Health:</span>
+                <input type="text" class="current-health" value="0" />/<input
+                  value="0"
+                  type="text"
+                  class="max-health"
+                />
+              </p>
+              <p id="proficiency">
+                <span class="bold italicized">Proficiency:</span> +<input
+                  type="text"
+                  value="2"
+                />
+              </p>
+              <button id="inspiration">I am not inspired.</button>
+            </div>
+            <div id="ac-init-speed">
+              <div id="armor-class">
+                <span class="number">16</span>
+                <span class="label">Armor<br />Class</span>
+              </div>
+              <div id="initiative">
+                <span class="number">2</span>
+                <span class="label">Initiative</span>
+              </div>
+              <div id="speed">
+                <span class="number">30</span>
+                <span class="label">Speed</span>
+              </div>
+            </div>
+          </div>
+          <div id="rests">
+            <button id="short-rest">Short Rest</button>
+            <button id="long-rest">Long Rest</button>
+          </div>
+        </div>
+        <!-- column 2 of grid end -->
       </div>
     </div>
     <script src="js/data.js"></script>

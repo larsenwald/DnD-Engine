@@ -10,3 +10,10 @@
     opacity: 1;
   }
 }
+
+.bold {
+  font-weight: bold;
+}
+.italicized {
+  font-style: italic;
+}
