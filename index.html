@@ -62,8 +62,10 @@
       </div>
       <!-- BOTTOM GRID END -->
     </div>
+
+    <!-- CHARACTER SHEET START -->
     <div id="character-sheet" class="">
-      <div class="header">
+      <section class="header">
         <!-- column 1 of grid -->
         <img src="" alt="character image" />
         <!-- column 1 of grid end -->
@@ -84,14 +86,20 @@
           </div>
           <div class="ui-group">
             <div id="health-prof-insp">
-              <p id="health">
-                <span class="bold italicized">Health:</span>
-                <input type="text" class="current-health" value="0" />/<input
-                  value="0"
-                  type="text"
-                  class="max-health"
-                />
-              </p>
+              <div class="health-n-temp">
+                <p id="health">
+                  <span class="bold italicized">Health:</span>
+                  <input type="text" class="current-health" value="0" />/<input
+                    value="0"
+                    type="text"
+                    class="max-health"
+                  />
+                </p>
+                <p id="temp">
+                  <span class="bold italicized">Temp: </span
+                  ><input type="text" class="temp-health" value="0" />
+                </p>
+              </div>
               <p id="proficiency">
                 <span class="bold italicized">Proficiency:</span> +<input
                   type="text"
@@ -127,7 +135,28 @@
           </div>
         </div>
         <!-- column 2 of grid end -->
-      </div>
+      </section>
+      <section id="skills">
+        <h2>—Skills—</h2>
+        <div id="skills-container">
+          <div class="skill-card">
+            <h3>Strength</h3>
+            <div class="ability-save-skills">
+              <div class="ability">
+                <p class="score">10</p>
+                <div class="mod-container"><span class="mod">+0</span></div>
+              </div>
+              <div class="save-skills">
+                <div class="saving-throw">
+                  <p class="bold italicized">Saving Throw</p>
+                  <p class="mod">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- CHARACTER SHEET END -->
     </div>
     <script src="js/data.js"></script>
     <script src="js/helpers.js"></script>

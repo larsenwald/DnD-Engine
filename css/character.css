@@ -217,9 +217,35 @@
   overflow-y: auto;
 }
 
+#character-sheet section {
+  margin-top: 20px;
+}
+#character-sheet .header {
+  margin-top: 0;
+}
+
+#character-sheet h1,
+#character-sheet h2,
+#character-sheet h3,
+#character-sheet h4,
+#character-sheet h5,
+#character-sheet h6 {
+  font-weight: 100;
+}
+#character-sheet h1 {
+  font-size: 55px;
+}
+#character-sheet h2 {
+  font-size: 40px;
+}
+#character-sheet h3 {
+  font-size: 30px;
+}
+
 #character-sheet input {
   border: none;
   outline: none;
+  background: none;
 
   field-sizing: content;
   min-width: 10px;
@@ -227,21 +253,17 @@
   font-family: "Alice", serif;
   font-size: 20px;
 }
-/* HEADER START */
+/*---- HEADER START */
 #character-sheet .header {
   display: grid;
   grid-template-columns: 2fr 3fr;
 }
 
-#name-class-species-background-alignment .character-name {
-  font-size: 55px;
-  font-weight: 100;
-}
 #name-class-species-background-alignment p {
   font-size: 20px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 645px) {
   #character-sheet .header img {
     display: none;
   }
@@ -350,5 +372,100 @@
 #rests {
   margin-top: 35px;
 }
-/* HEADER END */
+/*---- HEADER END */
+/*---- SKILLS START */
+
+#skills h2 {
+  text-align: center;
+}
+
+#skills-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.skill-card {
+  width: 250px;
+}
+
+.skill-card h3 {
+  position: relative;
+}
+
+.skill-card h3::after {
+  content: "";
+  display: block;
+  width: 0%;
+
+  position: absolute;
+  left: 45%;
+  border-top: dotted 2px;
+
+  transition: 0.3s;
+}
+.skill-card:hover h3::after {
+  width: 50%;
+}
+
+.skill-card .ability-save-skills {
+  display: flex;
+  justify-content: space-between;
+}
+
+.skill-card .ability {
+  border: solid 2px;
+  border-radius: 10px;
+  width: 100px;
+  height: 125px;
+
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skill-card .ability .score {
+  font-size: 60px;
+}
+
+.skill-card .ability .mod-container {
+  width: 50px;
+
+  position: absolute;
+  bottom: 0;
+  translate: 0 50%;
+
+  border: solid 1px;
+  border-radius: 10px;
+
+  background: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skill-card .save-skills {
+  font-size: 14px;
+  flex: 1;
+
+  padding-right: 10px;
+
+  margin-top: 10px;
+}
+.skill-card .saving-throw {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.saving-throw .mod {
+  border: solid 1px;
+  border-radius: 5px;
+
+  padding: 1px 5px;
+}
+
+/*---- SKILLS END */
 /* CHARACTER SHEET END */
