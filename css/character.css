@@ -315,6 +315,27 @@
   font-size: 19px;
 }
 
+#health-n-temp {
+  cursor: default;
+}
+#health {
+  position: relative;
+}
+#temp-health {
+  position: absolute;
+  top: 0;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: 0.3s;
+}
+#health-n-temp:hover #temp-health {
+  visibility: visible;
+  opacity: 1;
+  translate: 0 -100%;
+}
+
 #ac-init-speed {
   width: 90%;
   display: flex;
