@@ -497,4 +497,44 @@
   padding: 1px 5px;
 }
 /*---- SKILLS END */
+/*---- JOURNAL START*/
+
+#journal h2 {
+  text-align: center;
+}
+
+#journal .tabs {
+  width: 95%;
+  margin: 0 auto;
+
+  overflow-x: auto;
+  white-space: nowrap; /*to prevent tabs from wrapping*/
+
+  display: flex;
+  gap: 20px;
+
+  scrollbar-width: thin;
+  scrollbar-color: grey transparent;
+}
+
+#journal .tab {
+  height: 40px;
+  width: 125px;
+
+  flex: 0 0 125px;
+
+  border: solid 1px;
+  border-bottom: none;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  user-select: none;
+  cursor: pointer;
+}
+
+/*---- JOURNAL END*/
 /* CHARACTER SHEET END */

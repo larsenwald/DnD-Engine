@@ -55,6 +55,7 @@ class AbilityCard{
     }
 }
 
+//example usage
 const strengthCard = new AbilityCard('Strength', 16, ['Athletics']);
 const dexterityCard = new AbilityCard('Dexterity', 14, ['Acrobatics', 'Sleight of Hand', 'Stealth']);
 const constitutionCard = new AbilityCard('Constitution', 12);
