@@ -208,11 +208,13 @@
 /* CHARACTER SHEET START */
 
 #character-sheet {
-  width: min(800px, 90%);
-  height: 800px;
+  width: min(800px, 95%);
+  height: min(800px, 95%);
   border: double 3px;
 
   font-family: "Alice", serif;
+
+  overflow-y: auto;
 }
 
 #character-sheet input {
@@ -225,11 +227,27 @@
   font-family: "Alice", serif;
   font-size: 20px;
 }
-
+/* HEADER START */
 #character-sheet .header {
   display: grid;
   grid-template-columns: 2fr 3fr;
-  height: 500px;
+}
+
+#name-class-species-background-alignment .character-name {
+  font-size: 55px;
+  font-weight: 100;
+}
+#name-class-species-background-alignment p {
+  font-size: 20px;
+}
+
+@media (max-width: 600px) {
+  #character-sheet .header img {
+    display: none;
+  }
+  #character-sheet .header {
+    display: block;
+  }
 }
 
 #info {
@@ -259,14 +277,6 @@
   transform: scale(0.9);
 }
 
-#name-n-class .character-name {
-  font-size: 55px;
-  font-weight: 100;
-}
-#name-n-class .character-class {
-  font-size: 20px;
-}
-
 #info .ui-group {
   margin-top: 28px;
 }
@@ -274,6 +284,7 @@
 #health-prof-insp {
   width: 90%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 
@@ -283,6 +294,7 @@
 #ac-init-speed {
   width: 90%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 
   margin-top: 15px;
@@ -338,5 +350,5 @@
 #rests {
   margin-top: 35px;
 }
-
+/* HEADER END */
 /* CHARACTER SHEET END */
