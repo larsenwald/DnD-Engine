@@ -215,6 +215,8 @@
   font-family: "Alice", serif;
 
   overflow-y: auto;
+
+  box-shadow: 10px 10px 12px 5px rgba(0, 0, 0, 0.2);
 }
 
 #character-sheet section {
@@ -375,11 +377,11 @@
 /*---- HEADER END */
 /*---- SKILLS START */
 
-#skills h2 {
+#abilities h2 {
   text-align: center;
 }
 
-#skills-container {
+#abilities-container {
   width: 90%;
   margin: 0 auto;
 
@@ -389,18 +391,18 @@
   gap: 5%;
 }
 
-.skill-card {
+.ability-card {
   container-type: inline-size;
   width: max(175px, 30%);
   margin-top: 20px;
 }
 
-.skill-card h3 {
+.ability-card h3 {
   position: relative;
   font-size: 13cqw !important;
 }
 
-.skill-card h3::after {
+.ability-card h3::after {
   content: "";
   display: block;
   width: 0%;
@@ -411,17 +413,17 @@
 
   transition: 0.3s;
 }
-.skill-card:hover h3::after {
+.ability-card:hover h3::after {
   width: 50%;
 }
 
-.skill-card .ability-save-skills {
+.ability-card .ability-save-skills {
   display: flex;
   justify-content: space-between;
   gap: 2cqw;
 }
 
-.skill-card .ability {
+.ability-card .ability {
   border: solid 1cqw;
   border-radius: 4cqw;
   width: 40cqw;
@@ -434,11 +436,11 @@
   align-items: center;
 }
 
-.skill-card .ability .score {
+.ability-card .ability .score {
   font-size: 25cqw;
 }
 
-.skill-card .ability .mod-container {
+.ability-card .ability .mod-container {
   width: 18cqw;
 
   position: absolute;
@@ -455,7 +457,7 @@
   align-items: center;
 }
 
-.skill-card .save-skills {
+.ability-card .save-skills {
   font-size: 5.5cqw;
   flex: 1;
 
@@ -463,7 +465,7 @@
 
   margin-top: 3cqw;
 }
-.skill-card .saving-throw {
+.ability-card .saving-throw {
   display: flex;
   justify-content: space-between;
   align-items: center;

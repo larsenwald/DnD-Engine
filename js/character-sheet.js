@@ -12,7 +12,7 @@ class AbilityCard{
         console.log(this.ability, this.skills);
         console.log(this.skillsToHtml());
         return `          
-            <div class="skill-card">
+            <div class="ability-card">
             <h3>${this.ability}</h3>
             <div class="ability-save-skills">
               <div class="ability">
@@ -62,7 +62,7 @@ const intelligenceCard = new AbilityCard('Intelligence', 10, ['Arcana', 'History
 const wisdomCard = new AbilityCard('Wisdom', 8, ['Animal Handling', 'Insight', 'Medicine', 'Perception', 'Survival']);
 const charismaCard = new AbilityCard('Charisma', 18, ['Deception', 'Intimidation', 'Performance', 'Persuasion']);
 
-AbilityCard.render('#skills-container', [
+AbilityCard.render('#abilities-container', [
     strengthCard,
     dexterityCard,
     constitutionCard,
