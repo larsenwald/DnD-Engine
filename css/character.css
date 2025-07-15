@@ -382,14 +382,22 @@
 #skills-container {
   width: 90%;
   margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5%;
 }
 
 .skill-card {
-  width: 250px;
+  container-type: inline-size;
+  width: max(175px, 30%);
+  margin-top: 20px;
 }
 
 .skill-card h3 {
   position: relative;
+  font-size: 13cqw !important;
 }
 
 .skill-card h3::after {
@@ -410,13 +418,14 @@
 .skill-card .ability-save-skills {
   display: flex;
   justify-content: space-between;
+  gap: 2cqw;
 }
 
 .skill-card .ability {
-  border: solid 2px;
-  border-radius: 10px;
-  width: 100px;
-  height: 125px;
+  border: solid 1cqw;
+  border-radius: 4cqw;
+  width: 40cqw;
+  aspect-ratio: 1/1.25;
 
   position: relative;
 
@@ -426,11 +435,11 @@
 }
 
 .skill-card .ability .score {
-  font-size: 60px;
+  font-size: 25cqw;
 }
 
 .skill-card .ability .mod-container {
-  width: 50px;
+  width: 18cqw;
 
   position: absolute;
   bottom: 0;
@@ -447,18 +456,18 @@
 }
 
 .skill-card .save-skills {
-  font-size: 14px;
+  font-size: 5.5cqw;
   flex: 1;
 
-  padding-right: 10px;
+  padding-right: 0cqw;
 
-  margin-top: 10px;
+  margin-top: 3cqw;
 }
 .skill-card .saving-throw {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 12cqw;
 }
 .saving-throw .mod {
   border: solid 1px;
@@ -467,5 +476,23 @@
   padding: 1px 5px;
 }
 
+.skills {
+  margin-top: 4cqw;
+}
+
+.skills .skill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12cqw;
+
+  margin-top: 1cqw;
+}
+.skill .mod {
+  border: solid 1px;
+  border-radius: 5px;
+
+  padding: 1px 5px;
+}
 /*---- SKILLS END */
 /* CHARACTER SHEET END */
