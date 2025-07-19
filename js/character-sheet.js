@@ -1,7 +1,13 @@
 class AbilityCard{
-    constructor(ability, score, skills=[]){
+    constructor(
+      ability, 
+      score, 
+      saveProf = false, 
+      skills=[/*{skill: athletics, proficiency: 'half'||'proficient'||'expertise'}*/]
+    ){
         this.ability = ability;
         this.score = score;
+        this.saveProf = saveProf;
 
         this.mod = Math.floor((score - 10) / 2);
 
@@ -21,7 +27,7 @@ class AbilityCard{
               </div>
               <div class="save-skills">
                 <div class="saving-throw">
-                  <p class="bold italicized">Saving Throw</p>
+                  <p class="bold italicized">Saving Throw${this.saveProf ? `<span class='star'>★</span>` : ''}</p>
                   <p class="mod">${this.mod}</p>
                 </div>
                 <div class="skills">
@@ -38,7 +44,15 @@ class AbilityCard{
         this.skills.forEach(skill => {
             output += `
             <div class="skill">
-            <p>${skill}</p>
+            <p>
+              ${skill.skill}
+              ${
+                skill.proficiency === 'half' ? `<span class='star'>⯪</span>` :
+                (skill.proficiency === 'proficient' ? `<span class='star'>★</span>`:
+                (skill.proficiency === 'expertise' ? `<span class='star'>★★</span>` :
+                ''))
+              }
+            </p>
             <p class="mod">${this.mod}</p>
             </div>
             `
@@ -54,14 +68,36 @@ class AbilityCard{
         })
     }
 }
-
 //example usage
-const strengthCard = new AbilityCard('Strength', 16, ['Athletics']);
-const dexterityCard = new AbilityCard('Dexterity', 14, ['Acrobatics', 'Sleight of Hand', 'Stealth']);
-const constitutionCard = new AbilityCard('Constitution', 12);
-const intelligenceCard = new AbilityCard('Intelligence', 10, ['Arcana', 'History', 'Investigation', 'Nature', 'Religion']);
-const wisdomCard = new AbilityCard('Wisdom', 8, ['Animal Handling', 'Insight', 'Medicine', 'Perception', 'Survival']);
-const charismaCard = new AbilityCard('Charisma', 18, ['Deception', 'Intimidation', 'Performance', 'Persuasion']);
+const strengthCard = new AbilityCard('Strength', 16, true, [
+    {skill: 'Athletics', proficiency: 'proficient'}
+]);
+const dexterityCard = new AbilityCard('Dexterity', 14, false, [
+    {skill: 'Acrobatics', proficiency: 'half'},
+    {skill: 'Sleight of Hand', proficiency: 'expertise'},
+    {skill: 'Stealth', proficiency: 'proficient'}
+]);
+const constitutionCard = new AbilityCard('Constitution', 15, true, []);
+const intelligenceCard = new AbilityCard('Intelligence', 12, false, [
+    {skill: 'Arcana', proficiency: 'half'},
+    {skill: 'History', proficiency: 'half'},
+    {skill: 'Investigation', proficiency: 'half'},
+    {skill: 'Nature', proficiency: 'half'},
+    {skill: 'Religion', proficiency: 'half'}
+]);
+const wisdomCard = new AbilityCard('Wisdom', 10, false, [
+    {skill: 'Animal Handling', proficiency: 'expertise'},
+    {skill: 'Insight', proficiency: 'half'},
+    {skill: 'Medicine', proficiency: 'half'},
+    {skill: 'Perception', proficiency: 'proficient'},
+    {skill: 'Survival', proficiency: 'half'}
+]);
+const charismaCard = new AbilityCard('Charisma', 8, false, [
+    {skill: 'Deception', proficiency: 'half'},
+    {skill: 'Intimidation', proficiency: 'proficient'},
+    {skill: 'Performance', proficiency: 'half'},
+    {skill: 'Persuasion', proficiency: 'half'}
+]);
 
 AbilityCard.render('#abilities-container', [
     strengthCard,

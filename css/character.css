@@ -207,209 +207,127 @@
 
 /* CHARACTER SHEET START */
 
-#character-sheet {
-  width: min(800px, 95%);
-  height: min(800px, 95%);
-  border: double 3px;
-
-  font-family: "Alice", serif;
-
-  overflow-y: auto;
-
-  box-shadow: 10px 10px 12px 5px rgba(0, 0, 0, 0.2);
-}
-
-#character-sheet section {
-  margin-top: 20px;
-}
-#character-sheet .header {
-  margin-top: 0;
-}
-
-#character-sheet h1,
-#character-sheet h2,
-#character-sheet h3,
-#character-sheet h4,
-#character-sheet h5,
-#character-sheet h6 {
-  font-weight: 100;
-}
-#character-sheet h1 {
-  font-size: 55px;
-}
-#character-sheet h2 {
-  font-size: 40px;
+/* CHARACTER SHEET ROOT */
+#character-sheet .value {
+  font-size: var(--value-l);
 }
 #character-sheet h3 {
-  font-size: 30px;
-}
-
-#character-sheet input {
-  border: none;
-  outline: none;
-  background: none;
-
-  field-sizing: content;
-  min-width: 10px;
-
-  font-family: "Alice", serif;
-  font-size: 20px;
-}
-/*---- HEADER START */
-#character-sheet .header {
-  display: grid;
-  grid-template-columns: 2fr 3fr;
-}
-
-#name-class-species-background-alignment p {
-  font-size: 20px;
-}
-
-@media (max-width: 645px) {
-  #character-sheet .header img {
-    display: none;
-  }
-  #character-sheet .header {
-    display: block;
-  }
-}
-
-#info {
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-}
-
-#info button {
-  font-family: "Alice", serif;
-  border: black solid 2px;
-  border-radius: 10px;
-
-  font-size: 19px;
-  padding: 12px 8px;
-  background: white;
-  min-width: 169.5px;
-
-  cursor: pointer;
-  transition: all 0.3s, transform 0.1s;
-}
-#info button:hover {
-  filter: brightness(80%);
-}
-#info button:active {
-  transform: scale(0.9);
-}
-
-#info .ui-group {
-  margin-top: 28px;
-}
-
-#health-prof-insp {
-  width: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-
-  font-size: 19px;
-}
-
-#health-n-temp {
-  cursor: default;
-}
-#health {
-  position: relative;
-}
-#temp-health {
-  position: absolute;
-  top: 0;
-
-  visibility: hidden;
-  opacity: 0;
-
-  transition: 0.3s;
-}
-#health-n-temp:hover #temp-health {
-  visibility: visible;
-  opacity: 1;
-  translate: 0 -100%;
-}
-
-#ac-init-speed {
-  width: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  margin-top: 15px;
-}
-
-#ac-init-speed div {
-  width: 120px;
-  height: 120px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-#ac-init-speed div input {
-  font-size: 50px;
-  background: none;
-}
-
-#character-sheet #ac-init-speed .label {
-  font-size: 12px;
+  font-size: var(--font-xs);
+  font-weight: normal;
   font-style: italic;
 }
+#character-sheet .btn {
+  container-type: inline-size;
 
-#character-sheet #armor-class {
-  background-image: url("/images/ui/shield.webp");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  font-family: "Alice", serif;
+  font-size: max(var(--font-xs), 1.2cqw);
+  width: max(150px, 16vw);
+  height: 50px;
+
+  border-radius: 10px;
+  border: black solid 2px;
+  background: white;
+  padding-bottom: 2px;
+
+  cursor: pointer;
+}
+#character-sheet .btn:active {
+  border: black solid 4px;
+}
+/* CHARACTER SHEET ROOT END */
+
+#character-sheet {
+  width: 900px;
+  height: 100%;
+  border: solid;
+
+  padding: 30px max(5px, 2vw);
+  font-family: "Alice", serif;
+
+  overflow: auto;
 }
 
-#initiative {
-  border: dotted 2px;
+#character-sheet .header {
+  display: flex;
+  align-items: center;
 }
-#initiative .number {
-  margin-top: -12px;
+#character-sheet .header .class-icon {
+  width: 17%;
+  aspect-ratio: 1/1;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.123);
+  border-radius: 50%;
 }
-#initiative .label {
-  margin-top: 5px;
+#character-sheet .header .group-identity {
+  margin-left: 2%;
+}
+#character-sheet h1 {
+  font-size: var(--font-l);
+  font-weight: normal;
+}
+#character-sheet h2 {
+  font-size: var(--font-sm);
+  font-weight: normal;
+  font-style: italic;
+  color: grey;
 }
 
-#speed {
-  border: dotted 2px;
+#character-sheet .group-hp-n-combat {
+  display: flex;
+
+  margin-top: var(--margin-l);
 }
-#speed .number {
-  margin-top: -12px;
-}
-#speed .label {
-  margin-top: 5px;
+#character-sheet .group-hp-n-combat .left-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin-l);
+
+  width: 50%;
 }
 
-#rests {
-  margin-top: 35px;
+#character-sheet .group-hp-n-combat .left-side .group-combat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--margin-m);
 }
-/*---- HEADER END */
-/*---- SKILLS START */
+#character-sheet .group-hp-n-combat .left-side .group-combat * {
+  text-align: center;
+  flex: 0 0 calc(33.33% - var(--margin-m));
+}
 
-#abilities h2 {
+#character-sheet .group-hp-n-combat .right-side {
+  width: 50%;
+}
+
+#character-sheet .group-hp-n-combat .right-side .group-hp-temp-hd {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3vw;
+}
+#character-sheet .group-hp-n-combat .right-side .group-hp-temp-hd * {
   text-align: center;
 }
 
+#character-sheet .rest-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1vw;
+
+  margin-top: var(--margin-m);
+}
+#character-sheet .rest-btns .btn {
+  width: 150px;
+  font-size: max(12px, var(--font-s));
+}
+
+/*---- SKILLS START */
 #abilities-container {
-  width: 90%;
   margin: 0 auto;
 
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 5%;
+  gap: 1vw;
 }
 
 .ability-card {
@@ -420,34 +338,20 @@
 
 .ability-card h3 {
   position: relative;
-  font-size: 13cqw !important;
-}
-
-.ability-card h3::after {
-  content: "";
-  display: block;
-  width: 0%;
-
-  position: absolute;
-  left: 45%;
-  border-top: dotted 2px;
-
-  transition: 0.3s;
-}
-.ability-card:hover h3::after {
-  width: 50%;
+  font-size: 10cqw !important;
 }
 
 .ability-card .ability-save-skills {
   display: flex;
-  justify-content: space-between;
-  gap: 2cqw;
+  justify-content: center;
+  gap: 3cqw;
 }
 
 .ability-card .ability {
   border: solid 1cqw;
   border-radius: 4cqw;
   width: 40cqw;
+  aspect-ratio: 1/1.25;
   aspect-ratio: 1/1.25;
 
   position: relative;
@@ -480,9 +384,6 @@
 
 .ability-card .save-skills {
   font-size: 5.5cqw;
-  flex: 1;
-
-  padding-right: 0cqw;
 
   margin-top: 3cqw;
 }
@@ -490,7 +391,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12cqw;
+  gap: 10.5cqw;
 }
 .saving-throw .mod {
   border: solid 1px;
@@ -507,7 +408,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12cqw;
 
   margin-top: 1cqw;
 }
@@ -517,45 +417,8 @@
 
   padding: 1px 5px;
 }
+.star {
+  font-size: 6.1cqw;
+}
 /*---- SKILLS END */
-/*---- JOURNAL START*/
-
-#journal h2 {
-  text-align: center;
-}
-
-#journal .tabs {
-  width: 95%;
-  margin: 0 auto;
-
-  overflow-x: auto;
-  white-space: nowrap; /*to prevent tabs from wrapping*/
-
-  display: flex;
-  gap: 20px;
-
-  scrollbar-width: thin;
-  scrollbar-color: grey transparent;
-}
-
-#journal .tab {
-  height: 40px;
-  width: 125px;
-
-  flex: 0 0 125px;
-
-  border: solid 1px;
-  border-bottom: none;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  user-select: none;
-  cursor: pointer;
-}
-
-/*---- JOURNAL END*/
 /* CHARACTER SHEET END */
