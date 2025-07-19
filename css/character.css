@@ -313,7 +313,7 @@
   justify-content: center;
   gap: 1vw;
 
-  margin-top: var(--margin-m);
+  margin-top: var(--margin-s);
 }
 #character-sheet .rest-btns .btn {
   width: 150px;
