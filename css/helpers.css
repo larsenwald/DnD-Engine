@@ -15,6 +15,25 @@
   display: none !important;
 }
 
+.fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+
+.rise {
+  animation: rise 0.3s ease forwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

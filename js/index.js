@@ -51,7 +51,7 @@ executeWhenLoaded.push(function() {
                     <img src="images/class-badges/${character.charClass.toLowerCase()}.webp" alt="${character.charClass} badge" />
                     <div class="name-and-class">
                     <h3>${character.name}</h3>
-                    <p>${`Level ${character.level} ${character.subclass} ${character.charClass}`}</p>
+                    <p>${`Level ${character.level} ${character.subClass} ${character.charClass}`}</p>
                     </div>
                 </div>`
         })
@@ -68,10 +68,11 @@ executeWhenLoaded.push(function() {
 let currentCharacter;
 function renderCharacter(characterObject){
     currentCharacter = characterObject;
-    console.log(currentCharacter)
+    console.log(currentCharacter);
 
     document.querySelector(`#character-list-page`).classList.add(`hidden`);
     document.querySelector(`#character-page`).classList.remove(`hidden`);
 
     initializeHealthOrb(characterObject);
+    renderSheet(characterObject);
 }

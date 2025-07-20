@@ -15,7 +15,7 @@ class Character{
         this.name;
         //Step 1: Choose a class
         this.charClass = '';
-        this.subclass = '';
+        this.subClass = '';
         this.level = 1;
         //*armor training was moved to the 'proficiencies' object
 

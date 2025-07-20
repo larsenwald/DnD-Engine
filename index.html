@@ -15,7 +15,7 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="character-list-page" class="hidden">
+    <div id="character-list-page" class="">
       <h2 id="characters-title">Characters</h2>
       <div id="character-container">
         <div class="loader"></div>
@@ -59,87 +59,89 @@
           </div>
         </div>
         <div id="action-bar"></div>
+        <div id="utility-buttons">
+          <button class="character-sheet-toggle">📓</button>
+        </div>
       </div>
       <!-- BOTTOM GRID END -->
-    </div>
-
-    <!-- CHARACTER SHEET START -->
-    <div id="character-sheet" class="">
-      <div class="header">
-        <img class="class-icon" src="" alt="class icon" />
-        <div class="group-identity">
-          <h1 class="name">Hector Morenis</h1>
-          <h2>
-            Level <span class="level">3</span>
-            <span class="species">Human</span>
-            <span class="class">Fighter</span>
-            <span class="subclass">(Champion)</span>
-          </h2>
-          <h2><span class="background">Soldier</span> Background</h2>
-        </div>
-      </div>
-      <div class="group-hp-n-combat">
-        <div class="left-side">
-          <button class="inspiration-btn btn">I am not inspired.</button>
-          <div class="group-combat">
-            <div class="armor-class">
-              <h3>Armor Class</h3>
-              <span class="value">16</span>
-            </div>
-            <div class="initiative">
-              <h3>Initiative</h3>
-              <span class="value">+2</span>
-            </div>
-            <div class="speed">
-              <h3>Speed</h3>
-              <span class="value">30</span>
-            </div>
-            <div class="proficiency">
-              <h3>Proficiency</h3>
-              <span class="value">+2</span>
-            </div>
-            <div class="size">
-              <h3>Size</h3>
-              <span class="value">M</span>
-            </div>
-            <div class="passive-perception">
-              <h3>Passive Perception</h3>
-              <span class="value">13</span>
-            </div>
+      <!-- CHARACTER SHEET START -->
+      <div id="character-sheet" class="hidden">
+        <button class="x-btn"></button>
+        <div class="header">
+          <img class="class-icon" src="" alt="class icon" />
+          <div class="group-identity">
+            <h1 class="name">Hector Morenis</h1>
+            <h2>
+              Level <span class="level">3</span>
+              <span class="species">Human</span>
+              <span class="class">Fighter</span>
+              <span class="subclass">(Champion)</span>
+            </h2>
+            <h2><span class="background">Soldier</span> Background</h2>
           </div>
         </div>
-        <div class="right-side">
-          <div class="group-hp-temp-hd">
-            <div class="health">
-              <h3>Health</h3>
-              <div class="value">
-                <span class="current">0</span>/<span class="max">0</span>
+        <div class="group-hp-n-combat">
+          <div class="left-side">
+            <button class="inspiration-btn btn">I am not inspired.</button>
+            <div class="group-combat">
+              <div class="armor-class">
+                <h3>Armor Class</h3>
+                <span class="value">16</span>
+              </div>
+              <div class="initiative">
+                <h3>Initiative</h3>
+                <span class="value">+2</span>
+              </div>
+              <div class="speed">
+                <h3>Speed</h3>
+                <span class="value">30</span>
+              </div>
+              <div class="proficiency">
+                <h3>Proficiency</h3>
+                <span class="value">+2</span>
+              </div>
+              <div class="size">
+                <h3>Size</h3>
+                <span class="value">M</span>
+              </div>
+              <div class="passive-perception">
+                <h3>Passive Perception</h3>
+                <span class="value">13</span>
               </div>
             </div>
-            <div class="temp">
-              <h3>Temp</h3>
-              <span class="value">0</span>
-            </div>
-            <div class="hd">
-              <h3>Hit Dice</h3>
-              <div class="hit-die">
+          </div>
+          <div class="right-side">
+            <div class="group-hp-temp-hd">
+              <div class="health">
+                <h3>Health</h3>
                 <div class="value">
                   <span class="current">0</span>/<span class="max">0</span>
                 </div>
-                <span class="hit-die-type">1d10</span>
+              </div>
+              <div class="temp">
+                <h3>Temp</h3>
+                <span class="value">0</span>
+              </div>
+              <div class="hd">
+                <h3>Hit Dice</h3>
+                <div class="hit-die">
+                  <div class="value">
+                    <span class="current">0</span>/<span class="max">0</span>
+                  </div>
+                  <span class="type">1d10</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="rest-btns">
-            <button class="btn">Short Rest</button>
-            <button class="btn">Long Rest</button>
+            <div class="rest-btns">
+              <button class="btn">Short Rest</button>
+              <button class="btn">Long Rest</button>
+            </div>
           </div>
         </div>
+        <div id="abilities-container"></div>
+        <!-- CHARACTER SHEET END -->
       </div>
-      <div id="abilities-container"></div>
-      <!-- CHARACTER SHEET END -->
     </div>
-    <div id="character-sheet2"></div>
     <script src="js/data.js"></script>
     <script src="js/helpers.js"></script>
     <script src="js/5etoolsHelpers.js"></script>

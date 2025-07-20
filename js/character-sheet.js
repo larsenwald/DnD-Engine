@@ -15,8 +15,6 @@ class AbilityCard{
     }
 
     get HTML(){
-        console.log(this.ability, this.skills);
-        console.log(this.skillsToHtml());
         return `          
             <div class="ability-card">
             <h3>${this.ability}</h3>
@@ -68,42 +66,151 @@ class AbilityCard{
         })
     }
 }
-//example usage
-const strengthCard = new AbilityCard('Strength', 16, true, [
-    {skill: 'Athletics', proficiency: 'proficient'}
-]);
-const dexterityCard = new AbilityCard('Dexterity', 14, false, [
-    {skill: 'Acrobatics', proficiency: 'half'},
-    {skill: 'Sleight of Hand', proficiency: 'expertise'},
-    {skill: 'Stealth', proficiency: 'proficient'}
-]);
-const constitutionCard = new AbilityCard('Constitution', 15, true, []);
-const intelligenceCard = new AbilityCard('Intelligence', 12, false, [
-    {skill: 'Arcana', proficiency: 'half'},
-    {skill: 'History', proficiency: 'half'},
-    {skill: 'Investigation', proficiency: 'half'},
-    {skill: 'Nature', proficiency: 'half'},
-    {skill: 'Religion', proficiency: 'half'}
-]);
-const wisdomCard = new AbilityCard('Wisdom', 10, false, [
-    {skill: 'Animal Handling', proficiency: 'expertise'},
-    {skill: 'Insight', proficiency: 'half'},
-    {skill: 'Medicine', proficiency: 'half'},
-    {skill: 'Perception', proficiency: 'proficient'},
-    {skill: 'Survival', proficiency: 'half'}
-]);
-const charismaCard = new AbilityCard('Charisma', 8, false, [
-    {skill: 'Deception', proficiency: 'half'},
-    {skill: 'Intimidation', proficiency: 'proficient'},
-    {skill: 'Performance', proficiency: 'half'},
-    {skill: 'Persuasion', proficiency: 'half'}
-]);
 
-AbilityCard.render('#abilities-container', [
-    strengthCard,
-    dexterityCard,
-    constitutionCard,
-    intelligenceCard,
-    wisdomCard,
-    charismaCard
-]);
+function renderSheet(characterObject){
+  const get = function(selector){
+    return document.querySelector('#character-sheet ' + selector);
+  }
+  const getAll = function(selector){
+    return document.querySelectorAll('#character-sheet ' + selector);
+  } //helper functions to prevent having to repeat myself querying '#character-sheet'
+  const c = characterObject; //for quick reference of the character object
+
+  const picture = get('.class-icon');
+  const name = get('.name');
+  const level = get('.level');
+  const species = get('.species');
+  const charClass = get('.class');
+  const subClass = get('.subclass');
+  const background = get('.background');
+
+  const inspirationBtn = get('.inspiration-btn');
+
+  const armorClass = get('.armor-class .value');
+  const initiative = get('.initiative .value');
+  const speed = get('.speed .value');
+  const proficiency = get('.proficiency .value');
+  const size = get('.size .value');
+  const passivePerception = get('.passive-perception .value');
+
+  const currentHp = get('.health .value .current');
+  const maxHp = get('.health .value .max');
+  const tempHp = get('.temp .value');
+  const currentHitDie = get('.hd .hit-die .value .current');
+  const maxHitDie = get('.hd .hit-die .value .max');
+  const hitDieType = get('.hd .hit-die .type');
+
+  let shortRestBtn;
+  getAll('.rest-btns .btn').forEach(ele => {
+    if (ele.innerText === 'Short Rest') shortRestBtn = ele;
+  });
+
+  let longRestBtn;
+  getAll('.rest-btns .btn').forEach(ele => {
+    if (ele.innerText === 'Long Rest') longRestBtn = ele;
+  });
+
+  picture.src = `images/class-badges/${c.charClass}.webp`
+  name.innerText = c.name;
+  level.innerText = c.level;
+  species.innerText = c.species;
+  charClass.innerText = c.charClass;
+  subClass.innerText = c.subClass;
+  background.innerText = c.background.name;
+
+  let inspired = false;
+  if (c.inspiration){
+    inspired = true;
+    inspirationBtn.classList.add('inspired');
+    inspirationBtn.innerText = 'I am inspired!';
+  }
+  inspirationBtn.addEventListener('click', ()=>{
+    inspired = !inspired;
+    c.inspiration = inspired;
+    if (inspired){
+      inspirationBtn.classList.add('inspired');
+      inspirationBtn.innerText = 'I am inspired!';
+    }else{
+      inspirationBtn.classList.remove('inspired');
+      inspirationBtn.innerText = 'I am not inspired.';
+    }
+  });
+  armorClass.innerText = c.ac.val;
+  initiative.innerText = c.dexterityMod.val;
+  speed.innerText = c.speed;
+  proficiency.innerText = c.proficiencyBonus;
+  size.innerText = c.size.charAt(0).toUpperCase();
+  passivePerception.innerText = c.passivePerception.val;
+
+  currentHp.innerText = c.hp.current;
+  maxHp.innerText = c.hp.max;
+  tempHp.innerText = c.hp.temp;
+  currentHitDie.innerText = c.hitDice.current;
+  maxHitDie.innerText = c.hitDice.max;
+  hitDieType.innerText = c.hitDice.type;
+
+  shortRestBtn.addEventListener('click', ()=> c.shortRest());
+  longRestBtn.addEventListener('click', ()=> c.longRest());
+
+  //render ability cards
+  const checkSaveProf = function(ability){
+    if (c.proficiencies.save.includes(ability.toLowerCase().slice(0,3))) return true;
+    return false;
+  }
+  const checkSkillProf = function(skill){
+    return c.proficiencies.skill[toCamelCase(skill)].proficiency;
+  }
+  const strengthCard = new AbilityCard('Strength', c.strength.val, checkSaveProf('strength'), [
+      {skill: 'Athletics', proficiency: checkSkillProf('Athletics')}
+  ]);
+  const dexterityCard = new AbilityCard('Dexterity', c.dexterity.val, checkSaveProf('dexterity'), [
+      {skill: 'Acrobatics', proficiency: checkSkillProf('Acrobatics')},
+      {skill: 'Sleight of Hand', proficiency: checkSkillProf('Sleight of Hand')},
+      {skill: 'Stealth', proficiency: checkSkillProf('Stealth')}
+  ]);
+  const constitutionCard = new AbilityCard('Constitution', c.constitution.val, checkSaveProf('constitution'), []);
+  const intelligenceCard = new AbilityCard('Intelligence', c.intelligence.val, checkSaveProf('intelligence'), [
+      {skill: 'Arcana', proficiency: checkSkillProf('Arcana')},
+      {skill: 'History', proficiency: checkSkillProf('History')},
+      {skill: 'Investigation', proficiency: checkSkillProf('Investigation')},
+      {skill: 'Nature', proficiency: checkSkillProf('Nature')},
+      {skill: 'Religion', proficiency: checkSkillProf('Religion')}
+  ]);
+  const wisdomCard = new AbilityCard('Wisdom', c.wisdom.val, checkSaveProf('wisdom'), [
+      {skill: 'Animal Handling', proficiency: checkSkillProf('Animal Handling')},
+      {skill: 'Insight', proficiency: checkSkillProf('Insight')},
+      {skill: 'Medicine', proficiency: checkSkillProf('Medicine')},
+      {skill: 'Perception', proficiency: checkSkillProf('Perception')},
+      {skill: 'Survival', proficiency: checkSkillProf('Survival')}
+  ]);
+  const charismaCard = new AbilityCard('Charisma', c.charisma.val, checkSaveProf('charisma'), [
+      {skill: 'Deception', proficiency: checkSkillProf('Deception')},
+      {skill: 'Intimidation', proficiency: checkSkillProf('Intimidation')},
+      {skill: 'Performance', proficiency: checkSkillProf('Performance')},
+      {skill: 'Persuasion', proficiency: checkSkillProf('Persuasion')}
+  ]);
+
+  AbilityCard.render('#abilities-container', [
+      strengthCard,
+      dexterityCard,
+      constitutionCard,
+      intelligenceCard,
+      wisdomCard,
+      charismaCard
+  ]);
+}
+
+tippy(`#utility-buttons .character-sheet-toggle`, {
+  content: `Character Sheet`,
+});
+
+document.querySelector(`#utility-buttons .character-sheet-toggle`).addEventListener(`click`, ()=>{
+  document.querySelector(`#character-sheet`).classList.toggle(`fade-in`)
+  document.querySelector(`#character-sheet`).classList.toggle(`rise`)
+    document.querySelector(`#character-sheet`).classList.toggle(`hidden`);
+})
+document.querySelector(`#character-sheet .x-btn`).addEventListener('click', ()=>{
+  document.querySelector(`#character-sheet`).classList.toggle(`fade-in`)
+  document.querySelector(`#character-sheet`).classList.toggle(`rise`)
+  document.querySelector(`#character-sheet`).classList.toggle(`hidden`);
+})
