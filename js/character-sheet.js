@@ -71,10 +71,7 @@ class AbilityCard{
 function renderSheet(characterObject){
   const get = function(selector){
     return document.querySelector('#character-sheet ' + selector);
-  }
-  const getAll = function(selector){
-    return document.querySelectorAll('#character-sheet ' + selector);
-  } //helper functions to prevent having to repeat myself querying '#character-sheet'
+  }//helper functions to prevent having to repeat myself querying '#character-sheet'
   const c = characterObject; //for quick reference of the character object
 
   const picture = get('.class-icon');
