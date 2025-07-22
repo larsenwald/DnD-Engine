@@ -19,30 +19,32 @@ function initializeHealthOrb(characterObject){
 
 
 healthOrb.addEventListener(`click`, (event) => {
-  health.current++;
-  updateHealth();
+  executeCommand('heal');
+  executeCommand('1');
 });
 
 healthOrb.addEventListener(`contextmenu`, (event) => {
   event.preventDefault();
   
-  if (health.temp > 0) 
-    health.temp--;
-  else 
-    health.current--;
-
-  updateHealth();
+  if (health.temp > 0){
+    executeCommand('lose temp hp');
+    executeCommand('1')
+  }
+  else {
+    executeCommand('harm');
+    executeCommand('1')
+  }
 });
 
 tempHealthShield.addEventListener(`click`, (event) => {
-  health.temp++;
-  updateHealth();
+  executeCommand('gain temp hp');
+  executeCommand('1');
 });
 tempHealthShield.addEventListener(`contextmenu`, (event) => {
   event.preventDefault();
   if (health.temp > 0){
-    health.temp--;
-    updateHealth();
+    executeCommand('lose temp hp');
+    executeCommand('1');
   }
 });
 

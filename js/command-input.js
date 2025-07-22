@@ -25,8 +25,6 @@ commandInput.addEventListener(`keydown`, (event)=>{
             };
 
             commandLog.prepend(ele);
-            //commandLog.innerHTML = `> ${output.val}<br>` + commandLog.innerHTML;
-            //logic to give the innerHTML a tooltip with output.breakdown goes here
             return;
         }
 
@@ -133,7 +131,6 @@ const multiStepCommands = {
         placeholderText: 'Enter amount to heal',
         onEnter: (val) => {
             const output = currentCharacter.changeHp(Math.abs(val));
-            updateHealth();
             return output;
         }
     },
@@ -143,7 +140,6 @@ const multiStepCommands = {
         placeholderText: 'Enter amount of damage',
         onEnter: (val) => {
             const output = currentCharacter.changeHp(-Math.abs(val));
-            updateHealth();
             return output;
         }
     },
@@ -161,7 +157,6 @@ const multiStepCommands = {
         placeholderText: 'Enter amount of temporary HP to gain',
         onEnter: (val) => {
             const output = currentCharacter.changeTempHp('gain', Math.abs(val));
-            updateHealth();
             return output;
         }
     },
@@ -171,7 +166,6 @@ const multiStepCommands = {
         placeholderText: 'Enter amount of temporary HP to lose',
         onEnter: (val) => {
             const output = currentCharacter.changeTempHp('lose', Math.abs(val));
-            updateHealth();
             return output;
         }
     }
@@ -198,7 +192,7 @@ commandInput.addEventListener('keydown', (event)=>{
 })
 //MULTI STEP COMMANDS END
 
-function executeCommand(string){
+window.executeCommand = function(string){
     string = string.toLowerCase().trim(); //normalize
 
     if (multiStepCommandToggle.command){
@@ -209,7 +203,11 @@ function executeCommand(string){
 
         commandInput.style.boxShadow = '';
 
-        return multiStepCommands[command].onEnter(string);
+        const output = multiStepCommands[command].onEnter(string);
+        updateHealth();
+        renderSheet(currentCharacter);
+        showToast(`${output}`, '#character-sheet', 4);
+        return output;
     }
 
     if (!commandsMap[string] && !multiStepCommands[string])
@@ -227,10 +225,20 @@ function executeCommand(string){
         return `${multiStepCommands[string].propertyName} mode active`;
     }
 
-    if (typeof currentCharacter[commandsMap[string].propertyName] === `function`)
-        return currentCharacter[commandsMap[string].propertyName](...commandsMap[string].args);
+    if (typeof currentCharacter[commandsMap[string].propertyName] === `function`){
+        const output = currentCharacter[commandsMap[string].propertyName](...commandsMap[string].args);
+        updateHealth();
+        renderSheet(currentCharacter);
+        showToast(`${output}`, '#character-sheet', 4);
+        return output;
+    }
 
-    return currentCharacter[commandsMap[string]];
+    const output = currentCharacter[commandsMap[string]];
+    updateHealth();
+    renderSheet(currentCharacter);
+    showToast(`${output}`, '#character-sheet', 4);
+    return output;
+    
 }
 
 // START OF AUTOCOMPLETE LOGIC

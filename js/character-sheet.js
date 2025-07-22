@@ -60,6 +60,7 @@ class AbilityCard{
 
     static render(domContainerSelector, abilityCards=[]){
         const container = document.querySelector(domContainerSelector);
+        container.innerHTML = '';
 
         abilityCards.forEach(card => {
             container.innerHTML += card.HTML;
@@ -100,16 +101,6 @@ function renderSheet(characterObject){
   const maxHitDie = get('.hd .hit-die .value .max');
   const hitDieType = get('.hd .hit-die .type');
 
-  let shortRestBtn;
-  getAll('.rest-btns .btn').forEach(ele => {
-    if (ele.innerText === 'Short Rest') shortRestBtn = ele;
-  });
-
-  let longRestBtn;
-  getAll('.rest-btns .btn').forEach(ele => {
-    if (ele.innerText === 'Long Rest') longRestBtn = ele;
-  });
-
   picture.src = `images/class-badges/${c.charClass}.webp`
   name.innerText = c.name;
   level.innerText = c.level;
@@ -148,9 +139,6 @@ function renderSheet(characterObject){
   currentHitDie.innerText = c.hitDice.current;
   maxHitDie.innerText = c.hitDice.max;
   hitDieType.innerText = c.hitDice.type;
-
-  shortRestBtn.addEventListener('click', ()=> c.shortRest());
-  longRestBtn.addEventListener('click', ()=> c.longRest());
 
   //render ability cards
   const checkSaveProf = function(ability){
@@ -199,6 +187,23 @@ function renderSheet(characterObject){
       charismaCard
   ]);
 }
+
+let shortRestBtn;
+document.querySelectorAll('#character-sheet .rest-btns .btn').forEach(ele => {
+  if (ele.innerText === 'Short Rest') shortRestBtn = ele;
+});
+
+let longRestBtn;
+document.querySelectorAll('#character-sheet .rest-btns .btn').forEach(ele => {
+  if (ele.innerText === 'Long Rest') longRestBtn = ele;
+});
+
+shortRestBtn.addEventListener('click', function(){
+  executeCommand('short rest');
+});
+longRestBtn.addEventListener('click', function(){
+  executeCommand('long rest');
+});
 
 tippy(`#utility-buttons .character-sheet-toggle`, {
   content: `Character Sheet`,
