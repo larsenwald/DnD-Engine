@@ -183,6 +183,13 @@ function renderSheet(characterObject){
       wisdomCard,
       charismaCard
   ]);
+
+  document.querySelectorAll('#character-sheet .ability-card').forEach(card =>{
+    card.querySelector('.ability').addEventListener('click', function(event){
+      const score = card.querySelector('h3').innerText;
+      executeCommand(score+' check', true)
+    })
+})
 }
 
 let shortRestBtn;

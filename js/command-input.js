@@ -206,7 +206,7 @@ window.executeCommand = function(string){
         const output = multiStepCommands[command].onEnter(string);
         updateHealth();
         renderSheet(currentCharacter);
-        showToast(`${output}`, '#character-sheet', 4);
+        showToast(`${typeof output === 'object' ? `||Value: ${output.val}||Breakdown: ${output.breakdown}||` : output}`, '#character-sheet', 4);
         return output;
     }
 
@@ -229,14 +229,14 @@ window.executeCommand = function(string){
         const output = currentCharacter[commandsMap[string].propertyName](...commandsMap[string].args);
         updateHealth();
         renderSheet(currentCharacter);
-        showToast(`${output}`, '#character-sheet', 4);
+        showToast(`${typeof output === 'object' ? `||Value: ${output.val}||Breakdown: ${output.breakdown}||` : output}`, '#character-sheet', 4);
         return output;
     }
 
     const output = currentCharacter[commandsMap[string]];
     updateHealth();
     renderSheet(currentCharacter);
-    showToast(`${output}`, '#character-sheet', 4);
+    showToast(`${typeof output === 'object' ? `||Value: ${output.val}||Breakdown: ${output.breakdown}||` : output}`, '#character-sheet', 4);
     return output;
     
 }

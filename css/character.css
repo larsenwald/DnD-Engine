@@ -422,6 +422,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(128, 128, 128, 0.329);
+    }
 
     .score {
       font-size: 25cqw;
