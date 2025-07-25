@@ -63,6 +63,12 @@ executeWhenLoaded.push(function() {
         });
     }
 
+    document.querySelector(`.new-character-btn`).addEventListener('click', ()=>{
+        document.querySelector(`.blank-or-mancer`).classList.remove('hidden');
+        document.querySelector(`.blank-or-mancer .cancel`).addEventListener('click', ()=>{
+            document.querySelector(`.blank-or-mancer`).classList.add(`hidden`);
+        })
+    })
 })
 
 let currentCharacter;

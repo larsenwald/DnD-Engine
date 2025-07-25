@@ -52,3 +52,28 @@
 .secondary-text {
   color: rgb(75, 75, 75);
 }
+
+.btn {
+  background: rgb(255, 255, 255);
+  width: 150px;
+  height: 50px;
+  border-radius: 8px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.2);
+
+  &:active {
+    box-shadow: -2px -2px 5px 2px rgba(0, 0, 0, 0.2);
+    scale: 0.98;
+  }
+}
+
+.btn.scale {
+  container-type: inline-size;
+  font-size: max(0.8cqw, 12px);
+  width: 40%;
+  height: auto;
+  aspect-ratio: 3/1;
+}
