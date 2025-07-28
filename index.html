@@ -15,7 +15,16 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="character-list-page" class="">
+    <div id="new-character-modal">
+      <label for="character-name">Name</label>
+      <input type="text" class="name" />
+      <label for="character-class">Class</label>
+      <input type="text" class="class" />
+      <label for="level">Level</label>
+      <input type="number" class="level" min="1" max="20" value="1" />
+      <label for="background">Background</label>
+    </div>
+    <div id="character-list-page" class="hidden">
       <h2 id="characters-title">Characters</h2>
       <div id="character-container">
         <div class="loader"></div>
@@ -26,7 +35,7 @@
             button to make one now!
           </p>
         </div>
-        <button class="new-character-btn btn">New Character</button>
+        <button class="new-character-btn btn0">New Character</button>
       </div>
     </div>
     <div id="character-page" class="hidden">

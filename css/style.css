@@ -136,3 +136,7 @@ body {
   font-size: max(15px, 2.5cqw);
   font-style: italic;
 }
+
+#new-character-modal {
+  width: 100%;
+}
